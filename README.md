@@ -98,8 +98,15 @@ Nada disso vive no repo — tudo é env var do projeto na Vercel (`vercel env ad
 
 ## Deploy
 
+Push na `main` deploya em produção. O repo é `guibess1/prolog-talks-lps` e não o da
+org: a `prologapp` não tem o app do Vercel instalado e só um owner pode instalar, então
+o vínculo mora na conta pessoal até isso mudar. O remote `org`
+(`prologapp/prolog-talks-lps`) segue existindo como cópia, sem gatilho de deploy.
+
 ```bash
-vercel --prod
+git push          # main → produção
+git push origin minha-branch   # branch → preview com URL própria
+vercel --prod     # ainda funciona, pra subir sem passar por commit
 ```
 
 ## Papéis
