@@ -317,7 +317,14 @@
   margin-top: 18px;
   text-shadow: 0 2px 24px rgba(1,17,63,.55);
 }
+/* Tagline: o mote do criativo. Fica acima do H1, pequena, so pra fazer a ponte
+   com o anuncio - o titulo em si entrega o beneficio (pedido da Gabi, 13/08). */
+.pt-tagline {
+  margin-top: 18px; font-size: 15px; font-weight: 600; letter-spacing: .01em;
+  color: var(--cyan-500); text-transform: none;
+}
 .pt-subhead { font-size: 19px; line-height: 1.5; color: rgba(255,255,255,.8); max-width: 560px; margin-top: 20px; }
+.pt-subhead strong { color: #fff; font-weight: 600; }
 /* Mesa de tres: aperta um pouco o gap pra caber numa linha em telas grandes.
    Abaixo disso o flex-wrap resolve sozinho. */
 /* Mesa de tres: cada um ocupa um terco da coluna, entao o cargo longo do Caio
@@ -503,18 +510,7 @@
 .pt-section-title { font-family: 'Prompt', system-ui, sans-serif; font-weight: 500; font-size: 40px; color: var(--ink-900); letter-spacing: -.035em; margin: 12px 0 16px; line-height: 1.12; text-wrap: balance; max-width: 18ch; }
 .pt-section-intro { font-size: 17px; color: var(--ink-600); max-width: 62ch; margin-bottom: 48px; line-height: 1.6; }
 
-.pt-agenda { display: flex; flex-direction: column; margin-bottom: 84px; }
-.pt-agenda-item { display: flex; gap: 22px; padding: 22px 0; border-bottom: 1px solid var(--brand-200); }
-.pt-agenda-item:last-child { border-bottom: none; }
-.pt-agenda-num {
-  flex-shrink: 0; width: 42px; height: 42px; border-radius: var(--r-md);
-  background: var(--brand-500); color: #fff;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Prompt', system-ui, sans-serif; font-weight: 500; font-size: 19px;
-  font-variant-numeric: tabular-nums;
-}
-.pt-agenda-text h4 { font-family: 'Prompt', system-ui, sans-serif; font-weight: 500; font-size: 20px; letter-spacing: -.025em; color: var(--ink-900); margin-bottom: 5px; }
-.pt-agenda-text p { font-size: 15.5px; color: var(--ink-500); line-height: 1.55; max-width: 68ch; }
+/* O CSS da agenda em lista saiu com a fusao das duas dobras (Gabi, 13/08). */
 
 .pt-benefits-head { text-align: center; max-width: 720px; margin: 0 auto 52px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
 .pt-benefits-title { font-family: 'Prompt', system-ui, sans-serif; font-weight: 500; font-size: 42px; color: var(--ink-900); letter-spacing: -.04em; line-height: 1.08; text-wrap: balance; }
@@ -529,9 +525,20 @@
 }
 .pt-benefit:hover { border-color: var(--brand-300); box-shadow: var(--sh-lg); transform: translateY(-3px); }
 .pt-benefit-icon { width: 52px; height: 52px; border-radius: var(--r-lg); background: var(--brand-500); display: flex; align-items: center; justify-content: center; color: #fff; margin-bottom: 18px; }
+/* Numero do card: herda a funcao que a lista da agenda tinha antes da fusao
+   das duas dobras - dizer que a live segue uma ordem. */
+.pt-benefit-num {
+  position: absolute; top: 30px; right: 26px;
+  font-family: 'Prompt', system-ui, sans-serif; font-weight: 500; font-size: 15px;
+  font-variant-numeric: tabular-nums; letter-spacing: .06em; color: var(--brand-300);
+}
 .pt-benefit h4 { font-family: 'Prompt', system-ui, sans-serif; font-weight: 500; font-size: 20px; letter-spacing: -.025em; color: var(--ink-900); margin-bottom: 8px; }
 .pt-benefit p { font-size: 15px; color: var(--ink-600); line-height: 1.55; }
 .pt-benefit p strong { color: var(--brand-500); font-weight: 600; }
+.pt-benefits-foot {
+  margin-top: 44px; text-align: center; font-size: 16px; color: var(--ink-600);
+}
+.pt-benefits-foot strong { color: var(--brand-500); font-weight: 600; }
 .pt-benefit-check {
   position: absolute; bottom: -17px; left: 50%; transform: translateX(-50%);
   width: 34px; height: 34px; border-radius: 50%;
@@ -658,12 +665,14 @@ body { overflow-x: hidden; }
 @media (max-width: 600px) {
   .pt-container { padding-left: 18px; padding-right: 18px; }
 
-  /* Reordena so no celular: hero -> FORM -> conteudo -> prova -> publico/CTA */
+  /* Reordena so no celular: hero -> FORM -> mesa -> conteudo -> publico/CTA.
+     Ate 13/08 a mesa caia depois do conteudo; a Gabi pediu ela mais pra cima,
+     entao a ordem do celular passou a ser a mesma do desktop. */
   .pt-lp { display: flex; flex-direction: column; }
   .pt-hero      { order: 1; }
   .pt-fold-form { order: 2; }
-  .pt-fold2     { order: 3; }
-  .pt-fold-video{ order: 4; }
+  .pt-fold-video{ order: 3; }
+  .pt-fold2     { order: 4; }
   .pt-fold3     { order: 5; }
   .pt-foot      { order: 6; }
 
@@ -730,11 +739,6 @@ body { overflow-x: hidden; }
 
   .pt-section-title { font-size: 26px; }
   .pt-section-intro { font-size: 15px; margin-bottom: 34px; }
-  .pt-agenda { margin-bottom: 52px; }
-  .pt-agenda-item { gap: 16px; padding: 18px 0; }
-  .pt-agenda-num { width: 36px; height: 36px; font-size: 16px; }
-  .pt-agenda-text h4 { font-size: 17px; }
-  .pt-agenda-text p { font-size: 14.5px; }
   .pt-benefits-title { font-size: 28px; }
   .pt-benefits-sub { font-size: 15px; }
   .pt-benefits-head { margin-bottom: 40px; }
@@ -770,14 +774,18 @@ body { overflow-x: hidden; }
         <div class="pt-lockup">
           <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAABqCAMAAADEB9V3AAADAFBMVEVMaXH////////////////+/v7////////////////////////////////////////////////////////////////////////+/v7////+/v7////////////////////////////////////////////////////////////////////+/v7////////////////////////////////+/v7+/v7////////////+/v7////////////////////////////////+/v7////////+/v7////////////////////////////////+/v7////////////////+/v7////////////////////////////////////////////////////+/v7+/v7////////////////+/v7////////////////+/v7////////////+/v7////////////////+/v7////////////+/v7+/v7+/v7////////////+/v7////////////////////+/v7+/v7////////////////////////////////////////////////////////////////////////////////////////////////////+/v7////////////////////////////////////////////////////////////////////////////////////////////////+/v7////////////////////////+/v7////////////////+/v7////////////////////////////////////////////////////////////////////////+/v7////////////////////////+/v7////////+/v7////////+/v7+/v7///////////////////////////////////////////////////////////////////////////////////////////////8PyoHcAAAA/3RSTlMA+wT6AfwD/gL92AXAF0YTqiLh01XVgPPtPun5NisgcxoNiWtX96hDJ38SLhwPMREG69T4CO8OCvXn9hAU8d2uFiEb4OYkyiNsSU+V9CXo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" alt="Prolog talks" width="420" height="106">
         </div>
-        <span class="pt-edition">Recapagem e Análise de Carcaça &middot; Edição de agosto</span>
+        <!-- Gabi (13/08): a pill de edicao saiu, nao acrescentava nada. -->
       </div>
 
       <div class="pt-hero-bottom">
         <div class="pt-hero-headline-col">
           <span class="pt-chip"><span class="pt-dot"></span>Ao vivo e 100% gratuito</span>
-          <h1 class="pt-headline">Recapagem mal feita <span class="pt-hl">custa mais que pneu novo</span></h1>
-          <p class="pt-subhead">Quantas vidas a carcaça aguenta de verdade e por que a sua não chega lá. Conversa direta pra quem gerencia 30 placas ou mais.</p>
+          <!-- Gabi (13/08): o H1 tem que entregar o beneficio, nao ser tagline.
+               O mote do criativo desceu pra linha de tagline logo acima, pra
+               quem vem do anuncio reconhecer a pagina. -->
+          <p class="pt-tagline">Recapagem mal feita custa mais que pneu novo.</p>
+          <h1 class="pt-headline">Aprenda a ler a carcaça e <span class="pt-hl">pare de perder pneu bom</span></h1>
+          <p class="pt-subhead">Uma aula gratuita pra entender quando vale recapar, quando é prejuízo e o que cobrar da recapadora. Com Diego Paludo, Yan Licks e Caio Scheer. <strong>25/08, terça, às 19h.</strong></p>
 
           <div class="pt-speakers pt-hero-speakers">
             <div class="pt-speaker">
@@ -940,13 +948,16 @@ body { overflow-x: hidden; }
     </div>
   </section>
 
-  <!-- ================= VÍDEO (prova de formato) ================= -->
+  <!-- ================= COM QUEM VOCÊ VAI APRENDER =================
+       Gabi (13/08): kicker era "Veja na prática" e virou "Com quem você vai
+       aprender"; a dobra sobe pra vir logo depois do formulário também no
+       celular (antes o mobile jogava ela pra depois do conteúdo). -->
   <section class="pt-fold-video pt-on-dark">
     <div class="pt-container pt-video-grid pt-reveal">
       <div class="pt-video-text">
-        <span class="pt-kicker pt-kicker-cyan">Veja na prática</span>
-        <h2>Como funciona um Prolog Talks</h2>
-        <p>Uma hora de conversa com quem vive o problema na operação, sem apresentação de quarenta slides. Esta live é a sequência direta da Maratona do Pneu — dá o play nela e veja o formato antes de garantir sua vaga.</p>
+        <span class="pt-kicker pt-kicker-cyan">Com quem você vai aprender</span>
+        <h2>Quem senta na mesa com você</h2>
+        <p>Um especialista que lê carcaça todo dia e dois gestores que olham o custo dela — uma hora de conversa, sem apresentação de quarenta slides. Dá o play na Maratona do Pneu, a edição que puxou este tema, e veja o formato antes de garantir sua vaga.</p>
 
         <div class="pt-speakers">
           <div class="pt-speaker">
@@ -988,81 +999,47 @@ body { overflow-x: hidden; }
     </div>
   </section>
 
-  <!-- ================= O QUE VAMOS DESTRAVAR ================= -->
+  <!-- ================= O QUE VOCÊ VAI APRENDER =================
+       Gabi (13/08): eram duas dobras redundantes — a agenda em lista e os
+       benefícios em card. Viraram uma só, no layout de card, que é o mais
+       legível. O kicker "O que vamos destravar" saiu, a intro deixou de falar
+       de pesquisa (irrelevante pro inscrito) e a ordem dos temas é a que ela
+       numerou nos comentários: decidir, causa, cobrança. -->
   <section class="pt-fold2">
     <div class="pt-gridbg" aria-hidden="true"></div>
     <div class="pt-container" style="position:relative;z-index:1">
       <div class="pt-reveal">
-        <span class="pt-kicker">O que vamos destravar</span>
-        <h2 class="pt-section-title">A carcaça é a parte mais cara do pneu e a que a sua frota menos controla</h2>
-        <p class="pt-section-intro">Este foi o tema mais pedido na pesquisa da última live sobre pneus. A carcaça sai da frota, passa meses fora, volta refugada — e a explicação que chega é "não deu". A conversa segue esta ordem:</p>
-      </div>
-
-      <div class="pt-agenda pt-reveal">
-        <div class="pt-agenda-item">
-          <div class="pt-agenda-num">1</div>
-          <div class="pt-agenda-text">
-            <h4>Quantas vidas a carcaça realmente aguenta</h4>
-            <p>O número que a sua frota deveria estar tirando de cada carcaça — e o que determina esse número.</p>
-          </div>
-        </div>
-        <div class="pt-agenda-item">
-          <div class="pt-agenda-num">2</div>
-          <div class="pt-agenda-text">
-            <h4>O que mata a carcaça antes da hora</h4>
-            <p>Calibragem, sobrecarga, alinhamento e reparo mal feito: o refugo é decidido na sua operação, não na recapadora.</p>
-          </div>
-        </div>
-        <div class="pt-agenda-item">
-          <div class="pt-agenda-num">3</div>
-          <div class="pt-agenda-text">
-            <h4>Recapar ou descartar, com critério</h4>
-            <p>O que olhar na carcaça pra decidir sem chutar — e por que "no olho" já custou dinheiro à sua frota.</p>
-          </div>
-        </div>
-        <div class="pt-agenda-item">
-          <div class="pt-agenda-num">4</div>
-          <div class="pt-agenda-text">
-            <h4>O que cobrar da recapadora</h4>
-            <p>Como avaliar o serviço, ler a taxa de refugo e chegar na negociação com número em vez de impressão.</p>
-          </div>
-        </div>
-        <div class="pt-agenda-item">
-          <div class="pt-agenda-num">5</div>
-          <div class="pt-agenda-text">
-            <h4>Perguntas ao vivo</h4>
-            <p>Espaço aberto pro Paludo responder os casos reais de carcaça da sua operação.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="pt-reveal">
         <div class="pt-benefits-head">
-          <span class="pt-kicker">O que você leva</span>
-          <h3 class="pt-benefits-title">Saia da live sabendo olhar pro <span class="pt-hl">próximo lote de carcaça</span></h3>
-          <p class="pt-benefits-sub">Nada de teoria: o que <strong>funciona de verdade no pátio e na recapadora</strong>. Direto de quem lê carcaça todo dia e de quem gerencia o custo dela.</p>
+          <span class="pt-kicker">O que você vai aprender</span>
+          <h2 class="pt-benefits-title">Veja o que você leva desta <span class="pt-hl">aula gratuita</span></h2>
+          <p class="pt-benefits-sub">Três coisas que mudam o custo de pneu da sua frota já no próximo lote de carcaça — <strong>direto de quem lê carcaça todo dia</strong> e de quem paga a conta dela.</p>
         </div>
 
         <div class="pt-benefits">
           <div class="pt-benefit">
             <div class="pt-benefit-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
-            <h4>Leitura de carcaça</h4>
-            <p>O que a carcaça mostra sobre a sua operação e <strong>como saber se ela ainda vale a recapagem</strong>.</p>
+            <span class="pt-benefit-num">01</span>
+            <h4>Recapar ou descartar, com critério</h4>
+            <p>O que olhar na carcaça pra decidir sem chutar, quantas vidas ela ainda tem e <strong>por que "no olho" já custou dinheiro à sua frota</strong>.</p>
             <div class="pt-benefit-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
           </div>
           <div class="pt-benefit">
             <div class="pt-benefit-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 1 3 6.7"/><path d="M3 21v-5h5"/><path d="M12 8v4l3 2"/></svg></div>
-            <h4>Mais vidas por carcaça</h4>
-            <p>O que as frotas que tiram três vidas fazem diferente e <strong>onde a sua está perdendo a segunda</strong>.</p>
+            <span class="pt-benefit-num">02</span>
+            <h4>O que mata a carcaça antes da hora</h4>
+            <p>Calibragem, sobrecarga, alinhamento e reparo mal feito: <strong>o refugo é decidido na sua operação</strong>, não na recapadora.</p>
             <div class="pt-benefit-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
           </div>
           <div class="pt-benefit">
             <div class="pt-benefit-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
-            <h4>Argumento pra cobrar</h4>
-            <p>Sua <strong>taxa de refugo</strong> como número de gestão: o que exigir da recapadora e o que levar pra reunião de custo.</p>
+            <span class="pt-benefit-num">03</span>
+            <h4>O que cobrar da recapadora</h4>
+            <p>Como avaliar o serviço, ler a sua <strong>taxa de refugo</strong> e chegar na negociação com número em vez de impressão.</p>
             <div class="pt-benefit-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
           </div>
         </div>
+
+        <p class="pt-benefits-foot">E no fim, <strong>perguntas ao vivo</strong>: o Paludo responde os casos reais de carcaça de quem estiver na sala.</p>
 
         <!-- ============================================================
              RECOMPENSA — material rico entregue NO FIM DA LIVE, via QR code
@@ -1079,6 +1056,13 @@ body { overflow-x: hidden; }
              De propósito NÃO é isca de inscrição: o formulário desta LP não
              promete a planilha, ela é de quem fica até o fim. Se um dia virar
              isca de inscrição, o subtítulo do form e o CTA final mudam junto.
+
+             >>> EM ABERTO (Gabi, 13/08) <<< ela perguntou se a planilha existe
+             (existe: prologapp.com/planilha-desgaste-de-pneus/) e sugeriu usar
+             a live pra LANÇAR o SIMULADOR DE RECAPAGENS, material novo que
+             está no radar da Jade. Se o simulador ficar pronto a tempo, ele
+             troca a planilha neste bloco — é material inédito e casa melhor
+             com o tema. Decisão depende da Jade.
         ============================================================ -->
         <div class="pt-bonus">
           <div>
@@ -1087,11 +1071,9 @@ body { overflow-x: hidden; }
               Pra quem ficar até o fim
             </span>
             <h3>Você sai da live com a <em>planilha pra achar o desgaste</em> antes que ele vire refugo</h3>
-            <p>A Planilha de Controle de Desgaste de Pneus, a mesma que a Prolog disponibiliza gratuitamente, entregue no encerramento da transmissão. Você registra o desgaste que viu no pátio e ela devolve as causas prováveis — que é onde a carcaça está sendo perdida.</p>
-            <div class="pt-bonus-note">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM18 18h3v3h-3z"/></svg>
-              QR code na tela no fim da live &middot; grátis &middot; arquivo em Excel
-            </div>
+            <p>A Planilha de Controle de Desgaste de Pneus fica liberada no encerramento da transmissão. Você registra o desgaste que viu no pátio e ela devolve as causas prováveis — que é onde a carcaça está sendo perdida.</p>
+            <!-- Gabi (13/08): "tirar tudo isso" — a linha de QR/grátis/Excel saiu.
+                 O mecanismo de entrega é assunto da live, não da página. -->
           </div>
 
           <div class="pt-bonus-card">
