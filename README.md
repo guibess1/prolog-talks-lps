@@ -89,7 +89,7 @@ pra caber. Se crescer, migrar pra Vercel Blob mexe só nesse arquivo.
 | `LPHUB_DOMINIO` | não | domínio que entra como revisor (padrão `prologapp.com`) |
 | `GOOGLE_CLIENT_ID` | não | login com Google; sem ele sobra o código de acesso |
 | `LPHUB_CODIGOS` | não | `{"CODIGO":{"nome":...,"email":...,"papel":...}}` — ponte de acesso |
-| `GITHUB_TOKEN` | pro envio | abrir PR no repo do site |
+| `GITHUB_TOKEN` | pro envio | abrir PR no repo do site. PAT **clássico** com escopo `repo` — fine-grained apontado pra repo da org precisa de aprovação de owner. Vence 12/09/2026 |
 | `SITE_REPO`, `SITE_BASE_BRANCH` | não | padrão `prologapp/site-comercial-prolog` e `dev` |
 | `ANTHROPIC_API_KEY` | pra IA | ler briefing e sugerir SEO. Sem ela os dois botões aparecem desabilitados dizendo o que falta |
 | `DISCORD_WEBHOOK`, `LPHUB_URL` | não | aviso de comentário e de mudança de status |
