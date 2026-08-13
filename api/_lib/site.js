@@ -459,6 +459,97 @@ async function abrirPr({ branch, titulo, corpo }) {
   return { numero: pr.number, url: pr.html_url, jaExistia: false };
 }
 
+/* ========================================================================== *
+ *  3. Leitura do estado — pra tela de acompanhamento
+ * ========================================================================== *
+ * Só GET. Nada aqui muda nada no GitHub: existe pra o hub conseguir dizer em
+ * qual etapa o envio está, em vez de largar a pessoa com "PR aberto" e três
+ * instruções que ela precisa conferir na mão em duas abas.
+ * Toda função devolve null quando não encontra, em vez de estourar: a tela
+ * mostra "não deu pra ler" numa etapa e segue mostrando as outras.
+ */
+
+async function talvez(promessa) {
+  try {
+    return await promessa;
+  } catch {
+    return null;
+  }
+}
+
+async function prPorNumero(numero) {
+  const pr = await talvez(gh(`/pulls/${encodeURIComponent(numero)}`));
+  if (!pr) return null;
+  return {
+    numero: pr.number,
+    url: pr.html_url,
+    titulo: pr.title,
+    estado: pr.merged_at ? 'mergeado' : pr.state === 'closed' ? 'fechado' : 'aberto',
+    mergeadoEm: pr.merged_at || null,
+    sha: (pr.head && pr.head.sha) || null,
+    base: pr.base && pr.base.ref,
+    head: pr.head && pr.head.ref,
+  };
+}
+
+// PR de release: o que leva `dev` (ou a base configurada) pra `main`. É nele que
+// roda a esteira `validate`, então é o que decide se dá pra publicar.
+async function prDeRelease() {
+  const c = cfgGit();
+  const dono = c.repo.split('/')[0];
+  const lista = await talvez(
+    gh(`/pulls?state=open&base=main&head=${encodeURIComponent(dono + ':' + c.base)}`)
+  );
+  if (!Array.isArray(lista) || !lista.length) return null;
+  const pr = lista[0];
+  return {
+    numero: pr.number,
+    url: pr.html_url,
+    titulo: pr.title,
+    estado: 'aberto',
+    sha: pr.head && pr.head.sha,
+  };
+}
+
+// Estado da esteira num commit. Junta check-runs (GitHub Actions) e statuses
+// (integrações antigas) porque o repo do site usa os dois.
+async function checagens(sha) {
+  if (!sha) return null;
+  const runs = await talvez(gh(`/commits/${encodeURIComponent(sha)}/check-runs?per_page=100`));
+  const itens = ((runs && runs.check_runs) || []).map((r) => ({
+    nome: r.name,
+    // queued/in_progress => rodando; completed => success|failure|neutral|…
+    estado: r.status !== 'completed' ? 'rodando' : r.conclusion === 'success' ? 'ok' : r.conclusion === 'neutral' || r.conclusion === 'skipped' ? 'ok' : 'falhou',
+    url: r.html_url,
+  }));
+  if (!itens.length) return { itens: [], resumo: 'sem' };
+  const falhou = itens.some((i) => i.estado === 'falhou');
+  const rodando = itens.some((i) => i.estado === 'rodando');
+  return { itens, resumo: falhou ? 'falhou' : rodando ? 'rodando' : 'ok' };
+}
+
+// O arquivo já está na branch? É o que separa "mergeado" de "no ar": entre um e
+// outro existe o deploy, que leva alguns minutos.
+async function existeNaBranch(caminho, ref) {
+  const r = await talvez(gh(`/contents/${caminho.split('/').map(encodeURIComponent).join('/')}?ref=${encodeURIComponent(ref)}`));
+  return Boolean(r && (r.sha || r.content));
+}
+
+// A página responde de verdade? Sem seguir redirect: 301 pra home é o sintoma
+// clássico de rota que ainda não existe.
+async function noAr(url) {
+  try {
+    const r = await fetch(url, {
+      method: 'GET',
+      redirect: 'manual',
+      headers: { 'User-Agent': 'prolog-lp-hub' },
+    });
+    return { ok: r.status === 200, status: r.status };
+  } catch (e) {
+    return { ok: false, status: 0, erro: String(e.message || e) };
+  }
+}
+
 module.exports = {
   converter,
   caminhos,
@@ -466,5 +557,10 @@ module.exports = {
   abrirPr,
   cfgGit,
   gitConfigurado,
+  prPorNumero,
+  prDeRelease,
+  checagens,
+  existeNaBranch,
+  noAr,
   TETO_EMBUTIDO,
 };
