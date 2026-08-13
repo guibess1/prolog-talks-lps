@@ -43,6 +43,11 @@
    - countdown, .ics e todos os textos de data foram de 18/08 pra 25/08
    - video de prova de formato agora e a Maratona do Pneu (28/07), sequencia
      direta desta edicao e a live de melhor desempenho da serie
+
+  v3.1 (13/08/2026) - entra a recompensa de quem fica ate o fim: a Planilha de
+  Controle de Desgaste de Pneus, entregue por QR no encerramento da live. Bloco
+  .pt-bonus depois dos beneficios + uma linha no CTA final. A LP so anuncia; a
+  captura acontece na pagina do material no site comercial.
   ============================================================================
   v2 (06/08/2026) - visual alinhado ao site comercial novo (Astro/Operations).
   Tokens, tipografia e formas vem de site-comercial-prolog/src/styles/global.css
@@ -73,9 +78,8 @@
   tela mesmo dentro de uma secao com padding/max-width).
 
   >>> PENDENCIAS - procure "TROCAR" no codigo <<<
-   1. Material rico: bloco comentado no fim da secao de beneficios - so descomentar
-      se decidirem atrelar um checklist de analise de carcaca a inscricao (muda
-      tambem o subtitulo do form, o CTA final e a camada de urgencia dos ads)
+   1. QR do encerramento: gerar a arte com a URL da planilha JA COM UTM
+      (ver comentario do bloco .pt-bonus, na secao de beneficios)
    2. Hero: a foto de fundo segue a rodovia noturna herdada da edicao anterior.
       Se quiserem casar 100% com o tema, trocar por inspecao de carcaca em
       recapadora - o prompt de imagem ja esta escrito na nota de criativos.
@@ -535,6 +539,57 @@
   display: flex; align-items: center; justify-content: center; border: 4px solid var(--brand-100);
 }
 
+/* --------------------------------------------------------------------------
+   RECOMPENSA - a planilha entregue no fim da live (QR no encerramento).
+   Bloco escuro no meio da laje clara: e o unico ponto da pagina que precisa
+   parar o olho depois dos beneficios. Nao promete entrega por e-mail na
+   inscricao de proposito - o material e de quem fica ate o fim.
+-------------------------------------------------------------------------- */
+.pt-bonus {
+  margin-top: 76px; background: var(--brand-900); border-radius: var(--r-xxl);
+  padding: 44px; display: grid; grid-template-columns: 1.05fr .95fr; gap: 44px;
+  align-items: center; position: relative; overflow: hidden;
+  box-shadow: var(--sh-2xl);
+}
+/* varredura cyan de canto, mesma linguagem do .pt-stream das secoes escuras */
+.pt-bonus::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(120% 80% at 100% 0%, rgba(0,238,255,.16), transparent 60%);
+}
+.pt-bonus > * { position: relative; z-index: 1; }
+.pt-bonus-chip {
+  display: inline-flex; align-items: center; gap: 7px; align-self: flex-start;
+  background: rgba(0,238,255,.14); border: 1px solid rgba(0,238,255,.32);
+  color: var(--cyan-500); font-size: 11.5px; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  border-radius: 999px; padding: 6px 13px; margin-bottom: 16px;
+}
+.pt-bonus h3 {
+  font-family: 'Prompt', system-ui, sans-serif; font-weight: 500;
+  font-size: 31px; line-height: 1.12; letter-spacing: -.035em; color: #fff;
+  margin-bottom: 14px; text-wrap: balance;
+}
+.pt-bonus h3 em { font-style: italic; color: var(--cyan-500); }
+.pt-bonus > div > p { font-size: 15.5px; line-height: 1.6; color: rgba(255,255,255,.72); }
+.pt-bonus-note {
+  display: flex; align-items: center; gap: 10px; margin-top: 20px;
+  font-size: 13px; color: rgba(255,255,255,.55);
+}
+.pt-bonus-note svg { color: var(--cyan-500); flex-shrink: 0; }
+.pt-bonus-card {
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.14);
+  border-radius: var(--r-xl); padding: 26px 24px;
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+.pt-bonus-card-title {
+  font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: rgba(255,255,255,.5); margin-bottom: 16px;
+}
+.pt-bonus-list { list-style: none; display: flex; flex-direction: column; gap: 13px; }
+.pt-bonus-list li { display: flex; gap: 11px; align-items: flex-start; font-size: 14.5px; color: rgba(255,255,255,.86); line-height: 1.45; }
+.pt-bonus-list li svg { color: var(--cyan-500); flex-shrink: 0; margin-top: 3px; }
+.pt-bonus-list li strong { color: #fff; font-weight: 600; }
+
 /* ==========================================================================
    PUBLICO + CTA FINAL
 ========================================================================== */
@@ -589,6 +644,8 @@ body { overflow-x: hidden; }
   .pt-hero-cta-card { flex: none; max-width: none; }
   .pt-headline { font-size: 42px; }
   .pt-benefits { grid-template-columns: 1fr; gap: 30px; }
+  .pt-bonus { grid-template-columns: 1fr; gap: 28px; padding: 34px 28px; margin-top: 60px; }
+  .pt-bonus h3 { font-size: 27px; }
   .pt-benefits-title { font-size: 34px; }
   .pt-section-title, .pt-cta-final h2 { font-size: 32px; max-width: none; }
   .pt-fold2, .pt-fold3 { padding: 64px 0; }
@@ -1008,16 +1065,45 @@ body { overflow-x: hidden; }
         </div>
 
         <!-- ============================================================
-             MATERIAL RICO (opcional) - descomentar SÓ se decidirem atrelar
-             um material à inscrição. Se ativar, ajustar também o subtítulo
-             do formulário e o texto do CTA final, que hoje não prometem nada.
+             RECOMPENSA — material rico entregue NO FIM DA LIVE, via QR code
+             no slide de encerramento. Escolha do Gui em 13/08: Planilha de
+             Controle de Desgaste de Pneus, que já existe no site comercial
+             (prologapp.com/planilha-desgaste-de-pneus/, form do HubSpot
+             4e0d0c60-4a0b-40a5-8a03-26d407f4b4c3 — o arquivo chega por e-mail
+             depois do preenchimento).
 
-        <div class="pt-benefit">
-          <div class="pt-benefit-icon">...</div>
-          <h4>Checklist de análise de carcaça</h4>
-          <p>Material prático pra aplicar no próximo lote que sair da sua frota.</p>
-        </div>
+             O QR do encerramento deve levar pra URL com UTM, senão não dá pra
+             separar quem veio da live de quem veio do site:
+             /planilha-desgaste-de-pneus/?utm_source=prolog-talks&utm_medium=qr&utm_campaign=talks-25-08
+
+             De propósito NÃO é isca de inscrição: o formulário desta LP não
+             promete a planilha, ela é de quem fica até o fim. Se um dia virar
+             isca de inscrição, o subtítulo do form e o CTA final mudam junto.
         ============================================================ -->
+        <div class="pt-bonus">
+          <div>
+            <span class="pt-bonus-chip">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.6 6.6L21 9.3l-4.8 4.3 1.4 6.4L12 16.8 6.4 20l1.4-6.4L3 9.3l6.4-.7z"/></svg>
+              Pra quem ficar até o fim
+            </span>
+            <h3>Você sai da live com a <em>planilha pra achar o desgaste</em> antes que ele vire refugo</h3>
+            <p>A Planilha de Controle de Desgaste de Pneus, a mesma que a Prolog disponibiliza gratuitamente, entregue no encerramento da transmissão. Você registra o desgaste que viu no pátio e ela devolve as causas prováveis — que é onde a carcaça está sendo perdida.</p>
+            <div class="pt-bonus-note">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM18 18h3v3h-3z"/></svg>
+              QR code na tela no fim da live &middot; grátis &middot; arquivo em Excel
+            </div>
+          </div>
+
+          <div class="pt-bonus-card">
+            <div class="pt-bonus-card-title">O que a planilha mostra</div>
+            <ul class="pt-bonus-list">
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Quantos pneus da frota estão com <strong>desgaste irregular</strong></span></li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>A proporção de <strong>pneus novos x recapados</strong> rodando hoje</span></li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>Os <strong>tipos de desgaste mais frequentes</strong> na sua operação</span></li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg><span>As <strong>causas prováveis</strong> de cada desgaste, preenchidas automaticamente</span></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1039,7 +1125,7 @@ body { overflow-x: hidden; }
 
       <div class="pt-cta-final pt-reveal">
         <h2>Carcaça boa no lixo é <span class="pt-hl">dinheiro no lixo</span>.</h2>
-        <p>25 de agosto, 19h, online e de graça. Garanta sua vaga e receba o link da live no e-mail.</p>
+        <p>25 de agosto, 19h, online e de graça. Garanta sua vaga e receba o link da live no e-mail. Quem fica até o fim ainda leva a planilha de controle de desgaste.</p>
         <a href="#inscreva-se" class="pt-cta-btn pt-sheen">
           Garantir minha vaga grátis
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
