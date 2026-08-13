@@ -1,0 +1,169 @@
+/* Design system do hub — extraído do que estava duplicado inline em cada página.
+   Segue o DESIGN.md da Prolog: Prompt só no peso 500, Figtree no corpo,
+   sombras com base brand-900 em vez de preto puro, radius de 4 a 24. */
+
+:root {
+  color-scheme: light;
+
+  /* Brand (azul Prolog) */
+  --brand-0:#fafbff; --brand-100:#f7f9fe; --brand-200:#e7ecfb; --brand-300:#bfcdf4;
+  --brand-400:#7694e6; --brand-500:#043ad1; --brand-600:#0330ad; --brand-700:#032688;
+  --brand-800:#021b64; --brand-900:#01113f;
+  /* Cyan (accent) */
+  --cyan-200:#c5fbff; --cyan-400:#70f5ff; --cyan-500:#00eeff; --cyan-700:#009ba6; --cyan-800:#00717a;
+  /* Marketing (laranja) */
+  --mkt-100:#fff3eb; --mkt-500:#f55e00; --mkt-600:#cb4e00; --mkt-700:#a13e00;
+  /* Success / Warn / Erro */
+  --ok-200:#d1f5e7; --ok-500:#008554; --ok-700:#005837;
+  --warn-100:#fdf3d3; --warn-500:#f5bf0c; --warn-700:#b47b0a;
+  --err-100:#fdeceb; --err-500:#d92d20; --err-700:#a11c14;
+  /* Ink (grayscale) */
+  --ink-0:#ffffff; --ink-100:#fdfdfd; --ink-200:#f1f2f3; --ink-300:#d4d5da;
+  --ink-400:#9ea1ab; --ink-500:#4a5063; --ink-600:#3d4252; --ink-700:#303441;
+  --ink-800:#23262f; --ink-900:#16181e;
+
+  --sh-sm: 0 1px 3px 0 rgb(1 17 63 / .12), 0 1px 2px -1px rgb(1 17 63 / .12);
+  --sh-md: 0 4px 6px -1px rgb(1 17 63 / .12), 0 2px 4px -2px rgb(1 17 63 / .12);
+  --sh-lg: 0 10px 15px -3px rgb(1 17 63 / .14), 0 4px 6px -4px rgb(1 17 63 / .14);
+  --sh-xl: 0 20px 25px -5px rgb(1 17 63 / .16), 0 8px 10px -6px rgb(1 17 63 / .16);
+
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-xlg:16px; --r-xl:20px; --r-xxl:24px;
+
+  --font-display: 'Prompt', system-ui, sans-serif;
+  --font-sans: 'Figtree', system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+/* O atributo hidden vem do stylesheet do navegador, então qualquer regra nossa
+   com display (flex, grid) ganha dele e o elemento continua na tela. Como o hub
+   liga e desliga bloco via .hidden = true, isso precisa vir explícito. */
+[hidden] { display: none !important; }
+
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--ink-0);
+  color: var(--ink-900);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 3px solid var(--brand-500); outline-offset: 3px; border-radius: var(--r-sm); }
+
+.display { font-family: var(--font-display); font-weight: 500; letter-spacing: -.03em; }
+.display em, .hl { font-style: italic; color: var(--brand-500); font-weight: 500; }
+
+.kicker {
+  display: inline-block; font-size: 12px; font-weight: 600; line-height: 1;
+  text-transform: uppercase; letter-spacing: .16em; color: var(--brand-500);
+}
+.kicker::before { content: '// '; opacity: .55; }
+.kicker-cyan { color: var(--cyan-500); }
+.kicker-ink { color: var(--ink-400); }
+
+.mono { font-family: var(--font-sans); letter-spacing: .08em; text-transform: uppercase; font-weight: 600; }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; line-height: 1;
+  text-transform: uppercase; letter-spacing: .08em;
+  padding: 6px 10px; border-radius: var(--r-md); white-space: nowrap;
+}
+.chip .dot { width: 6px; height: 6px; border-radius: 999px; background: currentColor; position: relative; flex: 0 0 auto; }
+.chip .dot::after {
+  content: ''; position: absolute; inset: 0; border-radius: 999px;
+  background: currentColor; opacity: .5; animation: pulse 2s cubic-bezier(0,0,.2,1) infinite;
+}
+.chip-warn    { background: var(--warn-100); color: var(--warn-700); }
+.chip-mkt     { background: var(--mkt-100);  color: var(--mkt-700); }
+.chip-ok      { background: var(--ok-200);   color: var(--ok-700); }
+.chip-brand   { background: var(--brand-200);color: var(--brand-700); }
+.chip-neutral { background: var(--ink-200);  color: var(--ink-600); }
+.chip-neutral .dot::after, .chip-ok .dot::after, .chip-brand .dot::after { animation: none; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: var(--font-sans); font-size: 14px; font-weight: 600;
+  padding: 11px 18px; border-radius: var(--r-md); border: 1px solid transparent;
+  cursor: pointer; transition: background .18s ease, color .18s ease, border-color .18s ease;
+  position: relative; overflow: hidden; isolation: isolate;
+}
+.btn svg { width: 15px; height: 15px; flex: 0 0 auto; }
+.btn[disabled] { opacity: .55; cursor: not-allowed; }
+.btn-brand { background: var(--brand-500); color: #fff; }
+.btn-brand:hover:not([disabled]) { background: var(--brand-600); }
+.btn-ghost { background: #fff; color: var(--ink-700); border-color: var(--ink-300); }
+.btn-ghost:hover:not([disabled]) { border-color: var(--brand-500); color: var(--brand-500); }
+.btn-cyan { background: var(--cyan-500); color: var(--brand-900); }
+.btn-cyan:hover:not([disabled]) { background: var(--cyan-400); }
+/* Aprovar. Contorno em vez de preenchido: dividir peso visual com o
+   "Revisar e comentar" faria as duas ações competirem, e revisar vem antes. */
+.btn-ok { background: #fff; color: var(--ok-700); border-color: var(--ok-500); }
+.btn-ok:hover:not([disabled]) { background: var(--ok-200); }
+/* Segundo clique: confirmação no próprio botão, sem diálogo do navegador. */
+.btn-ok[data-confirmar] { background: var(--ok-500); color: #fff; border-color: var(--ok-500); }
+.btn-sm { font-size: 13px; padding: 8px 13px; }
+.btn::before {
+  content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 45%;
+  background: linear-gradient(100deg, transparent 0%, rgba(255,255,255,.16) 50%, transparent 100%);
+  transform: translateX(-160%) skewX(-18deg); opacity: 0;
+  transition: opacity .3s ease; pointer-events: none;
+}
+.btn-brand:hover::before, .btn-cyan:hover::before, .btn-brand:focus-visible::before {
+  opacity: 1; animation: sheen 1.8s linear infinite;
+}
+
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(231,236,251,.6) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(231,236,251,.6) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+.stream { height: 1px; background: linear-gradient(90deg, transparent, var(--cyan-500), transparent); animation: stream 3s linear infinite; }
+
+@keyframes sheen  { 0% { transform: translateX(-160%) skewX(-18deg); } 100% { transform: translateX(360%) skewX(-18deg); } }
+@keyframes stream { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+@keyframes pulse  { 0% { transform: scale(1); opacity: .6; } 80%, 100% { transform: scale(2.5); opacity: 0; } }
+@keyframes girar  { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+/* ---------- Campos ---------- */
+.campo {
+  width: 100%; font-family: var(--font-sans); font-size: 14px; line-height: 1.55;
+  color: var(--ink-900); background: #fff;
+  border: 1px solid var(--ink-300); border-radius: var(--r-md); padding: 11px 13px;
+  transition: border-color .18s ease, box-shadow .18s ease; resize: vertical;
+}
+.campo::placeholder { color: var(--ink-400); }
+.campo:focus { outline: 0; border-color: var(--brand-500); box-shadow: 0 0 0 3px rgba(4,58,209,.12); }
+
+/* ---------- Avatar de iniciais ---------- */
+.avatar {
+  width: 28px; height: 28px; flex: 0 0 auto; border-radius: 999px;
+  display: grid; place-items: center;
+  background: var(--brand-200); color: var(--brand-700);
+  font-size: 11px; font-weight: 700; letter-spacing: .02em;
+}
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: 26px; transform: translate(-50%, 16px);
+  background: var(--ink-900); color: #fff; font-size: 13px; font-weight: 500;
+  padding: 11px 18px; border-radius: var(--r-md); box-shadow: var(--sh-xl);
+  opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease; z-index: 200;
+  max-width: min(90vw, 460px); text-align: center;
+}
+.toast[data-on] { opacity: 1; transform: translate(-50%, 0); }
+.toast[data-tipo="erro"] { background: var(--err-700); }
+
+/* ---------- Spinner ---------- */
+.girando {
+  width: 16px; height: 16px; border-radius: 999px;
+  border: 2px solid currentColor; border-right-color: transparent;
+  animation: girar .7s linear infinite; display: inline-block;
+}

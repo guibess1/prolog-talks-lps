@@ -1,0 +1,1289 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Revisão · LP Hub Prolog Talks</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  <meta name="theme-color" content="#043ad1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,500;1,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/ds.css?v=9">
+  <style>
+    body { background: var(--brand-900); overflow: hidden; }
+
+    /* ---------- Barra superior ---------- */
+    .bar {
+      height: 56px; background: rgba(255,255,255,.97); backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--ink-200);
+      display: flex; align-items: center; gap: 12px; padding: 0 14px;
+    }
+    .voltar {
+      display: inline-flex; align-items: center; gap: 7px; flex: 0 0 auto;
+      font-size: 13px; font-weight: 600; color: var(--ink-700);
+      padding: 8px 12px; border-radius: var(--r-md); border: 1px solid var(--ink-300);
+      transition: border-color .18s ease, color .18s ease;
+    }
+    .voltar:hover { border-color: var(--brand-500); color: var(--brand-500); }
+    .bar-div { width: 1px; height: 22px; background: var(--ink-200); flex: 0 0 auto; }
+
+    .id { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+    .id .chips { display: flex; align-items: center; gap: 6px; align-self: flex-start; }
+    .troca {
+      font-family: var(--font-display); font-weight: 500; letter-spacing: -.02em; font-size: 15px;
+      color: var(--ink-900); background: transparent; border: 0; padding: 0 18px 0 0; margin: 0;
+      max-width: 40ch; text-overflow: ellipsis; cursor: pointer; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234a5063' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right center; background-size: 13px;
+    }
+    .troca:hover { color: var(--brand-500); }
+
+    .tools { margin-left: auto; display: flex; align-items: center; gap: 9px; flex: 0 0 auto; }
+    .seg { display: inline-flex; background: var(--ink-200); border-radius: var(--r-md); padding: 3px; gap: 2px; }
+    .seg button {
+      display: inline-flex; align-items: baseline; gap: 6px;
+      font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: var(--ink-500);
+      background: transparent; border: 0; padding: 7px 13px; border-radius: 6px; cursor: pointer;
+      transition: background .16s ease, color .16s ease, box-shadow .16s ease;
+    }
+    .seg button span { font-size: 10px; font-weight: 600; letter-spacing: .06em; opacity: .65; }
+    .seg button:hover { color: var(--ink-800); }
+    .seg button[aria-pressed="true"] { background: #fff; color: var(--brand-500); box-shadow: var(--sh-sm); }
+
+    .icone {
+      width: 38px; height: 38px; display: grid; place-items: center; position: relative;
+      background: #fff; border: 1px solid var(--ink-300); border-radius: var(--r-md);
+      color: var(--ink-600); cursor: pointer; transition: border-color .18s ease, color .18s ease;
+    }
+    .icone:hover { border-color: var(--brand-500); color: var(--brand-500); }
+    .icone[aria-pressed="true"] { border-color: var(--brand-500); color: var(--brand-500); background: var(--brand-100); }
+    .icone svg { width: 16px; height: 16px; }
+    .icone .selo {
+      position: absolute; top: -6px; right: -6px; min-width: 17px; height: 17px; padding: 0 4px;
+      border-radius: 999px; background: var(--mkt-500); color: #fff;
+      font-size: 10px; font-weight: 700; display: grid; place-items: center; border: 2px solid #fff;
+    }
+
+    /* ---------- Layout palco + painel ---------- */
+    .corpo { display: flex; height: calc(100dvh - 56px); }
+    .palco {
+      flex: 1; min-width: 0; position: relative; overflow: hidden;
+      display: grid; place-items: center; padding: 20px; background: var(--brand-900);
+    }
+    .palco::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: 48px 48px;
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 25%, transparent 78%);
+      mask-image: radial-gradient(ellipse at center, #000 25%, transparent 78%);
+    }
+    .device {
+      position: relative; z-index: 1;
+      width: 390px; height: min(844px, 100%);
+      background: #fff; border: 10px solid #0b0d12; border-radius: 34px;
+      box-shadow: var(--sh-xl), 0 0 0 1px rgba(255,255,255,.08);
+      overflow: hidden; transition: width .22s ease, border-radius .22s ease, border-width .22s ease;
+    }
+    .device iframe { width: 100%; height: 100%; border: 0; display: block; background: #fff; }
+    .palco[data-modo="tablet"] .device { width: min(820px, 100%); height: min(1100px, 100%); border-width: 9px; border-radius: 22px; }
+    .palco[data-modo="desktop"] { padding: 0; }
+    .palco[data-modo="desktop"] .device { width: 100%; height: 100%; border: 0; border-radius: 0; box-shadow: none; }
+    .medida {
+      position: absolute; z-index: 2; bottom: 12px; left: 50%; transform: translateX(-50%);
+      font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+      color: rgba(255,255,255,.45); pointer-events: none;
+    }
+    .palco[data-modo="desktop"] .medida { display: none; }
+
+    /* ---------- Bolha de seleção ---------- */
+    /* Aparece sobre o texto marcado dentro da LP, como no Docs. */
+    .bolha {
+      position: absolute; z-index: 30; transform: translate(-50%, -100%);
+      display: none; align-items: center; gap: 4px; padding: 4px;
+      background: var(--ink-900); border-radius: var(--r-md); box-shadow: var(--sh-xl);
+      animation: bolhaEntra .14s ease;
+    }
+    .bolha[data-on] { display: flex; }
+    .bolha::after {
+      content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+      border: 5px solid transparent; border-top-color: var(--ink-900);
+    }
+    .bolha button {
+      display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+      font-family: var(--font-sans); font-size: 12px; font-weight: 600; color: #fff;
+      background: transparent; border: 0; padding: 7px 10px; border-radius: 6px;
+      transition: background .16s ease;
+    }
+    .bolha button:hover { background: rgba(255,255,255,.14); }
+    .bolha button svg { width: 13px; height: 13px; }
+    .bolha .div { width: 1px; height: 18px; background: rgba(255,255,255,.18); }
+    @keyframes bolhaEntra { from { opacity: 0; transform: translate(-50%, -92%); } }
+
+    /* ---------- Painel ---------- */
+    .painel {
+      width: 390px; flex: 0 0 390px; background: #fff; border-left: 1px solid var(--ink-200);
+      display: flex; flex-direction: column; min-height: 0;
+    }
+    body[data-painel="off"] .painel { display: none; }
+
+    .pn-abas { display: flex; border-bottom: 1px solid var(--ink-200); flex: 0 0 auto; }
+    .pn-abas button {
+      flex: 1; background: transparent; border: 0; cursor: pointer;
+      font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: var(--ink-500);
+      padding: 15px 8px; border-bottom: 2px solid transparent; transition: color .16s ease, border-color .16s ease;
+    }
+    .pn-abas button:hover { color: var(--ink-800); }
+    .pn-abas button[aria-pressed="true"] { color: var(--brand-500); border-bottom-color: var(--brand-500); }
+
+    .pn-lista { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+
+    .com {
+      border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 13px 14px; background: #fff;
+      transition: border-color .18s ease, box-shadow .18s ease;
+    }
+    .com:hover { border-color: var(--ink-300); }
+    .com[data-focado] { border-color: var(--brand-500); box-shadow: 0 0 0 3px rgba(4,58,209,.1); }
+    .com[data-resolvido] { background: var(--ink-100); border-style: dashed; }
+    .com[data-resolvido] .com-texto { color: var(--ink-500); }
+    .com-topo { display: flex; align-items: center; gap: 9px; }
+    .com-quem { min-width: 0; flex: 1; display: flex; flex-direction: column; line-height: 1.3; }
+    .com-nome { font-size: 13px; font-weight: 600; color: var(--ink-800); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .com-hora { font-size: 11px; color: var(--ink-400); }
+    .com-texto { font-size: 14px; line-height: 1.6; color: var(--ink-700); margin: 10px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+    /* Trecho citado — clicar rola a LP até ele */
+    .com-trecho {
+      margin: 10px 0 0; padding: 7px 11px; cursor: pointer;
+      border-left: 2px solid var(--warn-500); background: var(--warn-100);
+      border-radius: 0 var(--r-sm) var(--r-sm) 0;
+      font-size: 12px; line-height: 1.5; color: var(--ink-600);
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+      transition: background .16s ease;
+    }
+    .com-trecho:hover { background: #fbe9b6; }
+    .com-trecho[data-perdido] { border-left-color: var(--ink-300); background: var(--ink-200); cursor: default; }
+
+    /* Sugestão de texto — antes riscado, depois em verde */
+    .com-sug { margin: 10px 0 0; border: 1px solid var(--ok-200); border-radius: var(--r-md); overflow: hidden; }
+    .com-sug .cab {
+      font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--ok-700); background: var(--ok-200); padding: 5px 10px;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .com-sug .cab button {
+      background: transparent; border: 0; cursor: pointer; padding: 0;
+      font-family: var(--font-sans); font-size: 10px; font-weight: 700; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--ok-700); text-decoration: underline;
+    }
+    .com-sug .novo { padding: 9px 11px; font-size: 13px; line-height: 1.55; color: var(--ok-700); font-weight: 500; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+    .com-pe { display: flex; align-items: center; gap: 12px; margin-top: 11px; }
+    .com-acao {
+      background: transparent; border: 0; cursor: pointer; padding: 4px 0;
+      font-family: var(--font-sans); font-size: 12px; font-weight: 600; color: var(--ink-500);
+      transition: color .16s ease;
+    }
+    .com-acao:hover { color: var(--brand-500); }
+    .com-acao[data-perigo]:hover { color: var(--err-500); }
+    .com-selo {
+      margin-left: auto; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--ok-700); background: var(--ok-200); padding: 4px 8px; border-radius: var(--r-sm);
+    }
+
+    .pn-vazio { text-align: center; color: var(--ink-500); font-size: 14px; line-height: 1.6; padding: 34px 12px; }
+    .pn-vazio strong { display: block; font-family: var(--font-display); font-weight: 500; font-size: 17px; color: var(--ink-800); margin-bottom: 6px; }
+
+    /* ---------- Composer ---------- */
+    .pn-form { flex: 0 0 auto; border-top: 1px solid var(--ink-200); padding: 13px 16px 15px; background: var(--ink-100); }
+    .pn-form[data-off] { display: none; }
+    .pn-form textarea { min-height: 70px; }
+
+    .sel-chip {
+      display: none; align-items: flex-start; gap: 8px; margin-bottom: 9px;
+      border-left: 2px solid var(--warn-500); background: var(--warn-100);
+      border-radius: 0 var(--r-sm) var(--r-sm) 0; padding: 7px 10px;
+    }
+    .sel-chip[data-on] { display: flex; }
+    .sel-chip p {
+      margin: 0; flex: 1; min-width: 0; font-size: 12px; line-height: 1.5; color: var(--ink-600);
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .sel-chip button {
+      flex: 0 0 auto; background: transparent; border: 0; cursor: pointer; color: var(--ink-500);
+      font-size: 15px; line-height: 1; padding: 2px;
+    }
+    .sel-chip button:hover { color: var(--err-500); }
+
+    .sug-area { display: none; margin-top: 9px; }
+    .sug-area[data-on] { display: block; }
+    .sug-area label { display: block; font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ok-700); margin-bottom: 5px; }
+    .sug-area textarea { min-height: 58px; border-color: var(--ok-500); }
+
+    .pn-form .linha { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+    .pn-form .dica { font-size: 11px; color: var(--ink-400); margin-right: auto; }
+    .liga-sug {
+      background: transparent; border: 0; cursor: pointer; padding: 0;
+      font-family: var(--font-sans); font-size: 12px; font-weight: 600; color: var(--ok-700);
+    }
+    .liga-sug:hover { text-decoration: underline; }
+    .liga-sug[disabled] { color: var(--ink-400); cursor: not-allowed; text-decoration: none; }
+
+    .pn-status { flex: 0 0 auto; border-top: 1px solid var(--ink-200); padding: 13px 16px; display: flex; gap: 8px; align-items: center; }
+    .pn-status select { flex: 1; }
+
+    /* ---------- Gerar com IA ---------- */
+    .ia-linha { display: flex; align-items: center; gap: 10px; margin: -4px 0 16px; flex-wrap: wrap; }
+    .btn-ia {
+      display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+      font-family: var(--font-sans); font-size: 13px; font-weight: 600;
+      padding: 9px 14px; border-radius: var(--r-md);
+      background: var(--brand-100); color: var(--brand-700); border: 1px solid var(--brand-300);
+      transition: background .18s ease, border-color .18s ease;
+    }
+    .btn-ia:hover:not([disabled]) { background: var(--brand-200); border-color: var(--brand-500); }
+    .btn-ia[disabled] { opacity: .55; cursor: not-allowed; }
+    .btn-ia svg { width: 15px; height: 15px; flex: 0 0 auto; }
+    .ia-linha .dica-ia { font-size: 12px; color: var(--ink-400); line-height: 1.5; flex: 1; min-width: 12ch; }
+
+    .ia-nota {
+      display: none; margin: -6px 0 16px; padding: 11px 13px;
+      border-left: 2px solid var(--brand-500); background: var(--brand-100);
+      border-radius: 0 var(--r-md) var(--r-md) 0; font-size: 12.5px; line-height: 1.6; color: var(--brand-700);
+    }
+    .ia-nota[data-on] { display: block; }
+    .ia-nota b { font-weight: 600; }
+    .ia-nota ul { margin: 7px 0 0; padding-left: 18px; }
+    .ia-nota li { color: var(--mkt-700); }
+
+    /* Campo recém-preenchido pela IA: some no primeiro toque da pessoa. */
+    .campo[data-ia] { border-color: var(--brand-500); background: var(--brand-100); }
+
+    /* ---------- Histórico ---------- */
+    .hist { list-style: none; margin: 0; padding: 0; }
+    .hist li { display: flex; gap: 12px; padding: 0 0 16px; position: relative; }
+    .hist li::before { content: ''; position: absolute; left: 5px; top: 16px; bottom: 0; width: 1px; background: var(--ink-200); }
+    .hist li:last-child { padding-bottom: 0; }
+    .hist li:last-child::before { display: none; }
+    .hist b { flex: 0 0 auto; width: 11px; height: 11px; margin-top: 4px; border-radius: 999px; background: var(--brand-300); border: 2px solid #fff; box-shadow: 0 0 0 1px var(--brand-300); }
+    .hist div { min-width: 0; }
+    .hist .h-tit { font-size: 13px; font-weight: 600; color: var(--ink-800); line-height: 1.4; }
+    .hist .h-sub { font-size: 12px; color: var(--ink-500); margin-top: 2px; }
+
+    .url-final {
+      flex: 0 0 auto; border-top: 1px solid var(--ink-200); padding: 11px 16px;
+      display: flex; align-items: center; gap: 8px; background: var(--brand-100);
+      font-size: 12px; color: var(--brand-700); overflow: hidden;
+    }
+    .url-final code { font-family: var(--font-sans); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .url-final button { margin-left: auto; flex: 0 0 auto; background: transparent; border: 0; cursor: pointer; font-family: var(--font-sans); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--brand-500); }
+
+    /* ---------- Envio pro site comercial ---------- */
+    /* Modal, e não uma seção no painel: o painel é estreito e já disputa espaço
+       com a lista de comentários, e aqui precisa caber a prévia do arquivo. */
+    .modal { position: fixed; inset: 0; z-index: 100; display: none; }
+    .modal[data-on] { display: block; }
+    .modal-fundo { position: absolute; inset: 0; background: rgba(1,17,63,.58); animation: fundoEntra .16s ease; }
+    @keyframes fundoEntra { from { opacity: 0 } }
+    .modal-caixa {
+      position: relative; z-index: 1; margin: 0 auto; top: 50%; transform: translateY(-50%);
+      width: min(720px, calc(100vw - 32px)); max-height: min(88dvh, 860px);
+      background: #fff; border-radius: var(--r-xlg); box-shadow: var(--sh-xl);
+      display: flex; flex-direction: column; overflow: hidden; animation: caixaEntra .18s ease;
+    }
+    @keyframes caixaEntra { from { opacity: 0; transform: translateY(-46%) } }
+    .modal-topo { flex: 0 0 auto; padding: 20px 22px 16px; border-bottom: 1px solid var(--ink-200); }
+    .modal-topo h2 { font-family: var(--font-display); font-weight: 500; letter-spacing: -.03em; font-size: 22px; line-height: 1.2; margin: 9px 0 0; }
+    .modal-topo p { color: var(--ink-500); font-size: 13.5px; line-height: 1.6; margin: 8px 0 0; }
+    .modal-topo code { font-size: 12.5px; background: var(--ink-200); padding: 2px 6px; border-radius: var(--r-sm); color: var(--ink-700); }
+    .modal-fechar {
+      position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; display: grid; place-items: center;
+      background: #fff; border: 1px solid var(--ink-300); border-radius: var(--r-md); color: var(--ink-500); cursor: pointer;
+    }
+    .modal-fechar:hover { border-color: var(--err-500); color: var(--err-500); }
+    .modal-corpo { flex: 1; overflow-y: auto; padding: 18px 22px; min-height: 0; }
+    .modal-pe { flex: 0 0 auto; padding: 14px 22px; border-top: 1px solid var(--ink-200); background: var(--ink-100); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .modal-pe .aviso-pe { font-size: 12px; color: var(--ink-500); margin-right: auto; max-width: 40ch; line-height: 1.5; }
+
+    .campo-linha { margin-bottom: 15px; }
+    .campo-linha label { display: block; font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-500); margin-bottom: 6px; }
+    .campo-linha .ajuda { font-size: 12px; color: var(--ink-400); margin-top: 5px; line-height: 1.5; }
+    .campo-linha .conta { float: right; font-size: 10px; font-weight: 600; color: var(--ink-400); letter-spacing: 0; text-transform: none; }
+    .campo-linha .conta[data-estourou] { color: var(--err-500); }
+    .campo-linha textarea { min-height: 66px; }
+    .campo-mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+    .previa { margin-top: 4px; border: 1px solid var(--ink-200); border-radius: var(--r-lg); overflow: hidden; }
+    .previa-cab { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 11px 13px; background: var(--ink-100); border-bottom: 1px solid var(--ink-200); font-size: 12px; color: var(--ink-600); }
+    .previa-cab b { font-weight: 600; color: var(--ink-800); }
+    .previa-cab .peso { margin-left: auto; font-weight: 600; color: var(--ink-500); }
+    .previa pre {
+      margin: 0; padding: 13px; max-height: 260px; overflow: auto; background: var(--brand-900);
+      color: rgba(255,255,255,.82); font-size: 11.5px; line-height: 1.55; white-space: pre; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .previa-ativos { list-style: none; margin: 0; padding: 10px 13px; border-top: 1px solid var(--ink-200); display: grid; gap: 5px; }
+    .previa-ativos li { font-size: 12px; color: var(--ink-600); display: flex; gap: 8px; }
+    .previa-ativos li span { margin-left: auto; color: var(--ink-400); }
+
+    .envio-ok { border: 1px solid var(--ok-500); background: var(--ok-200); border-radius: var(--r-lg); padding: 15px 16px; }
+    .envio-ok strong { display: block; font-family: var(--font-display); font-weight: 500; font-size: 18px; color: var(--ok-700); margin-bottom: 6px; }
+    .envio-ok p { font-size: 13.5px; line-height: 1.6; color: var(--ink-700); margin: 0 0 4px; }
+    .envio-ok ol { margin: 10px 0 0 18px; padding: 0; font-size: 13px; line-height: 1.7; color: var(--ink-600); }
+
+    .envio-erro { border-left: 2px solid var(--err-500); background: var(--err-100); border-radius: 0 var(--r-md) var(--r-md) 0; padding: 12px 14px; margin-bottom: 15px; font-size: 13px; line-height: 1.6; color: var(--err-700); }
+    .forcar { display: flex; align-items: flex-start; gap: 8px; margin-top: 10px; font-size: 12.5px; color: var(--ink-600); line-height: 1.5; }
+    .forcar input { margin-top: 2px; }
+
+    .ultimo-envio { border: 1px dashed var(--brand-300); border-radius: var(--r-md); padding: 11px 13px; margin-bottom: 16px; font-size: 12.5px; color: var(--brand-700); line-height: 1.6; }
+    .ultimo-envio a { text-decoration: underline; font-weight: 600; }
+
+    @media (max-width: 620px) {
+      .modal-caixa { width: 100vw; max-height: 100dvh; height: 100dvh; top: 0; transform: none; border-radius: 0; }
+      .modal-pe { flex-direction: column; align-items: stretch; }
+      .modal-pe .btn { width: 100% ; justify-content: center; }
+      .modal-pe .aviso-pe { margin-right: 0; max-width: none; }
+    }
+
+    @media (max-width: 1180px) { .painel { width: 340px; flex-basis: 340px; } }
+    @media (max-width: 1080px) { .seg button span { display: none; } }
+    @media (max-width: 960px) {
+      .painel { position: fixed; z-index: 80; top: 56px; right: 0; bottom: 0; width: min(390px, 100%); flex-basis: auto; box-shadow: var(--sh-xl); }
+    }
+    @media (max-width: 900px) {
+      .bar { gap: 8px; padding: 0 10px; }
+      .bar-div, .id .chip { display: none; }
+      .troca { font-size: 13px; max-width: 100%; }
+      .seg, .icone[data-act="reload"], .btn-cheia { display: none; }
+      .palco { padding: 0; }
+      .device { width: 100% !important; height: 100% !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; }
+      .medida { display: none; }
+      .voltar span { display: none; }
+    }
+  </style>
+</head>
+<body data-painel="on">
+  <header class="bar">
+    <a class="voltar" href="/">&#8592;<span>Hub</span></a>
+    <span class="bar-div" aria-hidden="true"></span>
+    <div class="id">
+      <span class="chips">
+        <span class="chip chip-neutral" id="chip"><i class="dot"></i>—</span>
+        <span class="chip chip-warn" id="chip-espelho" hidden><i class="dot"></i>preview espelhado</span>
+      </span>
+      <select class="troca display" id="troca" aria-label="Trocar de landing page"></select>
+    </div>
+    <div class="tools">
+      <div class="seg" role="group" aria-label="Largura de visualização">
+        <button type="button" data-modo="mobile" aria-pressed="true" title="Mobile (tecla 1)">Mobile <span>390</span></button>
+        <button type="button" data-modo="tablet" aria-pressed="false" title="Tablet (tecla 2)">Tablet <span>820</span></button>
+        <button type="button" data-modo="desktop" aria-pressed="false" title="Desktop (tecla 3)">Desktop <span>100%</span></button>
+      </div>
+      <button class="icone" type="button" data-act="reload" title="Recarregar a LP" aria-label="Recarregar a LP">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+      </button>
+      <button class="icone" type="button" id="alterna-painel" aria-pressed="true" title="Comentários (tecla C)" aria-label="Mostrar ou esconder comentários">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.9 8.9 0 0 1-3.8-.9L3 21l1.9-5a8.4 8.4 0 0 1-.9-3.8 8.4 8.4 0 0 1 8.4-9 8.4 8.4 0 0 1 8.6 8.3z"/></svg>
+        <span class="selo" id="selo" hidden>0</span>
+      </button>
+      <button class="icone" type="button" id="abre-envio" title="Enviar pro site comercial" aria-label="Enviar pro site comercial" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+      </button>
+      <a class="btn btn-brand btn-cheia" id="cheia" href="#" target="_blank" rel="noopener">Tela cheia <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M9 5l7 7-7 7"/></svg></a>
+    </div>
+  </header>
+
+  <div class="corpo">
+    <main class="palco" id="palco" data-modo="mobile">
+      <div class="device">
+        <iframe id="quadro" title="Landing page em revisão" loading="eager"></iframe>
+      </div>
+      <span class="medida" id="medida">390 × 844</span>
+
+      <div class="bolha" id="bolha">
+        <button type="button" data-bolha="comentar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.9 8.9 0 0 1-3.8-.9L3 21l1.9-5a8.4 8.4 0 0 1-.9-3.8 8.4 8.4 0 0 1 8.4-9 8.4 8.4 0 0 1 8.6 8.3z"/></svg>
+          Comentar
+        </button>
+        <span class="div" aria-hidden="true"></span>
+        <button type="button" data-bolha="sugerir">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+          Sugerir texto
+        </button>
+      </div>
+    </main>
+
+    <aside class="painel" aria-label="Comentários e histórico">
+      <div class="pn-abas" role="group">
+        <button type="button" data-pn="abertos" aria-pressed="true">Em aberto</button>
+        <button type="button" data-pn="todos" aria-pressed="false">Todos</button>
+        <button type="button" data-pn="hist" aria-pressed="false">Histórico</button>
+      </div>
+
+      <div class="pn-lista" id="pn-lista"></div>
+
+      <form class="pn-form" id="pn-form">
+        <div class="sel-chip" id="sel-chip">
+          <p id="sel-texto"></p>
+          <button type="button" id="sel-limpar" title="Descartar a seleção" aria-label="Descartar a seleção">&times;</button>
+        </div>
+
+        <textarea class="campo" id="txt" placeholder="Selecione um trecho da LP ou escreva um comentário geral" maxlength="1200" aria-label="Novo comentário"></textarea>
+
+        <div class="sug-area" id="sug-area">
+          <label for="sug">Novo texto sugerido</label>
+          <textarea class="campo" id="sug" maxlength="1200" aria-label="Texto sugerido"></textarea>
+        </div>
+
+        <div class="linha">
+          <span class="dica">Ctrl + Enter envia</span>
+          <button class="liga-sug" type="button" id="liga-sug" disabled>Sugerir texto</button>
+          <button class="btn btn-brand btn-sm" type="submit" id="btn-com">Comentar</button>
+        </div>
+      </form>
+
+      <div class="url-final" id="url-final" hidden>
+        <span>vai no ar em</span> <code id="url-final-txt"></code>
+        <button type="button" id="url-copiar">copiar</button>
+      </div>
+
+      <div class="pn-status" id="pn-status" hidden>
+        <select class="campo" id="sel-status" aria-label="Status da LP">
+          <option value="revisao">aguardando revisão</option>
+          <option value="ajuste">em ajuste</option>
+          <option value="aprovada">aprovada</option>
+          <option value="publicada">publicada</option>
+          <option value="arquivada">arquivada</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" type="button" id="btn-status">Salvar</button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="modal" id="modal-envio" role="dialog" aria-modal="true" aria-labelledby="envio-titulo">
+    <div class="modal-fundo" data-fecha-envio></div>
+    <div class="modal-caixa">
+      <div class="modal-topo">
+        <button class="modal-fechar" type="button" data-fecha-envio aria-label="Fechar">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <span class="kicker">enviar pro site</span>
+        <h2 class="display" id="envio-titulo">Levar esta LP pra estrutura do site</h2>
+        <p id="envio-explica">
+          Gera <code>src/pages/…</code> no repo do site comercial, commita numa branch
+          e abre PR. Não mergeia e não publica: quem aprova o PR é o CTO.
+        </p>
+      </div>
+
+      <div class="modal-corpo" id="envio-corpo">
+        <div class="ultimo-envio" id="envio-ultimo" hidden></div>
+        <div class="envio-erro" id="envio-erro" hidden></div>
+
+        <div class="ia-linha" id="ia-linha" hidden>
+          <button class="btn-ia" type="button" id="btn-ia">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3.2"/></svg>
+            Gerar com IA
+          </button>
+          <span class="dica-ia" id="dica-ia">Usa a copy desta LP como base: headline, agenda, público, convidada e data.</span>
+        </div>
+        <div class="ia-nota" id="ia-nota"></div>
+
+        <div class="campo-linha">
+          <label for="f-url">URL no site <span class="conta">padrão /série/slug</span></label>
+          <input class="campo campo-mono" id="f-url" type="text" spellcheck="false" placeholder="/talks/adesao-de-motoristas">
+          <p class="ajuda">Vira o arquivo <code id="f-url-arquivo">src/pages/…</code>. Sem data no slug: depois da live a mesma página vira a do replay.</p>
+        </div>
+
+        <div class="campo-linha">
+          <label for="f-titulo">Título da aba e do Google <span class="conta" id="c-titulo">0/120</span></label>
+          <input class="campo" id="f-titulo" type="text" placeholder="Prolog Talks · Adesão de motoristas aos procedimentos">
+          <p class="ajuda">O <code>· Prolog</code> do fim entra sozinho, é a convenção do site.</p>
+        </div>
+
+        <div class="campo-linha">
+          <label for="f-desc">Descrição (meta description) <span class="conta" id="c-desc">0/200</span></label>
+          <textarea class="campo" id="f-desc" placeholder="Live gratuita em 18/08, 19h: …"></textarea>
+          <p class="ajuda">O Google corta em ~160. Em branco, o gerador usa a subheadline do hero da própria LP.</p>
+        </div>
+
+        <div id="envio-previa"></div>
+
+        <label class="forcar" id="envio-forcar" hidden>
+          <input type="checkbox" id="f-forcar">
+          <span id="envio-forcar-txt"></span>
+        </label>
+      </div>
+
+      <div class="modal-pe">
+        <span class="aviso-pe" id="envio-repo"></span>
+        <button class="btn btn-ghost btn-sm" type="button" id="btn-previa">Ver o arquivo</button>
+        <button class="btn btn-brand btn-sm" type="button" id="btn-enviar">Enviar e abrir PR</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+
+  <script src="/app.js?v=8"></script>
+  <script src="/ancora.js?v=8"></script>
+  <script>
+    (function () {
+      var lista = document.getElementById('pn-lista');
+      if (!window.Hub || !window.Ancora) {
+        lista.innerHTML = '<div class="pn-vazio"><strong>Scripts não carregaram</strong>' +
+          '<button class="btn btn-ghost btn-sm" style="margin-top:12px" onclick="location.reload(true)">Recarregar</button></div>';
+        return;
+      }
+
+      var lpId = decodeURIComponent((location.pathname.split('/')[2] || '').trim());
+      var palco = document.getElementById('palco');
+      var quadro = document.getElementById('quadro');
+      var medida = document.getElementById('medida');
+      var device = palco.querySelector('.device');
+      var selo = document.getElementById('selo');
+      var form = document.getElementById('pn-form');
+      var txt = document.getElementById('txt');
+      var sug = document.getElementById('sug');
+      var sugArea = document.getElementById('sug-area');
+      var ligaSug = document.getElementById('liga-sug');
+      var selChip = document.getElementById('sel-chip');
+      var selTexto = document.getElementById('sel-texto');
+      var bolha = document.getElementById('bolha');
+      var btnCom = document.getElementById('btn-com');
+      var pnStatus = document.getElementById('pn-status');
+      var selStatus = document.getElementById('sel-status');
+
+      var dados = null;
+      var lp = null;
+      var pnAba = 'abertos';
+      var selecao = null;        // âncora escolhida pelo usuário: {trecho, ocorrencia}
+      var selecaoPendente = null; // o que a bolha vai usar se for clicada
+
+      /* ================= Device ================= */
+      var CHAVE_MODO = 'pt-lp-modo';
+      var MODOS = { mobile: 1, tablet: 1, desktop: 1 };
+      var botoes = Array.prototype.slice.call(document.querySelectorAll('.seg button'));
+
+      function medir() {
+        if (palco.getAttribute('data-modo') === 'desktop') { medida.textContent = ''; return; }
+        var r = device.getBoundingClientRect();
+        medida.textContent = Math.round(r.width) + ' × ' + Math.round(r.height);
+      }
+
+      // Dentro do frame de device a scrollbar do desktop roubaria ~15px da LP e
+      // falsearia o dobramento. Some com ela nos modos device; no desktop volta.
+      function ajustarBarra(doc) {
+        try {
+          if (!doc) return;
+          var st = doc.getElementById('pt-sem-barra');
+          if (!st) {
+            st = doc.createElement('style');
+            st.id = 'pt-sem-barra';
+            st.textContent = 'html{scrollbar-width:none!important}html::-webkit-scrollbar{width:0!important;height:0!important}';
+            doc.head.appendChild(st);
+          }
+          st.disabled = palco.getAttribute('data-modo') === 'desktop';
+        } catch (e) {}
+      }
+
+      function aplicar(modo, salvar) {
+        palco.setAttribute('data-modo', modo);
+        botoes.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-modo') === modo)); });
+        if (salvar !== false) { try { localStorage.setItem(CHAVE_MODO, modo); } catch (e) {} }
+        ajustarBarra(docLp());
+        esconderBolha();
+        setTimeout(medir, 240);
+      }
+
+      botoes.forEach(function (b) { b.addEventListener('click', function () { aplicar(b.getAttribute('data-modo')); }); });
+      window.addEventListener('resize', function () { medir(); esconderBolha(); });
+      document.querySelector('[data-act="reload"]').addEventListener('click', function () { quadro.src = quadro.src; });
+      // Leva o ?fonte junto quando a LP escolhida é uma cópia sem arquivo
+      // próprio: assim o iframe da próxima tela também nasce apontando certo.
+      document.getElementById('troca').addEventListener('change', function (e) {
+        var alvo = dados.lps.filter(function (x) { return x.id === e.target.value; })[0];
+        var f = alvo && alvo.fonteHtml && alvo.fonteHtml !== alvo.id
+          ? '?fonte=' + encodeURIComponent(alvo.fonteHtml) : '';
+        location.href = '/ver/' + encodeURIComponent(e.target.value) + f;
+      });
+
+      /* ================= Painel ================= */
+      var CHAVE_PN = 'lphub-painel';
+      function painel(ligado, salvar) {
+        document.body.setAttribute('data-painel', ligado ? 'on' : 'off');
+        document.getElementById('alterna-painel').setAttribute('aria-pressed', String(ligado));
+        if (salvar !== false) { try { localStorage.setItem(CHAVE_PN, ligado ? 'on' : 'off'); } catch (e) {} }
+        setTimeout(medir, 240);
+      }
+      document.getElementById('alterna-painel').addEventListener('click', function () {
+        painel(document.body.getAttribute('data-painel') !== 'on');
+      });
+
+      document.addEventListener('keydown', function (e) {
+        var campo = /^(SELECT|INPUT|TEXTAREA)$/.test(e.target.tagName);
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && (e.target === txt || e.target === sug)) {
+          e.preventDefault(); enviar(); return;
+        }
+        if (campo || e.metaKey || e.ctrlKey || e.altKey) return;
+        var mapa = { '1': 'mobile', '2': 'tablet', '3': 'desktop' };
+        if (mapa[e.key]) { e.preventDefault(); aplicar(mapa[e.key]); }
+        if (e.key === 'c' || e.key === 'C') { e.preventDefault(); painel(document.body.getAttribute('data-painel') !== 'on'); }
+        if (e.key === 'Escape') { esconderBolha(); limparSelecao(); }
+      });
+
+      document.querySelectorAll('.pn-abas button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          pnAba = b.getAttribute('data-pn');
+          document.querySelectorAll('.pn-abas button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+          pintarPainel();
+        });
+      });
+
+      /* ================= Seleção dentro da LP ================= */
+      function docLp() {
+        try { return quadro.contentDocument; } catch (e) { return null; }
+      }
+
+      function esconderBolha() { bolha.removeAttribute('data-on'); }
+
+      function posicionarBolha(rect) {
+        var pr = palco.getBoundingClientRect();
+        var qr = quadro.getBoundingClientRect();
+        var x = qr.left - pr.left + rect.left + rect.width / 2;
+        var y = qr.top - pr.top + rect.top - 8;
+        // Não deixa a bolha sair do palco quando o trecho está na borda
+        x = Math.max(80, Math.min(pr.width - 80, x));
+        y = Math.max(46, y);
+        bolha.style.left = x + 'px';
+        bolha.style.top = y + 'px';
+        bolha.setAttribute('data-on', '');
+      }
+
+      function aoSelecionar() {
+        var doc = docLp();
+        if (!doc || !dados || !dados.poderes.comentar) return;
+        var sel = doc.getSelection();
+        if (!sel || sel.isCollapsed || !String(sel).trim()) { esconderBolha(); return; }
+        var ancora = Ancora.ancorarSelecao(doc, sel);
+        if (!ancora) { esconderBolha(); return; }
+        selecaoPendente = ancora;
+        var rect = sel.getRangeAt(0).getBoundingClientRect();
+        if (!rect || (!rect.width && !rect.height)) { esconderBolha(); return; }
+        posicionarBolha(rect);
+      }
+
+      bolha.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-bolha]');
+        if (!b || !selecaoPendente) return;
+        usarSelecao(selecaoPendente, b.getAttribute('data-bolha') === 'sugerir');
+        esconderBolha();
+      });
+
+      function usarSelecao(ancora, comSugestao) {
+        selecao = ancora;
+        selTexto.textContent = '“' + ancora.trecho + '”';
+        selChip.setAttribute('data-on', '');
+        ligaSug.disabled = false;
+        painel(true);
+        if (comSugestao) {
+          sugArea.setAttribute('data-on', '');
+          sug.value = ancora.trecho;
+          sug.focus();
+          sug.select();
+        } else {
+          txt.focus();
+        }
+      }
+
+      function limparSelecao() {
+        selecao = null;
+        selChip.removeAttribute('data-on');
+        sugArea.removeAttribute('data-on');
+        sug.value = '';
+        ligaSug.disabled = true;
+      }
+
+      document.getElementById('sel-limpar').addEventListener('click', limparSelecao);
+      ligaSug.addEventListener('click', function () {
+        if (!selecao) return;
+        var ligado = sugArea.hasAttribute('data-on');
+        if (ligado) { sugArea.removeAttribute('data-on'); sug.value = ''; return; }
+        sugArea.setAttribute('data-on', '');
+        if (!sug.value) sug.value = selecao.trecho;
+        sug.focus();
+      });
+
+      /* ================= Marcas no preview ================= */
+      var CSS_MARCA =
+        '.lphub-marca{background:rgba(245,191,12,.42);border-radius:2px;cursor:pointer;' +
+        'box-shadow:inset 0 -2px 0 rgba(180,123,10,.55)}' +
+        '.lphub-marca:hover{background:rgba(245,191,12,.65)}' +
+        '.lphub-marca[data-resolvido]{background:rgba(0,133,84,.18);box-shadow:inset 0 -2px 0 rgba(0,88,55,.4)}' +
+        '.lphub-marca[data-focado]{background:rgba(4,58,209,.28);box-shadow:inset 0 -2px 0 rgba(4,58,209,.7)}';
+
+      function repintarMarcas() {
+        var doc = docLp();
+        if (!doc || !doc.body || !dados) return;
+        if (!doc.getElementById('lphub-css')) {
+          var st = doc.createElement('style');
+          st.id = 'lphub-css';
+          st.textContent = CSS_MARCA;
+          doc.head.appendChild(st);
+        }
+        Ancora.limparMarcas(doc);
+
+        var ancorados = dados.comentarios.filter(function (c) { return c.lp === lpId && c.trecho; });
+        var perdidos = {};
+        ancorados.forEach(function (c) {
+          // Remapeia a cada comentário: marcar quebra nós de texto e invalida o mapa
+          var mapa = Ancora.mapear(doc);
+          var pos = Ancora.localizar(mapa, c.trecho, c.ocorrencia);
+          if (!pos) { perdidos[c.id] = true; return; }
+          var attrs = { 'data-com': c.id };
+          if (c.status === 'resolvido') attrs['data-resolvido'] = '';
+          Ancora.marcar(doc, mapa, pos.ini, pos.fim, attrs);
+        });
+        return perdidos;
+      }
+
+      function ligarEventosDoFrame() {
+        var doc = docLp();
+        if (!doc) return;
+        ajustarBarra(doc);
+        doc.addEventListener('mouseup', function () { setTimeout(aoSelecionar, 10); });
+        doc.addEventListener('keyup', function () { setTimeout(aoSelecionar, 10); });
+        doc.addEventListener('scroll', esconderBolha, true);
+        if (doc.defaultView) doc.defaultView.addEventListener('scroll', esconderBolha);
+        doc.addEventListener('click', function (e) {
+          var m = e.target.closest && e.target.closest('mark.lphub-marca');
+          if (!m) return;
+          focarComentario(m.getAttribute('data-com'), false);
+        });
+        repintarMarcas();
+      }
+      quadro.addEventListener('load', ligarEventosDoFrame);
+
+      function irParaTrecho(id) {
+        var doc = docLp();
+        if (!doc) return;
+        var m = doc.querySelector('mark.lphub-marca[data-com="' + id + '"]');
+        if (!m) { Hub.avisar('Esse trecho não está mais na LP', 'erro'); return; }
+        m.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        Array.prototype.slice.call(doc.querySelectorAll('mark.lphub-marca[data-focado]')).forEach(function (x) {
+          x.removeAttribute('data-focado');
+        });
+        doc.querySelectorAll('mark.lphub-marca[data-com="' + id + '"]').forEach(function (x) {
+          x.setAttribute('data-focado', '');
+        });
+      }
+
+      function focarComentario(id, rolarLp) {
+        if (pnAba === 'hist') {
+          pnAba = 'abertos';
+          document.querySelectorAll('.pn-abas button').forEach(function (x) {
+            x.setAttribute('aria-pressed', String(x.getAttribute('data-pn') === 'abertos'));
+          });
+          pintarPainel();
+        }
+        var card = lista.querySelector('.com[data-id="' + id + '"]');
+        if (!card) {
+          // Comentário resolvido só aparece na aba "Todos"
+          pnAba = 'todos';
+          document.querySelectorAll('.pn-abas button').forEach(function (x) {
+            x.setAttribute('aria-pressed', String(x.getAttribute('data-pn') === 'todos'));
+          });
+          pintarPainel();
+          card = lista.querySelector('.com[data-id="' + id + '"]');
+        }
+        if (card) {
+          Array.prototype.slice.call(lista.querySelectorAll('.com[data-focado]')).forEach(function (x) { x.removeAttribute('data-focado'); });
+          card.setAttribute('data-focado', '');
+          card.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          painel(true);
+        }
+        if (rolarLp) irParaTrecho(id);
+      }
+
+      /* ================= Render do painel ================= */
+      var perdidos = {};
+
+      function comentario(c) {
+        var resolvido = c.status === 'resolvido';
+        var dono = dados.usuario && c.autor && c.autor.email === dados.usuario.email;
+        var podeApagar = dados.poderes.apagar || dono;
+        var sumido = perdidos[c.id];
+        return '' +
+          '<article class="com"' + (resolvido ? ' data-resolvido' : '') + ' data-id="' + Hub.esc(c.id) + '">' +
+            '<div class="com-topo">' +
+              '<span class="avatar">' + Hub.esc(Hub.iniciais(c.autor && c.autor.nome)) + '</span>' +
+              '<span class="com-quem">' +
+                '<span class="com-nome">' + Hub.esc(c.autor && c.autor.nome) + '</span>' +
+                '<span class="com-hora">' + Hub.esc(Hub.quando(c.criadoEm)) + '</span>' +
+              '</span>' +
+              (resolvido ? '<span class="com-selo">resolvido</span>' : '') +
+            '</div>' +
+            (c.trecho ?
+              '<blockquote class="com-trecho"' + (sumido ? ' data-perdido title="Esse texto não existe mais na LP"' : ' data-ir title="Ir até o trecho na LP"') + '>' +
+                (sumido ? '⚠ ' : '') + '“' + Hub.esc(c.trecho) + '”' +
+              '</blockquote>' : '') +
+            (c.texto ? '<p class="com-texto">' + Hub.esc(c.texto) + '</p>' : '') +
+            (c.sugestao ?
+              '<div class="com-sug">' +
+                '<div class="cab"><span>texto sugerido</span><button type="button" data-acao="copiar-sug">copiar</button></div>' +
+                '<div class="novo">' + Hub.esc(c.sugestao) + '</div>' +
+              '</div>' : '') +
+            '<div class="com-pe">' +
+              '<button class="com-acao" type="button" data-acao="' + (resolvido ? 'reabrir' : 'resolver') + '">' +
+                (resolvido ? 'Reabrir' : 'Marcar como resolvido') + '</button>' +
+              (podeApagar ? '<button class="com-acao" type="button" data-acao="apagar" data-perigo>Apagar</button>' : '') +
+            '</div>' +
+          '</article>';
+      }
+
+      function historico() {
+        var itens = (lp.historico || []).slice().reverse();
+        if (!itens.length) {
+          return '<div class="pn-vazio"><strong>Sem movimentação</strong>As mudanças de status desta LP vão aparecer aqui, com quem fez e quando.</div>';
+        }
+        return '<ul class="hist">' + itens.map(function (h) {
+          var de = (Hub.STATUS[h.de] || {}).rotulo || h.de;
+          var para = (Hub.STATUS[h.para] || {}).rotulo || h.para;
+          return '<li><b></b><div>' +
+            '<div class="h-tit">' + Hub.esc(de) + ' → ' + Hub.esc(para) + '</div>' +
+            '<div class="h-sub">' + Hub.esc(h.por) + ' · ' + Hub.esc(Hub.quando(h.em)) + (h.motivo ? ' · ' + Hub.esc(h.motivo) : '') + '</div>' +
+          '</div></li>';
+        }).join('') + '</ul>';
+      }
+
+      function pintarPainel() {
+        if (!dados || !lp) return;
+        if (pnAba === 'hist') { lista.innerHTML = historico(); return; }
+        var doLp = dados.comentarios.filter(function (c) { return c.lp === lpId; });
+        var visiveis = pnAba === 'abertos' ? doLp.filter(function (c) { return c.status !== 'resolvido'; }) : doLp;
+        visiveis.sort(function (a, b) { return String(b.criadoEm).localeCompare(String(a.criadoEm)); });
+
+        if (!visiveis.length) {
+          lista.innerHTML = pnAba === 'abertos'
+            ? '<div class="pn-vazio"><strong>Nenhum ajuste em aberto</strong>Selecione um trecho na LP ao lado pra comentar nele, ou escreva um comentário geral aqui embaixo.</div>'
+            : '<div class="pn-vazio"><strong>Sem comentários ainda</strong>Esta LP não recebeu nenhum comentário.</div>';
+          return;
+        }
+        lista.innerHTML = visiveis.map(comentario).join('');
+      }
+
+      function pintarCabecalho() {
+        var st = Hub.STATUS[lp.status] || Hub.STATUS.revisao;
+        var chip = document.getElementById('chip');
+        chip.className = 'chip ' + st.chip;
+        chip.innerHTML = '<i class="dot"></i>' + Hub.esc(st.rotulo);
+        document.title = lp.titulo + ' · revisão';
+        selStatus.value = lp.status;
+        espelho();
+
+        var abertos = dados.comentarios.filter(function (c) { return c.lp === lpId && c.status !== 'resolvido'; }).length;
+        selo.hidden = abertos === 0;
+        selo.textContent = abertos;
+
+        var barra = document.getElementById('url-final');
+        if (lp.urlFinal) {
+          barra.hidden = false;
+          document.getElementById('url-final-txt').textContent = 'prologapp.com' + lp.urlFinal;
+        } else {
+          barra.hidden = true;
+        }
+      }
+
+      document.getElementById('url-copiar').addEventListener('click', function () {
+        Hub.copiar('https://prologapp.com' + lp.urlFinal);
+      });
+
+      // LP duplicada sem arquivo próprio mostra o HTML da origem. Quem entra
+      // direto pelo link (sem o ?fonte que o hub manda) precisa saber disso antes
+      // de comentar: senão comenta a copy do outro evento achando que é a desta.
+      var avisouEspelho = false;
+      function espelho() {
+        var fonte = lp.fonteHtml || lp.id;
+        var chip = document.getElementById('chip-espelho');
+        chip.hidden = fonte === lp.id;
+
+        // Troca o iframe só quando a fonte muda de verdade: pintarCabecalho roda
+        // a cada comentário, e recarregar a LP a cada um perderia o scroll.
+        // Também é o que conserta a URL com ?fonte velho depois que o arquivo
+        // próprio da cópia finalmente subiu.
+        if (quadroFonte !== fonte) {
+          quadroFonte = fonte;
+          quadro.src = '/' + encodeURIComponent(fonte);
+          document.getElementById('cheia').href = '/' + encodeURIComponent(fonte);
+        }
+
+        if (fonte === lp.id || avisouEspelho) return;
+        chip.title = 'Esta cópia ainda não tem arquivo próprio: o que aparece é a LP "' + fonte +
+          '". Suba public/' + lp.id + '/index.html num deploy.';
+        avisouEspelho = true;
+        Hub.avisar('Preview espelhado da LP "' + fonte + '": esta cópia ainda não tem arquivo próprio.');
+      }
+
+      function pintarTroca() {
+        var sel = document.getElementById('troca');
+        sel.innerHTML = dados.lps.map(function (x) {
+          return '<option value="' + Hub.esc(x.id) + '"' + (x.id === lpId ? ' selected' : '') + '>' +
+            Hub.esc(x.data) + ' · ' + Hub.esc(x.titulo) + '</option>';
+        }).join('');
+      }
+
+      function recarregar() {
+        return Hub.api('dados', { timeout: 15000 }).then(function (d) {
+          dados = d;
+          lp = d.lps.filter(function (x) { return x.id === lpId; })[0];
+          if (!lp) throw new Error('LP "' + lpId + '" não existe no hub');
+          perdidos = repintarMarcas() || {};
+          pintarCabecalho();
+          pintarPainel();
+        });
+      }
+
+      /* ================= Ações ================= */
+      function enviar() {
+        var texto = txt.value.trim();
+        var sugestao = sugArea.hasAttribute('data-on') ? sug.value.trim() : '';
+        if (!texto && !sugestao) { Hub.avisar('Escreva o comentário ou sugira um texto', 'erro'); return; }
+        if (sugestao && !selecao) { Hub.avisar('Selecione na LP o trecho que a sugestão substitui', 'erro'); return; }
+
+        btnCom.disabled = true;
+        Hub.api('comentario', {
+          metodo: 'POST',
+          corpo: {
+            lp: lpId,
+            texto: texto,
+            sugestao: sugestao,
+            trecho: selecao ? selecao.trecho : '',
+            ocorrencia: selecao ? selecao.ocorrencia : 0
+          }
+        })
+          .then(function () {
+            txt.value = '';
+            limparSelecao();
+            pnAba = 'abertos';
+            document.querySelectorAll('.pn-abas button').forEach(function (x) {
+              x.setAttribute('aria-pressed', String(x.getAttribute('data-pn') === 'abertos'));
+            });
+            return recarregar();
+          })
+          .then(function () { Hub.avisar('Comentário registrado'); })
+          .catch(function (err) { Hub.avisar(err.message, 'erro'); })
+          .finally(function () { btnCom.disabled = false; });
+      }
+
+      form.addEventListener('submit', function (e) { e.preventDefault(); enviar(); });
+
+      lista.addEventListener('click', function (e) {
+        var card = e.target.closest('.com');
+        if (!card) return;
+        var id = card.getAttribute('data-id');
+
+        var citacao = e.target.closest('[data-ir]');
+        if (citacao) { irParaTrecho(id); return; }
+
+        var b = e.target.closest('[data-acao]');
+        if (!b) return;
+        var acao = b.getAttribute('data-acao');
+
+        if (acao === 'copiar-sug') {
+          var c = dados.comentarios.filter(function (x) { return x.id === id; })[0];
+          if (c) Hub.copiar(c.sugestao).then(function () { Hub.avisar('Sugestão copiada'); });
+          return;
+        }
+        if (acao === 'apagar') {
+          if (!confirm('Apagar este comentário? Não dá pra desfazer.')) return;
+          Hub.api('comentario', { metodo: 'DELETE', corpo: { id: id } })
+            .then(recarregar).then(function () { Hub.avisar('Comentário apagado'); })
+            .catch(function (err) { Hub.avisar(err.message, 'erro'); });
+          return;
+        }
+        Hub.api('comentario', { metodo: 'PATCH', corpo: { id: id, acao: acao } })
+          .then(recarregar)
+          .then(function () { Hub.avisar(acao === 'resolver' ? 'Marcado como resolvido' : 'Comentário reaberto'); })
+          .catch(function (err) { Hub.avisar(err.message, 'erro'); });
+      });
+
+      document.getElementById('btn-status').addEventListener('click', function () {
+        var novo = selStatus.value;
+        Hub.api('lp', { metodo: 'PATCH', corpo: { id: lpId, status: novo } })
+          .then(recarregar)
+          .then(function () { Hub.avisar('Status: ' + ((Hub.STATUS[novo] || {}).rotulo || novo)); })
+          .catch(function (err) { Hub.avisar(err.message, 'erro'); });
+      });
+
+      /* ================= Envio pro site comercial ================= */
+      /* O botão para no PR de propósito. O que ele elimina é o trabalho manual de
+         portar 260KB de LP pra dentro do Astro na mão — não a revisão de quem
+         manda no repo do site. */
+      var modal = document.getElementById('modal-envio');
+      var fUrl = document.getElementById('f-url');
+      var fTitulo = document.getElementById('f-titulo');
+      var fDesc = document.getElementById('f-desc');
+      var fForcar = document.getElementById('f-forcar');
+      var envioPrevia = document.getElementById('envio-previa');
+      var envioErro = document.getElementById('envio-erro');
+      var envioForcar = document.getElementById('envio-forcar');
+      var btnPrevia = document.getElementById('btn-previa');
+      var btnEnviar = document.getElementById('btn-enviar');
+
+      function contar(campo, alvo, teto) {
+        var n = campo.value.trim().length;
+        alvo.textContent = n + '/' + teto;
+        if (n > teto) alvo.setAttribute('data-estourou', ''); else alvo.removeAttribute('data-estourou');
+      }
+      function ligarConta(campo, alvo, teto) {
+        campo.addEventListener('input', function () { contar(campo, alvo, teto); });
+      }
+      ligarConta(fTitulo, document.getElementById('c-titulo'), 120);
+      ligarConta(fDesc, document.getElementById('c-desc'), 200);
+
+      // Mostrar o caminho do arquivo enquanto a pessoa digita a URL evita o erro
+      // clássico de achar que /talks/x cria /pages/talks-x.astro.
+      function espelharCaminho() {
+        var v = fUrl.value.trim().toLowerCase();
+        var ok = /^\/[a-z0-9-]+\/[a-z0-9-]+$/.test(v);
+        document.getElementById('f-url-arquivo').textContent = ok
+          ? 'src/pages' + v + '.astro'
+          : 'src/pages/…';
+      }
+      fUrl.addEventListener('input', espelharCaminho);
+
+      function erroEnvio(msg, precisaForcar) {
+        envioErro.hidden = false;
+        envioErro.textContent = msg;
+        if (precisaForcar) {
+          envioForcar.hidden = false;
+          document.getElementById('envio-forcar-txt').textContent = 'Enviar mesmo assim. Eu li o que está pendente e assumo.';
+        }
+      }
+      function limparErro() {
+        envioErro.hidden = true;
+        envioForcar.hidden = true;
+        fForcar.checked = false;
+      }
+
+      function abrirEnvio() {
+        limparErro();
+        envioPrevia.innerHTML = '';
+        fUrl.value = lp.urlFinal || '';
+        fTitulo.value = lp.seoTitulo || '';
+        fDesc.value = lp.seoDescricao || '';
+        contar(fTitulo, document.getElementById('c-titulo'), 120);
+        contar(fDesc, document.getElementById('c-desc'), 200);
+        espelharCaminho();
+
+        var s = dados.site || {};
+        document.getElementById('envio-repo').textContent = s.configurado
+          ? 'PR em ' + s.repo + ', contra a branch ' + s.base + '.'
+          : 'GITHUB_TOKEN não configurado no projeto: dá pra ver a prévia, mas não abrir PR.';
+        btnEnviar.disabled = !s.configurado;
+
+        document.getElementById('ia-linha').hidden = false;
+        iaNota.removeAttribute('data-on');
+        [fUrl, fTitulo, fDesc].forEach(function (c) { c.removeAttribute('data-ia'); });
+        btnIa.disabled = !dados.ia;
+        document.getElementById('dica-ia').textContent = dados.ia
+          ? 'Usa a copy desta LP como base: headline, agenda, público, convidada e data.'
+          : 'ANTHROPIC_API_KEY não configurada no projeto: sem ela não dá pra gerar.';
+
+        var envios = (lp.envios || []);
+        var ultimo = envios[envios.length - 1];
+        var caixa = document.getElementById('envio-ultimo');
+        if (ultimo) {
+          caixa.hidden = false;
+          caixa.innerHTML = 'Esta LP já foi enviada: <a href="' + Hub.esc(ultimo.url) + '" target="_blank" rel="noopener">PR #' +
+            Hub.esc(ultimo.pr) + '</a> por ' + Hub.esc(ultimo.por) + ' ' + Hub.esc(Hub.quando(ultimo.em)) +
+            '. Enviar de novo empilha um commit na mesma branch e reaproveita o PR aberto.';
+        } else {
+          caixa.hidden = true;
+        }
+
+        modal.setAttribute('data-on', '');
+        fUrl.focus();
+      }
+
+      function fecharEnvio() {
+        modal.removeAttribute('data-on');
+      }
+
+      document.getElementById('abre-envio').addEventListener('click', abrirEnvio);
+      modal.addEventListener('click', function (e) {
+        if (e.target.closest('[data-fecha-envio]')) fecharEnvio();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.hasAttribute('data-on')) fecharEnvio();
+      });
+
+      /* ================= Gerar com IA ================= */
+      /* Os três campos saem todos de texto que já está na LP. Escrever à mão é
+         retrabalho, e é onde o padrão escapa: slug com data, título sem o tema,
+         descrição que não nomeia porte nem cargo. A IA sugere, a pessoa revisa —
+         nada é salvo antes de ela clicar em "Ver o arquivo" ou "Enviar". */
+      var btnIa = document.getElementById('btn-ia');
+      var iaNota = document.getElementById('ia-nota');
+
+      // Marca visual de "isto foi sugerido" que sai no primeiro toque: sem isso
+      // não dá pra saber, batendo o olho, o que é seu e o que é da máquina.
+      function marcarIa(campo) {
+        campo.setAttribute('data-ia', '');
+        campo.addEventListener('input', function () { campo.removeAttribute('data-ia'); }, { once: true });
+      }
+
+      btnIa.addEventListener('click', function () {
+        limparErro();
+        iaNota.removeAttribute('data-on');
+        btnIa.disabled = true;
+        btnIa.innerHTML = '<span class="girando" aria-hidden="true"></span> Escrevendo…';
+
+        Hub.api('seo', { metodo: 'POST', corpo: { id: lpId }, timeout: 70000 })
+          .then(function (d) {
+            var s = d.sugestao;
+            fUrl.value = s.urlFinal;
+            fTitulo.value = s.seoTitulo;
+            fDesc.value = s.seoDescricao;
+            [fUrl, fTitulo, fDesc].forEach(marcarIa);
+            contar(fTitulo, document.getElementById('c-titulo'), 120);
+            contar(fDesc, document.getElementById('c-desc'), 200);
+            espelharCaminho();
+
+            iaNota.innerHTML = '<b>Por que assim:</b> ' + Hub.esc(s.porque) +
+              (d.avisos && d.avisos.length
+                ? '<ul>' + d.avisos.map(function (x) { return '<li>' + Hub.esc(x) + '</li>'; }).join('') + '</ul>'
+                : '') +
+              '<div style="margin-top:7px;color:var(--ink-500)">Revise antes de enviar. Nada foi salvo ainda.</div>';
+            iaNota.setAttribute('data-on', '');
+            Hub.avisar('Sugestão pronta. Confira os três campos.');
+          })
+          .catch(function (err) { erroEnvio(err.message, false); })
+          .finally(function () {
+            btnIa.disabled = false;
+            btnIa.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3.2"/></svg> Gerar com IA';
+          });
+      });
+
+      // Salvar antes de gerar: o arquivo sai da LP gravada, não do que está na
+      // tela. Sem isso a prévia mentiria sobre o que vai pro repo.
+      function salvarCampos() {
+        var url = fUrl.value.trim();
+        var corpo = { id: lpId, seoTitulo: fTitulo.value.trim(), seoDescricao: fDesc.value.trim() };
+        if (url !== (lp.urlFinal || '')) corpo.urlFinal = url;
+        return Hub.api('lp', { metodo: 'PATCH', corpo: corpo }).then(recarregar);
+      }
+
+      function pintarPrevia(d) {
+        var r = d.resumo;
+        envioPrevia.innerHTML =
+          '<div class="previa">' +
+            '<div class="previa-cab"><b>' + Hub.esc(r.pagina) + '</b>' +
+              '<span>vai responder em ' + Hub.esc(r.rota) + '</span>' +
+              '<span class="peso">' + r.kbPagina + ' KB' + (r.temJsonLd ? ' · com JSON-LD de Event' : ' · sem JSON-LD') + '</span>' +
+            '</div>' +
+            '<pre>' + Hub.esc(d.arquivo) + (d.truncado ? '\n\n… (cortado só na prévia)' : '') + '</pre>' +
+            (r.ativos.length
+              ? '<ul class="previa-ativos">' + r.ativos.map(function (a) {
+                  return '<li>' + Hub.esc(a.caminho) + '<span>' + a.kb + ' KB</span></li>';
+                }).join('') + '</ul>'
+              : '') +
+          '</div>';
+      }
+
+      btnPrevia.addEventListener('click', function () {
+        limparErro();
+        btnPrevia.disabled = true;
+        btnPrevia.textContent = 'Gerando…';
+        salvarCampos()
+          .then(function () { return Hub.api('publicar', { metodo: 'POST', corpo: { id: lpId, previa: true }, timeout: 45000 }); })
+          .then(pintarPrevia)
+          .catch(function (err) { erroEnvio(err.message, false); })
+          .finally(function () { btnPrevia.disabled = false; btnPrevia.textContent = 'Ver o arquivo'; });
+      });
+
+      btnEnviar.addEventListener('click', function () {
+        limparErro();
+        btnEnviar.disabled = true;
+        btnEnviar.textContent = 'Enviando…';
+        salvarCampos()
+          .then(function () {
+            return Hub.api('publicar', {
+              metodo: 'POST',
+              corpo: { id: lpId, forcar: fForcar.checked },
+              timeout: 90000
+            });
+          })
+          .then(function (d) {
+            var e = d.envio;
+            envioPrevia.innerHTML =
+              '<div class="envio-ok">' +
+                '<strong>' + (d.prNovo ? 'PR #' + Hub.esc(e.pr) + ' aberto' : 'Commit empilhado no PR #' + Hub.esc(e.pr)) + '</strong>' +
+                '<p>' + (e.semMudanca
+                  ? 'A branch <code>' + Hub.esc(e.branch) + '</code> já estava com esta versão da LP: nada de novo pra commitar.'
+                  : 'Branch <code>' + Hub.esc(e.branch) + '</code> → <code>' + Hub.esc(e.base) + '</code>. A página vai responder em <b>prologapp.com' + Hub.esc(e.rota) + '</b>.') + '</p>' +
+                '<ol>' +
+                  '<li><a href="' + Hub.esc(e.url) + '" target="_blank" rel="noopener">Abrir o PR no GitHub</a> e mergear em <code>' + Hub.esc(e.base) + '</code></li>' +
+                  '<li>Abrir o PR <code>' + Hub.esc(e.base) + ' → main</code>: é nele que roda a esteira <b>validate</b>. Verde, dá pra mergear, e o merge em main publica</li>' +
+                  '<li>No ar, marcar esta LP como <b>publicada</b> aqui no hub</li>' +
+                '</ol>' +
+              '</div>';
+            envioPrevia.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            Hub.avisar(d.prNovo ? 'PR #' + e.pr + ' aberto no repo do site' : 'Commit novo no PR #' + e.pr);
+          })
+          .catch(function (err) {
+            // 409 do endpoint vem com precisaForcar: em vez de sumir com o erro,
+            // oferece o caminho consciente.
+            erroEnvio(err.message, /em aberto|marque como aprovada|está "/.test(err.message));
+          })
+          .finally(function () { btnEnviar.disabled = false; btnEnviar.textContent = 'Enviar e abrir PR'; });
+      });
+
+      /* ================= Início ================= */
+      // O hub manda ?fonte quando a LP é uma cópia que ainda espera o deploy do
+      // arquivo próprio. Vem na URL pra o iframe já nascer certo: esperar o
+      // /api/dados atrasaria a LP inteira, e apontar pro id da cópia daria 404
+      // até a resposta chegar.
+      var daUrlFonte = new URLSearchParams(location.search).get('fonte');
+      var quadroFonte = /^[a-z0-9][a-z0-9-]{1,48}$/.test(daUrlFonte || '') ? daUrlFonte : lpId;
+      quadro.src = '/' + encodeURIComponent(quadroFonte);
+      document.getElementById('cheia').href = '/' + encodeURIComponent(quadroFonte);
+
+      var daUrl = new URLSearchParams(location.search).get('modo');
+      var salvo;
+      try { salvo = localStorage.getItem(CHAVE_MODO); } catch (e) {}
+      aplicar(MODOS[daUrl] ? daUrl : MODOS[salvo] ? salvo : 'mobile', !!MODOS[daUrl]);
+      medir();
+
+      var pnSalvo;
+      try { pnSalvo = localStorage.getItem(CHAVE_PN); } catch (e) {}
+      painel(pnSalvo !== 'off', false);
+
+      recarregar().then(function () {
+        pintarTroca();
+        // Vindo do sino de notificações: ?com=<id> abre já no comentário, com a LP
+        // rolada até o trecho. Sem isso a pessoa cai na LP e tem que caçar o que
+        // foi comentado.
+        var alvo = new URLSearchParams(location.search).get('com');
+        if (alvo && dados.comentarios.some(function (c) { return c.id === alvo; })) {
+          // Espera o iframe pra que o scroll até o trecho tenha onde acontecer.
+          var ir = function () { focarComentario(alvo, true); };
+          if (docLp() && docLp().readyState === 'complete') setTimeout(ir, 120);
+          else quadro.addEventListener('load', function () { setTimeout(ir, 120); }, { once: true });
+        }
+        if (!dados.poderes.comentar) form.setAttribute('data-off', '');
+        pnStatus.hidden = !dados.poderes.status;
+        document.getElementById('abre-envio').hidden = !dados.poderes.publicar;
+        if (dados.poderes.publicar && new URLSearchParams(location.search).get('publicar')) abrirEnvio();
+        // Se o iframe já carregou antes do fetch voltar, o load não dispara de novo
+        if (docLp() && docLp().readyState === 'complete') ligarEventosDoFrame();
+      }).catch(function (err) {
+        lista.innerHTML = '<div class="pn-vazio"><strong>Não deu pra carregar</strong>' + Hub.esc(err.message) +
+          '<div style="margin-top:14px"><button class="btn btn-ghost btn-sm" onclick="location.reload()">Tentar de novo</button></div></div>';
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+# Vínculo local com o projeto da Vercel (contém orgId/projectId da conta)
+.vercel
+
+# Nunca versionar segredo: as variáveis vivem no projeto da Vercel
+.env
+.env.*
+!.env.example
+
+node_modules
+*.log
+.DS_Store

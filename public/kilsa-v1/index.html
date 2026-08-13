@@ -1,0 +1,922 @@
+<meta name="robots" content="noindex, nofollow">
+<!--
+  ============================================================================
+  PROLOG TALKS - LP de inscricao - 18/08/2026, 19h
+  Tema: adesao de motoristas aos procedimentos | Nome de marketing: "Do Papel pra Estrada"
+  Convidada: Kilsa | Conducao: Felipe + Yan
+  ============================================================================
+  COMO USAR: colar num widget HTML do Elementor. Todo o CSS esta scopado em
+  .pt-lp pra nao conflitar com o tema. A LP e full-bleed (ocupa a largura da
+  tela mesmo dentro de uma secao com padding/max-width).
+
+  >>> PENDENCIAS - procure "TROCAR" no codigo <<<
+   1. Empresa + cargo da Kilsa (2 lugares) e foto dela
+   2. Cargo do Yan e foto
+   3. Foto do Felipe: a URL antiga do site deu 404 ao testar em 05/08 - CONFERIR
+   4. Logo Prolog Talks: mesma coisa, URL retornou 404 - CONFERIR na midiateca do WP
+   5. Imagem de fundo do hero (hoje e so grafismo CSS - funciona sem foto)
+   6. Video: esta com o embed de uma edicao anterior (id de exemplo)
+   7. Material rico: bloco comentado no fim da secao de beneficios - so descomentar
+      se decidirem atrelar um checklist a inscricao
+
+  FORMULARIO: ja e o oficial do HubSpot (portal 44667852, form desta edicao).
+  O onFormSubmitted troca a mensagem padrao do HS pelo bloco "adicionar a agenda".
+  ============================================================================
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ===== Reset scoped ===== */
+.pt-lp, .pt-lp * { margin: 0; padding: 0; box-sizing: border-box; }
+.pt-lp {
+  /* Tokens Prolog (design-system-prolog.md) */
+  --blue: #3D5FD9;        /* tonal-700 - primario */
+  --blue-600: #4D78E4;
+  --blue-300: #C5D7F8;
+  --cyan: #9DBEF3;        /* tonal-400 - acento sobre fundo escuro */
+  --navy: #141a36;        /* secoes escuras */
+  --void: #0a0e20;        /* topo do hero / overscroll */
+  --orange: #FA541C;      /* highlight-400 - CTA */
+  --white: #ffffff;
+  --light-bg: #F1F5FD;    /* tonal-100 */
+  --text: #3F424D;        /* neutral-600 */
+  --text-light: #6F7588;  /* neutral-500 */
+  --border: #D8DADF;      /* neutral-300 */
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  background: var(--navy);
+  /* Full-bleed: arromba o container do Elementor */
+  position: relative;
+  width: auto;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+.pt-lp img { display: block; max-width: 100%; height: auto; }
+.pt-lp a { text-decoration: none; }
+/* Temas que pintam link de azul nao podem vencer os botoes */
+.pt-lp .pt-hero-cta-btn,
+.pt-lp .pt-cta-btn,
+.pt-lp .pt-hs-form .hs-button.primary,
+.pt-lp .pt-float-cta a { color: #fff !important; }
+.pt-lp .pt-cal-menu a { color: rgba(255,255,255,.9) !important; }
+.pt-lp :focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+
+.pt-container { max-width: 1120px; margin: 0 auto; padding: 0 24px; width: 100%; }
+
+/* ==========================================================================
+   HERO
+========================================================================== */
+.pt-hero { position: relative; overflow: hidden; background: var(--navy); }
+/* TROCAR (opcional): pra usar foto no hero, descomente o background-image abaixo */
+.pt-hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  /* background: url('URL-DA-IMAGEM') center center / cover no-repeat; */
+  background:
+    radial-gradient(120% 80% at 78% 8%, rgba(61,95,217,.42) 0%, rgba(61,95,217,0) 58%),
+    radial-gradient(90% 60% at 8% 92%, rgba(77,120,228,.24) 0%, rgba(77,120,228,0) 60%),
+    linear-gradient(180deg, var(--void) 0%, #101636 46%, var(--navy) 100%);
+}
+/* Malha diagonal discreta - textura, nao decoracao */
+.pt-hero-grid {
+  position: absolute; inset: 0; z-index: 1; opacity: .5;
+  background-image: repeating-linear-gradient(115deg, rgba(157,190,243,.075) 0 1px, transparent 1px 46px);
+  -webkit-mask-image: radial-gradient(75% 65% at 62% 30%, #000 0%, transparent 78%);
+  mask-image: radial-gradient(75% 65% at 62% 30%, #000 0%, transparent 78%);
+}
+/* Faixa de rodovia: puxa o "do papel pra estrada" sem ilustrar demais */
+.pt-road {
+  position: absolute; left: 0; right: 0; bottom: 20%; height: 3px; z-index: 1;
+  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.5) 0 44px, transparent 44px 92px);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+  opacity: .16;
+}
+.pt-hero-inner {
+  position: relative; z-index: 2;
+  min-height: 100vh; min-height: 100svh;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding-top: 34px; padding-bottom: 58px;
+}
+
+/* Topo: lockup + nome de marketing */
+.pt-hero-top { align-self: center; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+.pt-hero-logos { display: flex; align-items: center; justify-content: center; gap: 14px; }
+.pt-hero-logos .pt-logo-talks { height: 24px; width: auto; }
+.pt-edition {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: 'Prompt', sans-serif; font-weight: 600; font-size: 12.5px;
+  letter-spacing: 1.6px; text-transform: uppercase; color: var(--cyan);
+  border: 1px solid rgba(157,190,243,.3); border-radius: 999px; padding: 7px 16px;
+  background: rgba(10,14,32,.4);
+}
+
+/* Base: headline + card de data/CTA */
+.pt-hero-bottom { display: flex; align-items: flex-end; justify-content: space-between; gap: 44px; }
+.pt-hero-headline-col {
+  flex: 1.25; min-width: 0;
+  background: rgba(10,14,32,.5);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+  border: 1px solid rgba(157,190,243,.16);
+  border-radius: 22px; padding: 32px 34px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.32);
+}
+.pt-live-badge {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: var(--orange); color: #fff;
+  font-family: 'Prompt', sans-serif; font-weight: 700;
+  font-size: 13px; letter-spacing: .8px; text-transform: uppercase;
+  padding: 9px 18px; border-radius: 999px; margin-bottom: 18px;
+  box-shadow: 0 8px 26px rgba(250,84,28,.4);
+}
+.pt-live-dot { width: 9px; height: 9px; border-radius: 50%; background: #fff; flex-shrink: 0; animation: pt-live 1.4s ease-in-out infinite; }
+@keyframes pt-live { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.65); } }
+.pt-headline {
+  font-family: 'Prompt', sans-serif; font-weight: 800;
+  font-size: 46px; line-height: 1.06; color: var(--white);
+  letter-spacing: -1px; text-transform: uppercase; max-width: 680px;
+  text-wrap: balance; overflow-wrap: break-word;
+}
+.pt-headline .pt-hl-orange { color: var(--orange); font-style: normal; }
+.pt-subhead { font-weight: 500; font-size: 19px; line-height: 1.45; color: rgba(255,255,255,.82); max-width: 580px; margin-top: 16px; }
+.pt-hero-speakers { margin-top: 28px; }
+
+.pt-hero-cta-card {
+  flex: 0 0 380px; max-width: 380px;
+  background: rgba(10,14,32,.72);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 18px; padding: 28px 26px;
+}
+.pt-card-meta { display: flex; flex-direction: column; gap: 14px; padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,.12); text-transform: uppercase; }
+.pt-card-meta-item { display: flex; align-items: center; gap: 13px; }
+.pt-card-meta-item svg { width: 22px; height: 22px; color: #fff; background: var(--blue); border-radius: 12px; padding: 10px; flex-shrink: 0; box-sizing: content-box; }
+.pt-card-meta-strong { font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 15.5px; letter-spacing: .4px; color: var(--white); display: block; line-height: 1.2; }
+.pt-card-meta-sub { font-size: 11.5px; letter-spacing: .4px; color: rgba(255,255,255,.6); display: block; margin-top: 2px; }
+.pt-card-meta-mini { display: none; align-items: center; gap: 8px; color: #fff; font-family: 'Prompt', sans-serif; font-weight: 600; font-size: 12.5px; text-transform: uppercase; letter-spacing: .3px; }
+.pt-card-meta-mini svg { color: var(--cyan); flex-shrink: 0; }
+.pt-hero-cta-card > p { font-size: 15.5px; color: rgba(255,255,255,.82); margin-bottom: 20px; }
+.pt-hero-cta-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--orange); color: #fff; width: 100%;
+  font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 16px;
+  padding: 15px 22px; border-radius: 12px;
+  transition: transform .15s, box-shadow .15s;
+}
+.pt-hero-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(250,84,28,.4); }
+.pt-hero-cta-meta { display: flex; align-items: center; gap: 8px; justify-content: center; margin-top: 14px; font-size: 12.5px; color: rgba(255,255,255,.55); }
+.pt-hero-cta-meta svg { flex-shrink: 0; }
+
+.pt-scroll-cue {
+  position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%);
+  color: rgba(255,255,255,.55); font-size: 28px; line-height: 1;
+  animation: pt-bounce 2.2s ease-in-out infinite;
+}
+@keyframes pt-bounce { 0%,100% { transform: translate(-50%,0); } 50% { transform: translate(-50%,7px); } }
+
+/* Speakers */
+.pt-speakers { display: flex; gap: 24px; flex-wrap: wrap; }
+.pt-speaker { display: flex; align-items: center; gap: 12px; }
+.pt-speaker img, .pt-speaker .pt-avatar {
+  width: 54px; height: 54px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+  border: 2px solid rgba(157,190,243,.5);
+}
+/* Fallback enquanto nao tem foto: iniciais */
+.pt-avatar {
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(150deg, var(--blue-600), #2C3CA1);
+  color: #fff; font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 19px;
+}
+.pt-speaker-name { font-weight: 700; color: var(--white); font-size: 15px; }
+.pt-speaker-role { font-size: 12px; color: rgba(255,255,255,.6); }
+.pt-speaker-tag { display: inline-block; font-size: 10px; letter-spacing: .6px; text-transform: uppercase; color: var(--cyan); font-weight: 700; margin-bottom: 2px; }
+
+/* ==========================================================================
+   FORMULARIO
+========================================================================== */
+.pt-fold-form { background: var(--navy); padding: 72px 0; scroll-margin-top: 80px; }
+.pt-form-wrap { max-width: 540px; margin: 0 auto; }
+.pt-form-card { background: var(--white); border-radius: 24px; padding: 34px 30px; box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+.pt-form-title { font-family: 'Prompt', sans-serif; font-weight: 800; font-size: 24px; color: var(--navy); margin-bottom: 6px; line-height: 1.15; }
+.pt-form-subtitle { font-size: 14px; color: var(--text-light); margin-bottom: 18px; }
+
+.pt-countdown-bar { display: flex; gap: 10px; justify-content: center; background: var(--navy); border-radius: 14px; padding: 14px 12px; margin-bottom: 20px; }
+.pt-cd-block { text-align: center; min-width: 44px; }
+.pt-cd-num { font-family: 'Prompt', sans-serif; font-weight: 800; font-size: 26px; color: var(--cyan); line-height: 1; font-variant-numeric: tabular-nums; }
+.pt-cd-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .5px; color: rgba(255,255,255,.55); margin-top: 4px; }
+.pt-cd-sep { color: rgba(255,255,255,.3); font-size: 22px; font-weight: 700; align-self: flex-start; }
+
+.pt-form-note { text-align: center; font-size: 12px; color: var(--text-light); margin-top: 12px; }
+
+/* Estilo do embed do HubSpot - o form real desta edicao (renderRawHtml, sem CSS do HS) */
+.pt-hs-form .hs-form-field { margin-bottom: 12px; }
+.pt-hs-form .hs-form-field > label { display: block; font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 5px; }
+.pt-hs-form .hs-form-required { color: var(--orange); margin-left: 2px; }
+.pt-hs-form .hs-input {
+  width: 100% !important; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px;
+  font-family: 'Figtree', sans-serif; font-size: 16px; color: var(--navy); background: #fff; transition: border-color .2s;
+  -webkit-appearance: none; appearance: none;
+}
+/* Seta do select (o HubSpot nao traz uma quando o CSS dele esta desligado) */
+.pt-hs-form select.hs-input {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236F7588' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 13px center; padding-right: 40px;
+}
+.pt-hs-form input[type=checkbox].hs-input, .pt-hs-form input[type=radio].hs-input { width: auto !important; }
+.pt-hs-form .hs-input:focus { outline: none; border-color: var(--blue); }
+.pt-hs-form .inputs-list, .pt-hs-form .hs-error-msgs { list-style: none; margin: 6px 0 0; padding: 0; }
+.pt-hs-form .hs-error-msg, .pt-hs-form label.hs-error-msg { color: #D64717; font-size: 12px; }
+.pt-hs-form .hs_submit { margin-top: 8px; }
+.pt-hs-form .hs-button.primary, .pt-hs-form input[type=submit] {
+  width: 100%; background: var(--orange) !important; color: #fff !important; border: none;
+  font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 16px;
+  padding: 16px; border-radius: 12px; cursor: pointer; transition: transform .15s, box-shadow .15s;
+}
+.pt-hs-form .hs-button.primary:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(250,84,28,.4); }
+.pt-hs-form .legal-consent-container, .pt-hs-form .hs-richtext, .pt-hs-form .hs-field-desc { font-size: 11.5px; color: var(--text-light); margin-top: 6px; }
+.pt-hs-form .legal-consent-container a { color: var(--blue); }
+
+/* Estado de sucesso */
+.pt-form-success { display: none; text-align: center; }
+.pt-form-card.pt-submitted .pt-form-title,
+.pt-form-card.pt-submitted .pt-form-subtitle,
+.pt-form-card.pt-submitted .pt-countdown-bar,
+.pt-form-card.pt-submitted #hubspot-form-target,
+.pt-form-card.pt-submitted .pt-form-note { display: none !important; }
+.pt-form-card.pt-submitted .pt-form-success { display: block; }
+.pt-success-check { width: 56px; height: 56px; border-radius: 50%; background: #E7F6EE; color: #1F9D55; display: flex; align-items: center; justify-content: center; margin: 6px auto 16px; }
+.pt-success-title { font-family: 'Prompt', sans-serif; font-weight: 800; font-size: 22px; color: var(--navy); margin-bottom: 6px; }
+.pt-success-lead { font-size: 14px; color: var(--text); line-height: 1.5; margin-bottom: 16px; }
+.pt-success-text { font-size: 14.5px; color: var(--text-light); margin-bottom: 20px; }
+
+/* Adicionar a agenda */
+.pt-cal-wrap { position: relative; }
+.pt-cal-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+  background: var(--navy); color: #fff; border: none;
+  font-family: 'Prompt', sans-serif; font-weight: 600; font-size: 14.5px;
+  padding: 13px 22px; border-radius: 12px; cursor: pointer;
+  transition: background .15s;
+}
+.pt-cal-btn:hover { background: #1f2a52; }
+.pt-cal-caret { transition: transform .2s; }
+.pt-cal-wrap.pt-open .pt-cal-caret { transform: rotate(180deg); }
+.pt-cal-menu {
+  position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 30;
+  background: #1b2342; border: 1px solid rgba(255,255,255,.14);
+  border-radius: 12px; padding: 6px; box-shadow: 0 18px 44px rgba(0,0,0,.55);
+  display: none; text-align: left;
+}
+.pt-cal-wrap.pt-open .pt-cal-menu { display: block; }
+.pt-cal-menu a, .pt-cal-menu button {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  background: none; border: none; cursor: pointer; text-align: left;
+  color: rgba(255,255,255,.9); font-family: 'Figtree', sans-serif; font-size: 14px; font-weight: 500;
+  padding: 11px 12px; border-radius: 8px; transition: background .15s;
+}
+.pt-cal-menu a:hover, .pt-cal-menu button:hover { background: rgba(255,255,255,.09); }
+.pt-cal-menu svg { flex-shrink: 0; opacity: .85; }
+
+/* ==========================================================================
+   VIDEO - prova de formato
+========================================================================== */
+.pt-fold-video { background: var(--navy); border-top: 1px solid rgba(255,255,255,.06); padding: 72px 0 84px; }
+.pt-video-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; }
+.pt-video-text h2 { font-family: 'Prompt', sans-serif; font-weight: 800; font-size: 30px; color: #fff; letter-spacing: -.5px; line-height: 1.15; margin-bottom: 14px; text-wrap: balance; }
+.pt-video-text p { font-size: 16px; color: rgba(255,255,255,.78); margin-bottom: 26px; }
+.pt-section-tag-light { color: var(--cyan); }
+.pt-video-frame {
+  position: relative; width: 100%; padding-top: 56.25%;
+  border-radius: 16px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.08); box-shadow: 0 24px 60px rgba(0,0,0,.4);
+}
+.pt-video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* ==========================================================================
+   O QUE VAMOS DESTRAVAR + BENEFICIOS
+========================================================================== */
+.pt-fold2 { background: var(--light-bg); padding: 80px 0; }
+.pt-section-tag { display: inline-block; color: var(--blue); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+.pt-section-title { font-family: 'Prompt', sans-serif; font-weight: 800; font-size: 34px; color: var(--navy); letter-spacing: -.6px; margin-bottom: 14px; line-height: 1.15; text-wrap: balance; }
+.pt-section-intro { font-size: 17px; color: var(--text); max-width: 660px; margin-bottom: 44px; }
+
+.pt-agenda { display: flex; flex-direction: column; margin-bottom: 72px; }
+.pt-agenda-item { display: flex; gap: 22px; padding: 22px 0; border-bottom: 1px solid var(--border); }
+.pt-agenda-item:last-child { border-bottom: none; }
+.pt-agenda-num {
+  flex-shrink: 0; width: 42px; height: 42px; border-radius: 12px;
+  background: var(--blue); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Prompt', sans-serif; font-weight: 800; font-size: 18px;
+}
+.pt-agenda-text h4 { font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 18px; color: var(--navy); margin-bottom: 4px; }
+.pt-agenda-text p { font-size: 15px; color: var(--text-light); }
+
+.pt-benefits-head { text-align: center; max-width: 720px; margin: 0 auto 46px; }
+.pt-benefits-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #fff; border: 1px solid var(--border);
+  color: var(--blue); font-family: 'Prompt', sans-serif; font-weight: 700;
+  font-size: 13px; letter-spacing: 1px; text-transform: uppercase;
+  padding: 9px 18px; border-radius: 999px; margin-bottom: 20px;
+  box-shadow: 0 6px 18px rgba(61,95,217,.1);
+}
+.pt-benefits-title { font-family: 'Prompt', sans-serif; font-weight: 800; font-size: 40px; color: var(--navy); letter-spacing: -1px; line-height: 1.08; margin-bottom: 14px; text-wrap: balance; }
+.pt-benefits-sub { font-size: 17px; color: var(--text); }
+.pt-benefits-sub strong { color: var(--blue); font-weight: 700; }
+
+.pt-benefits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.pt-benefit {
+  position: relative; background: #fff; border: 1px solid var(--border);
+  border-radius: 16px; padding: 30px 26px 38px;
+  transition: border-color .2s, box-shadow .2s, transform .2s;
+}
+.pt-benefit:hover { border-color: var(--blue-300); box-shadow: 0 18px 40px rgba(61,95,217,.12); transform: translateY(-3px); }
+.pt-benefit-icon { width: 54px; height: 54px; border-radius: 14px; background: var(--blue); display: flex; align-items: center; justify-content: center; color: #fff; margin-bottom: 18px; }
+.pt-benefit h4 { font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 19px; color: var(--navy); margin-bottom: 8px; }
+.pt-benefit p { font-size: 15px; color: var(--text); line-height: 1.5; }
+.pt-benefit p strong { color: var(--blue); font-weight: 600; }
+.pt-benefit-check {
+  position: absolute; bottom: -17px; left: 50%; transform: translateX(-50%);
+  width: 34px; height: 34px; border-radius: 50%; background: var(--blue); color: #fff;
+  display: flex; align-items: center; justify-content: center; border: 4px solid var(--light-bg);
+}
+
+/* ==========================================================================
+   PUBLICO + CTA FINAL
+========================================================================== */
+.pt-fold3 { background: var(--navy); padding: 80px 0; position: relative; overflow: hidden; }
+.pt-audience { max-width: 720px; margin: 0 auto 56px; position: relative; z-index: 1; }
+.pt-audience h3 { font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 22px; color: #fff; margin-bottom: 20px; text-align: center; }
+.pt-audience ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.pt-audience li { display: flex; gap: 12px; align-items: flex-start; font-size: 16px; color: rgba(255,255,255,.82); }
+.pt-audience li svg { color: var(--cyan); flex-shrink: 0; margin-top: 3px; }
+
+.pt-cta-final { text-align: center; position: relative; z-index: 1; max-width: 660px; margin: 0 auto; }
+.pt-cta-final h2 { font-family: 'Prompt', sans-serif; font-weight: 800; font-size: 34px; color: #fff; letter-spacing: -.6px; margin-bottom: 14px; line-height: 1.15; text-wrap: balance; }
+.pt-cta-final p { font-size: 17px; color: rgba(255,255,255,.78); margin-bottom: 28px; }
+.pt-cta-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--orange); color: #fff;
+  font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 18px;
+  padding: 18px 44px; border-radius: 14px;
+  transition: transform .15s, box-shadow .15s;
+}
+.pt-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(250,84,28,.45); }
+.pt-cta-note { font-size: 13px; color: rgba(255,255,255,.55); margin-top: 16px; }
+
+.pt-foot { background: var(--navy); border-top: 1px solid rgba(255,255,255,.05); padding: 28px 0; text-align: center; width: 100% !important; max-width: none !important; }
+.pt-foot p { font-size: 14px; color: rgba(255,255,255,.55); }
+.pt-foot a { color: var(--cyan); }
+
+.pt-float-cta { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 999; background: var(--orange); padding: 14px 20px; text-align: center; box-shadow: 0 -4px 20px rgba(0,0,0,.25); }
+.pt-float-cta a { color: #fff; font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+.pt-reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s, transform .6s; }
+.pt-reveal.pt-visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .pt-lp *, .pt-lp *::before, .pt-lp *::after { animation: none !important; transition: none !important; }
+  .pt-reveal { opacity: 1; transform: none; }
+}
+
+/* ===== Overrides do Elementor ===== */
+.pt-lp, .pt-lp .pt-hero, .pt-lp .pt-fold-form, .pt-lp .pt-fold-video, .pt-lp .pt-fold2, .pt-lp .pt-fold3, .pt-lp .pt-foot { float: none !important; clear: both !important; }
+.elementor-widget-html .elementor-widget-container { padding: 0 !important; margin: 0 !important; max-width: none !important; width: 100% !important; }
+.elementor-widget-html { width: 100% !important; }
+.elementor-section.elementor-section-boxed > .elementor-container { max-width: none !important; }
+html, body { background-color: #0a0e20 !important; }
+body { overflow-x: hidden; }
+
+/* ==========================================================================
+   RESPONSIVO
+========================================================================== */
+@media (max-width: 900px) {
+  .pt-hero-bottom { flex-direction: column; align-items: stretch; gap: 26px; }
+  .pt-hero-cta-card { flex: none; max-width: none; }
+  .pt-headline { font-size: 38px; }
+  .pt-benefits { grid-template-columns: 1fr; gap: 28px; }
+  .pt-benefits-title { font-size: 32px; }
+  .pt-section-title, .pt-cta-final h2 { font-size: 28px; }
+  .pt-fold2, .pt-fold3 { padding: 56px 0; }
+  .pt-video-grid { grid-template-columns: 1fr; gap: 28px; }
+}
+
+@media (max-width: 600px) {
+  .pt-container { padding-left: 18px; padding-right: 18px; }
+
+  /* Reordena so no celular: hero -> FORM -> conteudo -> prova -> publico/CTA */
+  .pt-lp { display: flex; flex-direction: column; }
+  .pt-hero      { order: 1; }
+  .pt-fold-form { order: 2; }
+  .pt-fold2     { order: 3; }
+  .pt-fold-video{ order: 4; }
+  .pt-fold3     { order: 5; }
+  .pt-foot      { order: 6; }
+
+  /* Hero: primeira tela = tema + data + CTA */
+  .pt-hero { background: var(--navy); }
+  .pt-hero-grid { -webkit-mask-image: radial-gradient(90% 45% at 50% 30%, #000 0%, transparent 80%); mask-image: radial-gradient(90% 45% at 50% 30%, #000 0%, transparent 80%); }
+  .pt-road { bottom: 34%; }
+  .pt-hero-inner { min-height: 100vh; min-height: 100svh; justify-content: space-between; gap: 16px; padding-top: 26px; padding-bottom: 84px; }
+  .pt-hero-top { margin-top: 2vh; }
+  .pt-hero-logos .pt-logo-talks { height: 20px; }
+  .pt-edition { font-size: 11px; padding: 6px 13px; letter-spacing: 1.2px; }
+  .pt-hero-headline-col { background: none; border: none; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; padding: 0; border-radius: 0; text-align: center; }
+  .pt-hero-bottom {
+    margin: 0; background: rgba(10,14,32,.55);
+    -webkit-backdrop-filter: blur(11px); backdrop-filter: blur(11px);
+    border: 1px solid rgba(157,190,243,.18); border-radius: 22px;
+    padding: 26px 22px; box-shadow: 0 22px 54px rgba(0,0,0,.4);
+  }
+  .pt-live-badge { font-size: 11.5px; padding: 7px 14px; margin-bottom: 20px; gap: 7px; }
+  .pt-live-dot { width: 7px; height: 7px; }
+  .pt-headline { font-size: 30px; line-height: 1.15; letter-spacing: -.6px; }
+  .pt-subhead { font-size: 15.5px; max-width: 320px; margin: 16px auto 0; }
+  .pt-hero-speakers { display: none; }   /* palestrantes seguem na secao do video */
+  .pt-card-meta { display: none; }
+  .pt-card-meta-mini { display: flex; justify-content: center; margin-bottom: 22px; color: rgba(255,255,255,.88); }
+  .pt-hero-cta-card { background: none; border: none; -webkit-backdrop-filter: none; backdrop-filter: none; padding: 0; border-radius: 0; }
+  .pt-hero-cta-card > p { display: none; }
+  .pt-hero-cta-btn { white-space: nowrap; font-size: 15px; padding: 15px 16px; gap: 7px; }
+  .pt-hero-cta-meta { font-size: 11px; margin-top: 12px; }
+  .pt-scroll-cue { display: none; }
+
+  .pt-fold-form { padding: 40px 0 48px; }
+  .pt-form-card { padding: 24px 18px; border-radius: 18px; box-shadow: 0 14px 34px rgba(0,0,0,.3); }
+  .pt-form-title { font-size: 21px; }
+  .pt-form-subtitle { font-size: 13.5px; margin-bottom: 18px; }
+  .pt-countdown-bar { gap: 5px; padding: 12px 8px; margin-bottom: 20px; }
+  .pt-cd-num { font-size: 22px; }
+  .pt-cd-block { min-width: 38px; }
+  .pt-cd-sep { font-size: 18px; }
+  .pt-cd-lbl { font-size: 9.5px; }
+  .pt-hs-form .hs-form-field > label { font-size: 12.5px; }
+  .pt-hs-form .hs-button.primary, .pt-hs-form input[type=submit] { font-size: 15.5px; padding: 15px; }
+
+  .pt-fold-video { padding: 44px 0 52px; }
+  .pt-video-text h2 { font-size: 23px; }
+  .pt-video-text p { font-size: 15px; margin-bottom: 22px; }
+  .pt-speakers { gap: 12px 18px; }
+  .pt-speaker img, .pt-speaker .pt-avatar { width: 42px; height: 42px; font-size: 15px; }
+  .pt-speaker-name { font-size: 13px; }
+  .pt-speaker-role { font-size: 11px; }
+
+  .pt-section-tag { font-size: 12px; }
+  .pt-section-title { font-size: 24px; }
+  .pt-section-intro { font-size: 15px; margin-bottom: 32px; }
+  .pt-agenda { margin-bottom: 44px; }
+  .pt-agenda-item { gap: 16px; padding: 18px 0; }
+  .pt-agenda-num { width: 36px; height: 36px; font-size: 15px; border-radius: 10px; }
+  .pt-agenda-text h4 { font-size: 16px; }
+  .pt-agenda-text p { font-size: 14px; }
+  .pt-benefits-tag { font-size: 11.5px; padding: 8px 14px; }
+  .pt-benefits-title { font-size: 27px; }
+  .pt-benefits-sub { font-size: 15px; }
+  .pt-benefits-head { margin-bottom: 36px; }
+  .pt-benefit { padding: 26px 22px 36px; }
+  .pt-benefit-icon { width: 48px; height: 48px; margin-bottom: 16px; }
+  .pt-benefit h4 { font-size: 17.5px; }
+  .pt-benefit p { font-size: 14.5px; }
+
+  .pt-fold3 { padding: 48px 0; }
+  .pt-audience { margin-bottom: 36px; }
+  .pt-audience h3 { font-size: 18px; margin-bottom: 16px; }
+  .pt-audience li { font-size: 14.5px; }
+  .pt-cta-final h2 { font-size: 24px; }
+  .pt-cta-final p { font-size: 15px; }
+  .pt-cta-btn { display: flex; width: 100%; justify-content: center; padding: 15px 24px; font-size: 16px; }
+
+  .pt-float-cta { display: block; padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+  .pt-float-cta a { font-size: 15px; }
+  .pt-lp { padding-bottom: 72px !important; }
+}
+</style>
+
+<div class="pt-lp">
+
+  <!-- ================= HERO ================= -->
+  <section class="pt-hero">
+    <div class="pt-hero-bg"></div>
+    <div class="pt-hero-grid"></div>
+    <div class="pt-road"></div>
+
+    <div class="pt-hero-inner pt-container">
+
+      <div class="pt-hero-top">
+        <div class="pt-hero-logos">
+          <!-- TROCAR: conferir a URL do logo na midiateca do WP (a antiga deu 404 em 05/08) -->
+          <img class="pt-logo-talks" src="https://prologapp.com/wp-content/uploads/2026/05/logo_prolog_talks.png" alt="Prolog Talks">
+        </div>
+        <span class="pt-edition">Do Papel pra Estrada &middot; Edição de agosto</span>
+      </div>
+
+      <div class="pt-hero-bottom">
+        <div class="pt-hero-headline-col">
+          <span class="pt-live-badge"><span class="pt-live-dot"></span>Ao vivo e 100% gratuito</span>
+          <h1 class="pt-headline">O procedimento só acontece <span class="pt-hl-orange">quando você está olhando</span></h1>
+          <p class="pt-subhead">Como fazer o time de motoristas cumprir a rotina sem você ter que cobrar todo dia. Conversa direta pra quem gerencia 30 placas ou mais.</p>
+
+          <div class="pt-speakers pt-hero-speakers">
+            <!-- TROCAR: foto da Kilsa (trocar a div.pt-avatar por <img src="..." alt="Kilsa">) -->
+            <div class="pt-speaker">
+              <div class="pt-avatar">K</div>
+              <div>
+                <span class="pt-speaker-tag">Convidada</span>
+                <div class="pt-speaker-name">Kilsa</div>
+                <!-- TROCAR: cargo + empresa da Kilsa -->
+                <div class="pt-speaker-role">[cargo] &middot; [empresa]</div>
+              </div>
+            </div>
+            <div class="pt-speaker">
+              <!-- TROCAR: conferir a URL da foto do Felipe -->
+              <img src="https://prologapp.com/wp-content/uploads/2026/06/Felipe-scaled.jpg" alt="Felipe">
+              <div>
+                <div class="pt-speaker-name">Felipe</div>
+                <div class="pt-speaker-role">Coordenador Comercial &middot; Prolog</div>
+              </div>
+            </div>
+            <div class="pt-speaker">
+              <!-- TROCAR: foto do Yan -->
+              <div class="pt-avatar">Y</div>
+              <div>
+                <div class="pt-speaker-name">Yan</div>
+                <!-- TROCAR: cargo do Yan -->
+                <div class="pt-speaker-role">[cargo] &middot; Prolog</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-hero-cta-card">
+          <div class="pt-card-meta">
+            <div class="pt-card-meta-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              <div><span class="pt-card-meta-strong">18 de agosto de 2026</span><span class="pt-card-meta-sub">terça-feira &middot; 19h (Brasília)</span></div>
+            </div>
+            <div class="pt-card-meta-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+              <span class="pt-card-meta-strong">100% online &middot; ao vivo</span>
+            </div>
+          </div>
+          <div class="pt-card-meta-mini">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            <span>18 ago 2026 &middot; 19h &middot; online ao vivo</span>
+          </div>
+          <p>Uma hora de conversa com quem lida com adesão de motorista na prática — e depois responde suas perguntas ao vivo.</p>
+          <a href="#inscreva-se" class="pt-hero-cta-btn">
+            Quero garantir minha vaga
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <div class="pt-hero-cta-meta">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Inscrição em 30 segundos &middot; sem custo
+          </div>
+        </div>
+      </div>
+
+      <a href="#inscreva-se" class="pt-scroll-cue" aria-label="Ir para o formulário de inscrição">&#8964;</a>
+    </div>
+  </section>
+
+  <!-- ================= FORMULÁRIO ================= -->
+  <section class="pt-fold-form" id="inscreva-se">
+    <div class="pt-container">
+      <div class="pt-form-wrap">
+        <div class="pt-form-card">
+          <h3 class="pt-form-title">Garanta sua vaga grátis</h3>
+          <p class="pt-form-subtitle">Inscreva-se e receba o link da live no seu e-mail e no WhatsApp.</p>
+
+          <div class="pt-countdown-bar">
+            <div class="pt-cd-block"><div class="pt-cd-num" id="pt-cd-days">00</div><div class="pt-cd-lbl">dias</div></div>
+            <span class="pt-cd-sep">:</span>
+            <div class="pt-cd-block"><div class="pt-cd-num" id="pt-cd-hours">00</div><div class="pt-cd-lbl">horas</div></div>
+            <span class="pt-cd-sep">:</span>
+            <div class="pt-cd-block"><div class="pt-cd-num" id="pt-cd-mins">00</div><div class="pt-cd-lbl">min</div></div>
+            <span class="pt-cd-sep">:</span>
+            <div class="pt-cd-block"><div class="pt-cd-num" id="pt-cd-secs">00</div><div class="pt-cd-lbl">seg</div></div>
+          </div>
+
+          <!-- ============================================================
+               FORMULÁRIO OFICIAL DO HUBSPOT — conta Prolog (portal 44667852)
+               Form "18/08/2026 [Prolog Talks]" — id 116f4f06-...
+               Campos (na ordem em que aparecem): nome completo · cargo ·
+               e-mail · telefone · empresa · tamanho da frota.
+               Dois campos ocultos já vêm preenchidos pelo próprio form:
+               última fonte de conversão = "18/08/2026 [Prolog Talks]" e
+               gatilho LM/DM = "Eventos".
+          ============================================================ -->
+          <div id="hubspot-form-target" class="pt-hs-form"></div>
+          <script charset="utf-8" type="text/javascript" src="https://js.hsforms.net/forms/embed/v2.js"></script>
+          <script>
+            hbspt.forms.create({
+              region: "na1",
+              portalId: "44667852",
+              formId: "116f4f06-1f2e-4524-9a5f-62d89d615fc2",
+              target: "#hubspot-form-target",
+              onFormSubmitted: function() {
+                // Troca a mensagem padrão do HubSpot pelo bloco "adicionar à agenda"
+                var card = document.querySelector('.pt-form-card');
+                if (card) card.classList.add('pt-submitted');
+              }
+            });
+          </script>
+
+          <p class="pt-form-note">Inscrição 100% gratuita &middot; seus dados estão seguros</p>
+
+          <div class="pt-form-success">
+            <div class="pt-success-check">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <h4 class="pt-success-title">Inscrição confirmada!</h4>
+            <p class="pt-success-lead">Dia 18 de agosto, às 19h, a Kilsa mostra o que faz um time de motoristas cumprir procedimento de verdade — e o que só gera desgaste. O link da live vai pro seu e-mail e pro seu WhatsApp.</p>
+            <p class="pt-success-text">Pra não esquecer, já deixa salvo na sua agenda:</p>
+            <div class="pt-cal-wrap">
+              <button type="button" class="pt-cal-btn pt-add-cal" aria-haspopup="true" aria-expanded="false">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 14v4M10 16h4"/></svg>
+                Adicionar à agenda
+                <svg class="pt-cal-caret" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+              <div class="pt-cal-menu" role="menu">
+                <a class="pt-cal-google" href="#" target="_blank" rel="noopener" role="menuitem">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                  Google Agenda
+                </a>
+                <a class="pt-cal-outlook" href="#" target="_blank" rel="noopener" role="menuitem">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                  Outlook.com
+                </a>
+                <a class="pt-cal-office" href="#" target="_blank" rel="noopener" role="menuitem">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                  Outlook 365
+                </a>
+                <button type="button" class="pt-cal-ics" role="menuitem">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                  Apple / baixar .ics
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VÍDEO (prova de formato) ================= -->
+  <section class="pt-fold-video">
+    <div class="pt-container pt-video-grid pt-reveal">
+      <div class="pt-video-text">
+        <span class="pt-section-tag pt-section-tag-light">Veja na prática</span>
+        <h2>Como funciona um Prolog Talks</h2>
+        <p>Uma hora de conversa com quem vive o problema na operação, sem apresentação de quarenta slides. Dá o play numa edição anterior e veja o formato antes de garantir sua vaga.</p>
+
+        <div class="pt-speakers">
+          <div class="pt-speaker">
+            <div class="pt-avatar">K</div>
+            <div>
+              <span class="pt-speaker-tag">Convidada</span>
+              <div class="pt-speaker-name">Kilsa</div>
+              <div class="pt-speaker-role">[cargo] &middot; [empresa]</div>
+            </div>
+          </div>
+          <div class="pt-speaker">
+            <img src="https://prologapp.com/wp-content/uploads/2026/06/Felipe-scaled.jpg" alt="Felipe">
+            <div>
+              <div class="pt-speaker-name">Felipe</div>
+              <div class="pt-speaker-role">Coordenador Comercial &middot; Prolog</div>
+            </div>
+          </div>
+          <div class="pt-speaker">
+            <div class="pt-avatar">Y</div>
+            <div>
+              <div class="pt-speaker-name">Yan</div>
+              <div class="pt-speaker-role">[cargo] &middot; Prolog</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TROCAR: id do vídeo (hoje está o de uma edição anterior) -->
+      <div class="pt-video-frame">
+        <iframe src="https://www.youtube.com/embed/mZqEE_l3B_U" title="Prolog Talks — edição anterior" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= O QUE VAMOS DESTRAVAR ================= -->
+  <section class="pt-fold2">
+    <div class="pt-container">
+      <div class="pt-reveal">
+        <span class="pt-section-tag">O que vamos destravar</span>
+        <h2 class="pt-section-title">Do papel pra estrada: o que falta pro procedimento virar rotina</h2>
+        <p class="pt-section-intro">Este tema saiu do chat da última live: foi a pergunta mais votada pelos gestores que estavam assistindo. Todo mundo já montou o processo, treinou o time e viu a operação voltar ao jeito antigo em duas semanas. A conversa segue esta ordem:</p>
+      </div>
+
+      <div class="pt-agenda pt-reveal">
+        <div class="pt-agenda-item">
+          <div class="pt-agenda-num">1</div>
+          <div class="pt-agenda-text">
+            <h4>Por que o procedimento morre na saída da garagem</h4>
+            <p>O que está por trás da não adesão — e por que treinar o time de novo raramente resolve.</p>
+          </div>
+        </div>
+        <div class="pt-agenda-item">
+          <div class="pt-agenda-num">2</div>
+          <div class="pt-agenda-text">
+            <h4>A conta que quase ninguém faz</h4>
+            <p>Quanto a não adesão custa em manutenção corretiva, veículo parado e retrabalho de gestão.</p>
+          </div>
+        </div>
+        <div class="pt-agenda-item">
+          <div class="pt-agenda-num">3</div>
+          <div class="pt-agenda-text">
+            <h4>Falar com quem está na estrada</h4>
+            <p>Linguagem, canal e momento que fazem o motorista entender o porquê — não só receber mais uma ordem.</p>
+          </div>
+        </div>
+        <div class="pt-agenda-item">
+          <div class="pt-agenda-num">4</div>
+          <div class="pt-agenda-text">
+            <h4>Sair da cobrança e virar rotina</h4>
+            <p>Como sustentar a adesão quando o assunto sai do foco, sem você ser o único que cobra.</p>
+          </div>
+        </div>
+        <div class="pt-agenda-item">
+          <div class="pt-agenda-num">5</div>
+          <div class="pt-agenda-text">
+            <h4>Perguntas ao vivo</h4>
+            <p>Espaço aberto pra Kilsa responder os casos reais que travam a sua operação.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-reveal">
+        <div class="pt-benefits-head">
+          <span class="pt-benefits-tag">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+            O que você leva
+          </span>
+          <h3 class="pt-benefits-title">Sai da live sabendo o que mudar na segunda-feira</h3>
+          <p class="pt-benefits-sub">Nada de teoria de gestão: o que <strong>funciona com motorista de verdade</strong>, de quem lida com isso na operação.</p>
+        </div>
+
+        <div class="pt-benefits">
+          <div class="pt-benefit">
+            <div class="pt-benefit-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+            <h4>O diagnóstico certo</h4>
+            <p>Por que o motorista não segue o procedimento — e por que <strong>quase nunca é falta de treinamento</strong>.</p>
+            <div class="pt-benefit-check"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
+          </div>
+          <div class="pt-benefit">
+            <div class="pt-benefit-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 12a9 9 0 1 1 3 6.7"/><path d="M3 21v-5h5"/><path d="M12 8v4l3 2"/></svg></div>
+            <h4>Rotina que se sustenta</h4>
+            <p>Como sair da cobrança individual e <strong>manter a adesão</strong> depois que o assunto sai do foco.</p>
+            <div class="pt-benefit-check"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
+          </div>
+          <div class="pt-benefit">
+            <div class="pt-benefit-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+            <h4>Dado em que dá pra confiar</h4>
+            <p>Como identificar o <strong>checklist preenchido no automático</strong> e recuperar a confiança no que volta da ponta.</p>
+            <div class="pt-benefit-check"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
+          </div>
+        </div>
+
+        <!-- ============================================================
+             MATERIAL RICO (opcional) - descomentar SÓ se decidirem atrelar
+             um material à inscrição. Se ativar, ajustar também o subtítulo
+             do formulário e o texto do CTA final, que hoje não prometem nada.
+
+        <div class="pt-benefit">
+          <div class="pt-benefit-icon">...</div>
+          <h4>Checklist de adesão de motoristas</h4>
+          <p>Material prático pra levar a rotina pro time já na próxima semana.</p>
+        </div>
+        ============================================================ -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PÚBLICO + CTA FINAL ================= -->
+  <section class="pt-fold3">
+    <div class="pt-container">
+      <div class="pt-audience pt-reveal">
+        <h3>Essa live é pra você que</h3>
+        <ul>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Gerencia uma frota de 30 placas ou mais e é quem cobra o procedimento todo dia.</li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Tem processo e checklist montados, mas não confia no que volta preenchido.</li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Já treinou o time mais de uma vez e viu a rotina voltar ao jeito antigo em duas semanas.</li>
+          <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>É gerente, coordenador, diretor ou dono e precisa que a operação ande sem depender da sua cobrança.</li>
+        </ul>
+      </div>
+
+      <div class="pt-cta-final pt-reveal">
+        <h2>Cobrar de novo toda semana não é gestão. É retrabalho.</h2>
+        <p>18 de agosto, 19h, online e de graça. Garanta sua vaga e receba o link da live no e-mail.</p>
+        <a href="#inscreva-se" class="pt-cta-btn">
+          Garantir minha vaga grátis
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <p class="pt-cta-note">Inscrição 100% gratuita &middot; transmissão no YouTube da Prolog App</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="pt-foot">
+    <div class="pt-container">
+      <p><a href="https://prologapp.com">prologapp.com</a> &middot; contato@prologapp.com &middot; &copy; 2026 Prolog</p>
+    </div>
+  </div>
+
+  <div class="pt-float-cta"><a href="#inscreva-se">Garantir minha vaga grátis
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+
+</div>
+
+<script>
+(function() {
+  // ===== Countdown - 18/08/2026 19h BRT = 22h UTC | TROCAR se mudar o horário =====
+  var target = new Date('2026-08-18T22:00:00Z');
+  function tick() {
+    var diff = target - new Date(); if (diff < 0) diff = 0;
+    var pad = function(n){ return String(n).padStart(2, '0'); };
+    var setT = function(id, v){ var el = document.getElementById(id); if (el) el.textContent = pad(v); };
+    setT('pt-cd-days', Math.floor(diff / 86400000));
+    setT('pt-cd-hours', Math.floor((diff % 86400000) / 3600000));
+    setT('pt-cd-mins', Math.floor((diff % 3600000) / 60000));
+    setT('pt-cd-secs', Math.floor((diff % 60000) / 1000));
+  }
+  tick(); setInterval(tick, 1000);
+
+  // ===== Scroll reveal =====
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(x){ if (x.isIntersecting) x.target.classList.add('pt-visible'); });
+  }, { threshold: .12 });
+  document.querySelectorAll('.pt-reveal').forEach(function(el){ obs.observe(el); });
+
+  // ===== Adicionar à agenda - 18/08/2026 19h-20h30 BRT = 22:00-23:30 UTC =====
+  var EV = {
+    title: 'Prolog Talks - Adesao de motoristas aos procedimentos',
+    desc: 'Live gratuita com a Kilsa: como fazer o time de motoristas cumprir os procedimentos na pratica, sem depender da cobranca diaria do gestor.',
+    loc: 'Online - YouTube da Prolog App',
+    startUTC: '20260818T220000Z', endUTC: '20260818T233000Z',
+    startISO: '2026-08-18T22:00:00Z', endISO: '2026-08-18T23:30:00Z'
+  };
+  var enc = encodeURIComponent;
+  var gUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + enc(EV.title) +
+    '&dates=' + EV.startUTC + '/' + EV.endUTC + '&details=' + enc(EV.desc) + '&location=' + enc(EV.loc);
+  var oLiveUrl = 'https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=' +
+    enc(EV.title) + '&startdt=' + EV.startISO + '&enddt=' + EV.endISO + '&body=' + enc(EV.desc) + '&location=' + enc(EV.loc);
+  var oOfficeUrl = 'https://outlook.office.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=' +
+    enc(EV.title) + '&startdt=' + EV.startISO + '&enddt=' + EV.endISO + '&body=' + enc(EV.desc) + '&location=' + enc(EV.loc);
+
+  function downloadICS() {
+    var ics = [
+      'BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Prolog//Prolog Talks//PT-BR','CALSCALE:GREGORIAN','METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      'UID:prolog-talks-kilsa-20260818@prologapp.com',
+      'DTSTAMP:20260805T120000Z',
+      'DTSTART:' + EV.startUTC,
+      'DTEND:' + EV.endUTC,
+      'SUMMARY:' + EV.title,
+      'DESCRIPTION:' + EV.desc,
+      'LOCATION:' + EV.loc,
+      'URL:' + window.location.href,
+      'BEGIN:VALARM','TRIGGER:-PT30M','ACTION:DISPLAY','DESCRIPTION:Prolog Talks comeca em 30 minutos','END:VALARM',
+      'END:VEVENT','END:VCALENDAR'
+    ].join('\r\n');
+    var blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'prolog-talks-18-08.ics';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  }
+
+  document.querySelectorAll('.pt-cal-wrap').forEach(function(wrap){
+    var btn = wrap.querySelector('.pt-add-cal');
+    var g = wrap.querySelector('.pt-cal-google'); if (g) g.href = gUrl;
+    var o = wrap.querySelector('.pt-cal-outlook'); if (o) o.href = oLiveUrl;
+    var of = wrap.querySelector('.pt-cal-office'); if (of) of.href = oOfficeUrl;
+    var ics = wrap.querySelector('.pt-cal-ics');
+    if (btn) btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var open = wrap.classList.toggle('pt-open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    if (ics) ics.addEventListener('click', function(){ downloadICS(); wrap.classList.remove('pt-open'); });
+  });
+  document.addEventListener('click', function(e){
+    document.querySelectorAll('.pt-cal-wrap.pt-open').forEach(function(w){
+      if (!w.contains(e.target)) {
+        w.classList.remove('pt-open');
+        var b = w.querySelector('.pt-add-cal'); if (b) b.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+})();
+</script>

@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "name": "prolog-talks-lps",
+  "description": "Hub interno de revisão das landing pages do Prolog Talks",
+  "engines": {
+    "node": "22.x"
+  }
+}

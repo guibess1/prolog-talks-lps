@@ -1,0 +1,1450 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hub de LPs · Prolog Talks</title>
+  <meta name="description" content="Hub interno de aprovação das landing pages do Prolog Talks.">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  <meta name="theme-color" content="#043ad1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,500;1,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/ds.css?v=9">
+  <style>
+    /* ---------- Header sticky ---------- */
+    .hd { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--ink-200); }
+    .hd::before { content: ''; position: absolute; inset: 0; z-index: -1; background: rgba(255,255,255,.95); backdrop-filter: blur(8px); }
+    .hd-in { max-width: 1180px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; gap: 14px; }
+    .hd-div { width: 1px; height: 20px; background: var(--ink-300); flex: 0 0 auto; }
+    .hd-nome { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-500); white-space: nowrap; }
+
+    .eu { margin-left: auto; display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+    .eu-txt { display: flex; flex-direction: column; line-height: 1.25; text-align: right; }
+    .eu-nome { font-size: 13px; font-weight: 600; color: var(--ink-800); }
+    .eu-papel { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-400); }
+    .sair {
+      width: 34px; height: 34px; display: grid; place-items: center; cursor: pointer;
+      background: #fff; border: 1px solid var(--ink-300); border-radius: var(--r-md); color: var(--ink-500);
+      transition: border-color .18s ease, color .18s ease;
+    }
+    .sair:hover { border-color: var(--err-500); color: var(--err-500); }
+    .sair svg { width: 15px; height: 15px; }
+
+    /* ---------- Hero ---------- */
+    .hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--ink-200); background: var(--brand-0); }
+    .hero-grade { position: absolute; inset: 0; -webkit-mask-image: radial-gradient(ellipse 80% 60% at 30% 0%, #000 20%, transparent 75%); mask-image: radial-gradient(ellipse 80% 60% at 30% 0%, #000 20%, transparent 75%); }
+    .hero-in { position: relative; max-width: 1180px; margin: 0 auto; padding: 64px 24px 52px; }
+    h1 { font-size: clamp(30px, 5.2vw, 52px); line-height: 1.08; margin: 14px 0 0; max-width: min(22ch, 100%); }
+    .sub { color: var(--ink-500); font-size: 17px; line-height: 1.65; margin: 18px 0 0; max-width: min(60ch, 100%); }
+    .strip { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
+    .kpi { background: #fff; border: 1px solid var(--ink-200); border-radius: var(--r-lg); padding: 12px 16px; box-shadow: var(--sh-sm); min-width: 148px; }
+    .kpi dt { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-500); }
+    .kpi dd { margin: 5px 0 0; font-family: var(--font-display); font-weight: 500; font-size: 22px; letter-spacing: -.02em; line-height: 1.1; color: var(--ink-900); }
+    .kpi dd small { font-family: var(--font-sans); font-size: 12px; font-weight: 500; letter-spacing: 0; color: var(--ink-500); }
+
+    /* ---------- Abas fila / concluídas ---------- */
+    .lista-sec { max-width: 1180px; margin: 0 auto; padding: 48px 24px 24px; }
+    .abas { display: inline-flex; background: var(--ink-200); border-radius: var(--r-md); padding: 3px; gap: 2px; }
+    .abas button {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: var(--ink-500);
+      background: transparent; border: 0; padding: 8px 15px; border-radius: 6px; cursor: pointer;
+      transition: background .16s ease, color .16s ease, box-shadow .16s ease;
+    }
+    .abas button:hover { color: var(--ink-800); }
+    .abas button[aria-pressed="true"] { background: #fff; color: var(--brand-500); box-shadow: var(--sh-sm); }
+    .abas .n {
+      font-size: 11px; font-weight: 700; min-width: 19px; height: 19px; padding: 0 5px;
+      border-radius: 999px; background: var(--ink-300); color: var(--ink-700);
+      display: inline-grid; place-items: center;
+    }
+    .abas button[aria-pressed="true"] .n { background: var(--brand-500); color: #fff; }
+
+    .sec-head { max-width: min(52ch, 100%); margin-top: 26px; }
+    .sec-head h2 { font-family: var(--font-display); font-weight: 500; letter-spacing: -.03em; font-size: clamp(24px, 3.4vw, 34px); line-height: 1.15; margin: 10px 0 0; }
+    .sec-head p { color: var(--ink-500); font-size: 15px; line-height: 1.6; margin: 12px 0 0; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; margin-top: 28px; }
+    .card {
+      position: relative; overflow: hidden;
+      background: #fff; border: 1px solid var(--ink-200); border-radius: var(--r-xlg);
+      padding: 22px; display: flex; flex-direction: column;
+      transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+    }
+    .card:hover { border-color: var(--brand-300); box-shadow: var(--sh-lg); transform: translateY(-2px); }
+    .card-stream { position: absolute; top: 0; left: 0; right: 0; opacity: 0; transition: opacity .2s ease; }
+    .card:hover .card-stream { opacity: 1; }
+    .card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+    .card-data { font-size: 11px; color: var(--ink-500); }
+    .card-titulo { font-size: 21px; line-height: 1.25; margin: 7px 0 0; }
+    .card-nota { color: var(--ink-500); font-size: 14px; line-height: 1.6; margin: 10px 0 0; }
+    .card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 18px 0 20px; padding-top: 16px; border-top: 1px solid var(--ink-200); }
+    .card-meta dt { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-400); }
+    .card-meta dd { margin: 4px 0 0; font-size: 13px; color: var(--ink-700); }
+    .url-site { color: var(--ink-400); overflow-wrap: anywhere; }
+    .url-site b { font-weight: 600; color: var(--brand-500); }
+    .url-site i { font-style: normal; color: var(--ink-400); }
+    .card-acoes { margin-top: auto; display: flex; flex-wrap: wrap; gap: 8px; }
+    .card-acoes .btn-brand { flex: 1 1 100%; }
+    /* "Mais ações" encosta na direita: é o fim da linha em qualquer combinação
+       de botões, e a posição fixa dá memória muscular. */
+    /* Padding vertical igual ao dos outros botões: assim a altura bate mesmo
+       quando ele cai sozinho numa linha e não tem irmão pra esticar. */
+    .card-acoes .mais { margin-left: auto; width: 40px; padding: 11px 0; }
+    .card-acoes .mais svg { width: 17px; height: 17px; }
+    .card-acoes .mais[aria-expanded="true"] { border-color: var(--brand-500); color: var(--brand-500); }
+
+    /* Cópia que ainda não tem HTML próprio mostra a LP de origem. Isso precisa
+       estar na cara: sem o aviso, o revisor comenta a copy do outro evento. */
+    .espelho {
+      display: flex; gap: 8px; align-items: flex-start;
+      margin: -4px 0 16px; padding: 9px 11px; border-radius: var(--r-md);
+      background: var(--warn-100); color: var(--warn-700); font-size: 12px; line-height: 1.5;
+    }
+    .espelho svg { width: 14px; height: 14px; flex: 0 0 auto; margin-top: 1px; }
+    .espelho b { font-weight: 700; }
+
+    /* ---------- Menu de ações do cartão ---------- */
+    /* Vive no <body> e é posicionado por JS de propósito: dentro do cartão ele
+       seria cortado pelo overflow:hidden que segura o brilho do topo, e o
+       translateY do hover viraria referência de posição de um filho fixed. */
+    .menu {
+      position: fixed; z-index: 90; min-width: 244px; max-width: min(290px, calc(100vw - 24px));
+      background: #fff; border: 1px solid var(--ink-200); border-radius: var(--r-lg);
+      box-shadow: var(--sh-xl); padding: 6px; animation: menuEntra .13s ease;
+    }
+    @keyframes menuEntra { from { opacity: 0; transform: translateY(-4px); } }
+    .menu-cab {
+      margin: 0 0 5px; padding: 6px 10px 9px; border-bottom: 1px solid var(--ink-200);
+      font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-400);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .menu button {
+      width: 100%; display: flex; align-items: center; gap: 10px; text-align: left;
+      font-family: var(--font-sans); font-size: 13.5px; font-weight: 500; color: var(--ink-700);
+      background: transparent; border: 0; padding: 9px 10px; border-radius: var(--r-md); cursor: pointer;
+      transition: background .14s ease, color .14s ease;
+    }
+    .menu button:hover { background: var(--brand-100); color: var(--brand-600); }
+    .menu button svg { width: 15px; height: 15px; flex: 0 0 auto; opacity: .7; }
+    .menu .sep { height: 1px; margin: 5px 6px; background: var(--ink-200); }
+    .menu button[data-perigo] { color: var(--err-700); }
+    .menu button[data-perigo]:hover { background: var(--err-100); color: var(--err-700); }
+    /* Precisa vencer o :hover do item de perigo, que é mais específico. */
+    .menu button[data-confirmar], .menu button[data-confirmar]:hover { background: var(--err-500); color: #fff; }
+    .menu button[data-confirmar] svg { opacity: 1; }
+
+    /* ---------- Modal de duplicar / editar ---------- */
+    .modal { position: fixed; inset: 0; z-index: 100; display: none; }
+    .modal[data-on] { display: block; }
+    .modal-fundo { position: absolute; inset: 0; background: rgba(1,17,63,.58); animation: fundoEntra .16s ease; }
+    @keyframes fundoEntra { from { opacity: 0 } }
+    .modal-caixa {
+      position: relative; z-index: 1; margin: 0 auto; top: 50%; transform: translateY(-50%);
+      width: min(560px, calc(100vw - 32px)); max-height: min(88dvh, 820px);
+      background: #fff; border-radius: var(--r-xlg); box-shadow: var(--sh-xl);
+      display: flex; flex-direction: column; overflow: hidden; animation: caixaEntra .18s ease;
+    }
+    @keyframes caixaEntra { from { opacity: 0; transform: translateY(-46%) } }
+    .modal-topo { flex: 0 0 auto; padding: 20px 22px 16px; border-bottom: 1px solid var(--ink-200); position: relative; }
+    .modal-topo h2 { font-family: var(--font-display); font-weight: 500; letter-spacing: -.03em; font-size: 22px; line-height: 1.2; margin: 9px 0 0; }
+    .modal-topo p { color: var(--ink-500); font-size: 13.5px; line-height: 1.6; margin: 8px 0 0; }
+    .modal-topo code { font-size: 12.5px; background: var(--ink-200); padding: 2px 6px; border-radius: var(--r-sm); color: var(--ink-700); }
+    .modal-fechar {
+      position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; display: grid; place-items: center;
+      background: #fff; border: 1px solid var(--ink-300); border-radius: var(--r-md); color: var(--ink-500); cursor: pointer;
+    }
+    .modal-fechar:hover { border-color: var(--err-500); color: var(--err-500); }
+    .modal-corpo { flex: 1; overflow-y: auto; padding: 18px 22px; min-height: 0; }
+    .modal-pe { flex: 0 0 auto; padding: 14px 22px; border-top: 1px solid var(--ink-200); background: var(--ink-100); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .modal-pe .aviso-pe { font-size: 12px; color: var(--ink-500); margin-right: auto; max-width: 34ch; line-height: 1.5; }
+
+    .campo-linha { margin-bottom: 15px; }
+    .campo-linha label { display: block; font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-500); margin-bottom: 6px; }
+    .campo-linha .ajuda { font-size: 12px; color: var(--ink-400); margin-top: 5px; line-height: 1.5; }
+    .campo-linha .ajuda code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; color: var(--ink-600); }
+    .campo-linha .conta { float: right; font-size: 10px; font-weight: 600; color: var(--ink-400); letter-spacing: 0; text-transform: none; }
+    .campo-linha textarea { min-height: 62px; }
+    .campo-mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .dupla { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .marcar { display: flex; gap: 9px; align-items: flex-start; font-size: 13px; line-height: 1.5; color: var(--ink-600); }
+    .marcar input { margin-top: 2px; flex: 0 0 auto; }
+
+    .modal-erro { border-left: 2px solid var(--err-500); background: var(--err-100); border-radius: 0 var(--r-md) var(--r-md) 0; padding: 12px 14px; margin-bottom: 16px; font-size: 13px; line-height: 1.6; color: var(--err-700); }
+
+    /* ---------- Preencher a partir de um arquivo ---------- */
+    .briefing { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--ink-300); }
+    .briefing .btn { flex: 0 0 auto; }
+    .briefing-dica { font-size: 12px; color: var(--ink-400); line-height: 1.5; flex: 1; min-width: 16ch; }
+
+    .ia-nota {
+      display: none; margin: -4px 0 16px; padding: 12px 14px;
+      border-left: 2px solid var(--brand-500); background: var(--brand-100);
+      border-radius: 0 var(--r-md) var(--r-md) 0; font-size: 12.5px; line-height: 1.6; color: var(--brand-700);
+    }
+    .ia-nota[data-on] { display: block; }
+    .ia-nota b { font-weight: 700; }
+    .ia-nota ul { margin: 8px 0 0; padding-left: 18px; }
+    /* O que o documento não respondeu é o recado, não a decoração: fica em
+       laranja porque é pendência, não confirmação. */
+    .ia-nota li { color: var(--mkt-700); margin-bottom: 3px; }
+
+    /* Campo escrito pela IA: some no primeiro toque da pessoa. */
+    .campo[data-ia] { border-color: var(--brand-500); background: var(--brand-100); }
+
+    /* Passo que o hub não consegue dar sozinho: o arquivo da LP entra por deploy,
+       não por runtime. Em vez de deixar a pessoa descobrir, entrega o comando. */
+    .passo strong { display: block; font-family: var(--font-display); font-weight: 500; font-size: 19px; color: var(--ok-700); margin-bottom: 8px; }
+    .passo p { font-size: 13.5px; line-height: 1.65; color: var(--ink-600); margin: 0 0 14px; }
+    .passo pre {
+      margin: 0; padding: 13px 14px; border-radius: var(--r-md); background: var(--brand-900);
+      color: rgba(255,255,255,.86); font-size: 12.5px; line-height: 1.7; overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .passo .linha-copiar { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+    .passo .linha-copiar span { font-size: 12px; color: var(--ink-400); line-height: 1.5; }
+
+    /* Contador de comentários: é o dado que decide se a LP volta pra fila */
+    .balao {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; color: var(--mkt-700);
+      background: var(--mkt-100); border-radius: var(--r-md); padding: 5px 9px;
+    }
+    .balao svg { width: 13px; height: 13px; }
+    .balao[data-zero] { color: var(--ink-500); background: var(--ink-200); }
+
+    .vazio {
+      margin-top: 28px; border: 1px dashed var(--ink-300); border-radius: var(--r-xlg);
+      padding: 44px 24px; text-align: center; color: var(--ink-500); font-size: 15px; line-height: 1.6;
+    }
+    .vazio strong { display: block; font-family: var(--font-display); font-weight: 500; font-size: 19px; color: var(--ink-800); margin-bottom: 6px; }
+
+    .carregando { margin-top: 28px; display: flex; align-items: center; gap: 10px; color: var(--ink-500); font-size: 14px; }
+    .carregando .girando { color: var(--brand-500); }
+
+    /* ---------- Sino de notificações ---------- */
+    .sino-wrap { position: relative; flex: 0 0 auto; }
+    .sino {
+      width: 34px; height: 34px; display: grid; place-items: center; cursor: pointer; position: relative;
+      background: #fff; border: 1px solid var(--ink-300); border-radius: var(--r-md); color: var(--ink-500);
+      transition: border-color .18s ease, color .18s ease;
+    }
+    .sino:hover, .sino[aria-expanded="true"] { border-color: var(--brand-500); color: var(--brand-500); }
+    .sino svg { width: 16px; height: 16px; }
+    .sino .selo {
+      position: absolute; top: -5px; right: -5px; min-width: 17px; height: 17px; padding: 0 4px;
+      border-radius: 999px; background: var(--mkt-500); color: #fff;
+      font-size: 10px; font-weight: 700; display: grid; place-items: center; border: 2px solid #fff;
+    }
+
+    .avisos {
+      position: absolute; z-index: 60; top: calc(100% + 9px); right: 0; width: min(390px, calc(100vw - 28px));
+      background: #fff; border: 1px solid var(--ink-200); border-radius: var(--r-lg);
+      box-shadow: var(--sh-xl); overflow: hidden; display: none;
+    }
+    .avisos[data-on] { display: block; }
+    .avisos-topo {
+      display: flex; align-items: center; gap: 10px; padding: 12px 14px;
+      border-bottom: 1px solid var(--ink-200); background: var(--ink-100);
+    }
+    .avisos-topo strong { font-family: var(--font-display); font-weight: 500; font-size: 15px; }
+    .avisos-topo button {
+      margin-left: auto; background: transparent; border: 0; cursor: pointer; padding: 0;
+      font-family: var(--font-sans); font-size: 11px; font-weight: 700; letter-spacing: .06em;
+      text-transform: uppercase; color: var(--brand-500);
+    }
+    .avisos-topo button[disabled] { color: var(--ink-400); cursor: default; }
+    .avisos-lista { max-height: min(420px, 62dvh); overflow-y: auto; }
+    .aviso-item {
+      display: flex; gap: 11px; padding: 12px 14px; border-bottom: 1px solid var(--ink-200);
+      cursor: pointer; transition: background .16s ease; width: 100%; text-align: left;
+      background: #fff; border-left: 0; border-right: 0; border-top: 0; font-family: var(--font-sans);
+    }
+    .aviso-item:last-child { border-bottom: 0; }
+    .aviso-item:hover { background: var(--brand-100); }
+    .aviso-item[data-novo] { background: var(--mkt-100); }
+    .aviso-item[data-novo]:hover { background: #ffe8d6; }
+    .aviso-corpo { min-width: 0; flex: 1; }
+    .aviso-linha1 { display: flex; align-items: baseline; gap: 7px; }
+    .aviso-quem { font-size: 13px; font-weight: 600; color: var(--ink-800); }
+    .aviso-hora { font-size: 11px; color: var(--ink-400); margin-left: auto; flex: 0 0 auto; }
+    .aviso-lp { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--brand-500); margin-top: 3px; }
+    .aviso-txt {
+      font-size: 13px; line-height: 1.5; color: var(--ink-600); margin-top: 5px;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .aviso-tag {
+      display: inline-block; margin-top: 6px; font-size: 10px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase; padding: 3px 7px; border-radius: var(--r-sm);
+      background: var(--ok-200); color: var(--ok-700);
+    }
+    .aviso-tag[data-resolvido] { background: var(--ink-200); color: var(--ink-500); }
+    .aviso-tag[data-st="aprovada"]  { background: var(--ok-200);    color: var(--ok-700); }
+    .aviso-tag[data-st="publicada"] { background: var(--brand-200); color: var(--brand-700); }
+    .aviso-tag[data-st="ajuste"]    { background: var(--mkt-100);   color: var(--mkt-700); }
+    .aviso-tag[data-st="revisao"]   { background: var(--warn-100);  color: var(--warn-700); }
+    .aviso-tag[data-st="arquivada"] { background: var(--ink-200);   color: var(--ink-500); }
+    .avisos-vazio { padding: 30px 18px; text-align: center; font-size: 13px; line-height: 1.6; color: var(--ink-500); }
+    .avisos-pe { padding: 10px 14px; border-top: 1px solid var(--ink-200); background: var(--ink-100); font-size: 11px; color: var(--ink-400); line-height: 1.5; }
+
+    /* ---------- Faixa escura ---------- */
+    .escuro { background: var(--brand-900); color: #fff; margin-top: 56px; position: relative; overflow: hidden; }
+    .escuro::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 15% 0%, rgba(0,238,255,.16), transparent 55%), radial-gradient(circle at 100% 100%, rgba(4,58,209,.55), transparent 60%);
+    }
+    .escuro-in { position: relative; max-width: 1180px; margin: 0 auto; padding: 56px 24px; display: grid; grid-template-columns: 1.15fr 1fr; gap: 44px; }
+    .escuro h2 { font-family: var(--font-display); font-weight: 500; letter-spacing: -.03em; font-size: clamp(22px, 3vw, 30px); line-height: 1.2; margin: 12px 0 0; }
+    .escuro p { color: rgba(255,255,255,.72); font-size: 15px; line-height: 1.7; margin: 14px 0 0; }
+    .escuro strong { color: #fff; font-weight: 600; }
+    .passos { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+    .passos li { display: flex; gap: 14px; align-items: flex-start; font-size: 14px; line-height: 1.6; color: rgba(255,255,255,.78); }
+    .passos b { flex: 0 0 auto; width: 24px; height: 24px; border-radius: var(--r-sm); background: rgba(0,238,255,.14); color: var(--cyan-400); display: grid; place-items: center; font-size: 11px; font-weight: 700; }
+    .aviso { margin-top: 26px; border-left: 2px solid var(--cyan-500); background: rgba(255,255,255,.05); border-radius: 0 var(--r-md) var(--r-md) 0; padding: 16px 18px; }
+    .aviso code { font-size: 13px; background: rgba(0,238,255,.14); color: var(--cyan-400); padding: 2px 6px; border-radius: var(--r-sm); }
+
+    footer { border-top: 1px solid rgba(255,255,255,.1); background: var(--brand-900); }
+    .ft-in { max-width: 1180px; margin: 0 auto; padding: 22px 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px; color: rgba(255,255,255,.5); font-size: 12px; }
+    .ft-in .kicker { color: rgba(255,255,255,.45); }
+
+    @media (max-width: 860px) {
+      .escuro-in { grid-template-columns: 1fr; gap: 34px; }
+      .hero-in { padding: 44px 20px 38px; }
+      .lista-sec { padding: 36px 20px 20px; }
+      .hd-in, .escuro-in, .ft-in { padding-left: 20px; padding-right: 20px; }
+      .grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      .hd-nome, .hd-div { display: none; }
+      .eu-txt { display: none; }
+      .strip { display: grid; grid-template-columns: 1fr 1fr; }
+      .kpi { min-width: 0; }
+      .ft-in { font-size: 11px; }
+      .ft-in span:last-child { margin-left: 0 !important; }
+      .abas { display: flex; width: 100%; }
+      .abas button { flex: 1; justify-content: center; }
+      .dupla { grid-template-columns: 1fr; gap: 0; }
+      .modal-caixa { width: 100vw; max-height: 100dvh; height: 100dvh; top: 0; transform: none; border-radius: 0; }
+      .modal-pe { flex-direction: column; align-items: stretch; }
+      .modal-pe .btn { width: 100%; justify-content: center; }
+      .modal-pe .aviso-pe { margin-right: 0; max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hd">
+    <div class="hd-in">
+      <a href="/" aria-label="Prolog"><img src="/logo-lightmode.svg" alt="Prolog" width="97" height="24" style="height:24px;width:auto;display:block"></a>
+      <span class="hd-div" aria-hidden="true"></span>
+      <span class="hd-nome">LP Hub · Prolog Talks</span>
+      <div class="eu" id="eu" hidden>
+        <div class="sino-wrap" id="sino-wrap" hidden>
+          <button class="sino" id="sino" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Notificações" title="Notificações">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+            <span class="selo" id="sino-selo" hidden>0</span>
+          </button>
+          <div class="avisos" id="avisos" role="menu">
+            <div class="avisos-topo">
+              <strong>Notificações</strong>
+              <button type="button" id="avisos-lidas">marcar como lidas</button>
+            </div>
+            <div class="avisos-lista" id="avisos-lista"></div>
+            <p class="avisos-pe" id="avisos-pe"></p>
+          </div>
+        </div>
+        <span class="avatar" id="eu-avatar"></span>
+        <span class="eu-txt">
+          <span class="eu-nome" id="eu-nome"></span>
+          <span class="eu-papel" id="eu-papel"></span>
+        </span>
+        <button class="sair" id="sair" type="button" title="Sair" aria-label="Sair">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-grade grid-bg" aria-hidden="true"></div>
+    <div class="hero-in">
+      <span class="kicker">hub de aprovação</span>
+      <h1 class="display">Landing pages do <em>Prolog Talks</em></h1>
+      <p class="sub">Cada versão abre no formato mobile por padrão — é onde caem 9 de cada 10 leads. Comente direto na tela de revisão o que precisa ajustar: o comentário fica registrado com o seu nome e a LP volta pra fila.</p>
+      <dl class="strip">
+        <div class="kpi"><dt>Na fila</dt><dd id="kpi-fila">—</dd></div>
+        <div class="kpi"><dt>Concluídas</dt><dd id="kpi-concluidas">—</dd></div>
+        <div class="kpi"><dt>Ajustes em aberto</dt><dd id="kpi-abertos">—</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="lista-sec">
+    <div class="abas" role="group" aria-label="Visões da lista">
+      <button type="button" data-aba="fila" aria-pressed="true">Fila <span class="n" id="n-fila">0</span></button>
+      <button type="button" data-aba="concluidas" aria-pressed="false">Concluídas <span class="n" id="n-concluidas">0</span></button>
+    </div>
+
+    <div class="sec-head">
+      <span class="kicker" id="sec-kicker">versões</span>
+      <h2 id="sec-titulo">Fila de revisão</h2>
+      <p id="sec-texto">Abra em mobile, confira o dobramento e o formulário, e volte com o veredito.</p>
+    </div>
+
+    <div class="carregando" id="carregando"><span class="girando" aria-hidden="true"></span> Carregando o hub…</div>
+    <div class="grid" id="grid" hidden></div>
+    <div class="vazio" id="vazio" hidden></div>
+  </section>
+
+  <noscript>
+    <p style="max-width:1180px;margin:0 auto;padding:0 24px 24px;color:var(--err-700)">
+      Este hub precisa de JavaScript pra carregar a lista de LPs.
+    </p>
+  </noscript>
+
+  <section class="escuro">
+    <div class="escuro-in">
+      <div>
+        <span class="kicker kicker-cyan">como revisar</span>
+        <h2>Aprovação em quatro passos</h2>
+        <div class="aviso">
+          <p style="margin:0"><strong>Antes de testar o formulário:</strong> ele está ligado ao HubSpot de verdade da Prolog. Qualquer envio aqui vira contato real no CRM — se for só teste, use um e-mail marcado como <code>teste+algo@…</code> pra dar pra limpar depois.</p>
+        </div>
+      </div>
+      <ol class="passos">
+        <li><b>1</b><span>Abra em <strong>Revisar</strong> e desça a página inteira: headline, formulário, agenda e CTA fixo.</span></li>
+        <li><b>2</b><span>Achou algo? Escreva no painel de <strong>comentários</strong> ao lado. A LP muda pra "em ajuste" sozinha.</span></li>
+        <li><b>3</b><span>Quando o ajuste sair, marque o comentário como <strong>resolvido</strong> — o histórico fica.</span></li>
+        <li><b>4</b><span>Sem pendência? <strong>Aprovar</strong> na própria tela de revisão. A LP sai da fila e vai pra aba Concluídas.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    <div class="ft-in">
+      <img src="/logo-white.svg" alt="Prolog" width="97" height="24" style="height:24px;width:auto;display:block">
+      <span class="kicker">uso interno · não indexado</span>
+      <span style="margin-left:auto" id="ft-sync"></span>
+    </div>
+  </footer>
+
+  <div class="menu" id="menu" role="menu" hidden></div>
+
+  <div class="modal" id="modal-lp" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+    <div class="modal-fundo" data-fecha-modal></div>
+    <div class="modal-caixa">
+      <div class="modal-topo">
+        <button class="modal-fechar" type="button" data-fecha-modal aria-label="Fechar">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+        <span class="kicker" id="modal-kicker">duplicar</span>
+        <h2 class="display" id="modal-titulo">Duplicar LP</h2>
+        <p id="modal-explica"></p>
+      </div>
+
+      <div class="modal-corpo">
+        <div class="modal-erro" id="modal-erro" hidden></div>
+
+        <div id="modal-campos">
+          <!-- O briefing do evento já existe em algum lugar (Outline, PDF do
+               parceiro, print do card). Ler dali é melhor do que redigitar: além
+               de preencher, expõe o que o documento não respondeu. -->
+          <div class="briefing" id="linha-briefing">
+            <button class="btn btn-ghost btn-sm" type="button" id="btn-arquivo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4"/><path d="M7.5 8.5 12 4l4.5 4.5"/><path d="M4 16v2.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V16"/></svg>
+              Preencher a partir de um arquivo
+            </button>
+            <input type="file" id="f-arquivo" accept=".pdf,.md,.markdown,.txt,.csv,.json,.html,.png,.jpg,.jpeg,.webp,image/*" hidden>
+            <span class="briefing-dica" id="briefing-dica">Outline em PDF ou Markdown, o briefing do parceiro, um print. A IA lê e preenche o resto.</span>
+          </div>
+          <div class="ia-nota" id="ia-nota"></div>
+
+          <div class="campo-linha" id="linha-id">
+            <label for="f-id">Id da cópia <span class="conta" id="f-id-eco">/…</span></label>
+            <input class="campo campo-mono" id="f-id" type="text" spellcheck="false" autocomplete="off" maxlength="49" placeholder="kilsa-v3">
+            <p class="ajuda">É o link do preview (<code>/id</code>) e a pasta do arquivo (<code>public/id/index.html</code>). Não dá pra trocar depois.</p>
+          </div>
+
+          <div class="campo-linha">
+            <label for="f-titulo">Título</label>
+            <input class="campo" id="f-titulo" type="text" maxlength="90" placeholder="Kilsa — Adesão de Motoristas">
+          </div>
+
+          <div class="dupla">
+            <div class="campo-linha">
+              <label for="f-evento">Evento</label>
+              <input class="campo" id="f-evento" type="text" maxlength="50" placeholder="Prolog Talks">
+            </div>
+            <div class="campo-linha">
+              <label for="f-data">Data</label>
+              <input class="campo campo-mono" id="f-data" type="text" maxlength="10" inputmode="numeric" placeholder="18/08/2026">
+            </div>
+          </div>
+
+          <div class="dupla">
+            <div class="campo-linha">
+              <label for="f-versao">Versão</label>
+              <input class="campo" id="f-versao" type="text" maxlength="24" placeholder="v1">
+            </div>
+            <div class="campo-linha" id="linha-url">
+              <label for="f-url">URL no site <span class="conta">/série/slug</span></label>
+              <input class="campo campo-mono" id="f-url" type="text" spellcheck="false" autocomplete="off" placeholder="/talks/recapagem-de-carcaca">
+            </div>
+          </div>
+
+          <div class="campo-linha">
+            <label for="f-nota">Nota do cartão</label>
+            <textarea class="campo" id="f-nota" maxlength="240" placeholder="O que essa versão tem de diferente"></textarea>
+          </div>
+
+          <!-- Só aparece depois que a IA escreve: quem preenche na mão faz isso
+               na tela de revisão, junto do envio pro site. -->
+          <div id="bloco-seo" hidden>
+            <div class="campo-linha">
+              <label for="f-seo-titulo">Título no Google <span class="conta">sem o "· Prolog"</span></label>
+              <input class="campo" id="f-seo-titulo" type="text" maxlength="120">
+            </div>
+            <div class="campo-linha">
+              <label for="f-seo-desc">Descrição no Google</label>
+              <textarea class="campo" id="f-seo-desc" maxlength="200"></textarea>
+            </div>
+          </div>
+
+          <label class="marcar" id="linha-seo">
+            <input type="checkbox" id="f-seo">
+            <span>Copiar também o título e a descrição de SEO da LP de origem. Deixe desmarcado se o tema muda: eles nomeiam o assunto da live.</span>
+          </label>
+        </div>
+
+        <div class="passo" id="modal-passo" hidden></div>
+      </div>
+
+      <div class="modal-pe">
+        <span class="aviso-pe" id="modal-pe-txt"></span>
+        <button class="btn btn-ghost btn-sm" type="button" data-fecha-modal>Cancelar</button>
+        <button class="btn btn-brand btn-sm" type="button" id="modal-ok">Duplicar LP</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    /* Vigia de carregamento — inline de propósito.
+       Se o app.js não carregar, ou a API não responder, ou o script quebrar em
+       qualquer ponto, esta função ainda roda e conta o que aconteceu. Sem ela a
+       página fica girando pra sempre e não dá pra saber por quê. */
+    window.__hubPronto = false;
+    setTimeout(function () {
+      if (window.__hubPronto) return;
+      var alvo = document.getElementById('carregando');
+      if (!alvo || alvo.hidden) return;
+
+      function contar(diagnostico) {
+        alvo.innerHTML = '<div style="color:var(--err-700)"><strong>A página travou carregando.</strong><br>' +
+          diagnostico + '</div>' +
+          '<button class="btn btn-ghost btn-sm" style="margin-left:14px" id="forcar">Recarregar limpo</button>';
+        document.getElementById('forcar').addEventListener('click', function () {
+          location.href = location.pathname + '?r=' + Date.now();
+        });
+      }
+
+      if (!window.Hub) { contar('Os scripts da página não carregaram (cache velho, provavelmente).'); return; }
+      fetch('/api/dados', { credentials: 'same-origin', cache: 'no-store' }).then(function (r) {
+        contar(r.status === 401 ? 'Sua sessão caiu. <a href="/login" style="text-decoration:underline">Entrar de novo</a>.'
+                                : 'A API respondeu ' + r.status + ', mas a tela não montou.');
+      }).catch(function (e) {
+        contar('A API não respondeu: ' + e.message);
+      });
+    }, 10000);
+  </script>
+
+  <script src="/app.js?v=8"></script>
+  <script>
+    (function () {
+      var grid = document.getElementById('grid');
+      var carregandoEl = document.getElementById('carregando');
+
+      // Se o app.js não carregou (cache velho, rede caindo no meio do deploy), o
+      // resto do script quebraria na primeira linha e a página ficaria girando
+      // pra sempre. Melhor falhar dizendo o que houve.
+      if (!window.Hub) {
+        carregandoEl.innerHTML = 'Não deu pra carregar os scripts da página. ' +
+          '<button class="btn btn-ghost btn-sm" style="margin-left:10px" onclick="location.reload(true)">Recarregar</button>';
+        return;
+      }
+      var vazio = document.getElementById('vazio');
+      var carregando = document.getElementById('carregando');
+      var aba = 'fila';
+      var dados = null;
+
+      var TEXTOS = {
+        fila: {
+          kicker: 'versões',
+          titulo: 'Fila de revisão',
+          texto: 'Abra em mobile, confira o dobramento e o formulário, e volte com o veredito.',
+          vazio: '<strong>Fila limpa</strong>Nenhuma LP esperando revisão agora.'
+        },
+        concluidas: {
+          kicker: 'histórico',
+          titulo: 'Concluídas',
+          texto: 'Aprovadas, publicadas e arquivadas. Ficam aqui pra consulta: dá pra reabrir a revisão de qualquer uma se algo voltar a mudar.',
+          vazio: '<strong>Ainda nada por aqui</strong>Quando uma LP for aprovada ou publicada ela aparece nesta aba.'
+        }
+      };
+
+      var ICONE_SETA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.25" d="M9 5l7 7-7 7"/></svg>';
+      var ICONE_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>';
+      var ICONE_BALAO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.9 8.9 0 0 1-3.8-.9L3 21l1.9-5a8.4 8.4 0 0 1-.9-3.8 8.4 8.4 0 0 1 8.4-9 8.4 8.4 0 0 1 8.6 8.3z"/></svg>';
+      var ICONE_MAIS = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg>';
+      var ICONE_ALERTA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 2.4 17.3A2 2 0 0 0 4.1 20.3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>';
+
+      var svg = function (d) {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
+      };
+      var ICONES = {
+        duplicar: svg('<rect x="9" y="9" width="12" height="12" rx="2.2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>'),
+        editar:   svg('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
+        link:     svg('<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>'),
+        voltar:   svg('<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>'),
+        arquivar: svg('<rect x="2.5" y="4" width="19" height="4.5" rx="1.4"/><path d="M4.5 8.5V19a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5V8.5"/><path d="M10 13h4"/>'),
+        lixo:     svg('<path d="M3.5 6.5h17"/><path d="M9 6.5V4.8A1.3 1.3 0 0 1 10.3 3.5h3.4A1.3 1.3 0 0 1 15 4.8v1.7"/><path d="M6 6.5 7 19.4a1.6 1.6 0 0 0 1.6 1.5h6.8a1.6 1.6 0 0 0 1.6-1.5L18 6.5"/>')
+      };
+
+      // Aprovar é privilégio de admin (pedido do Gui em 11/08). Revisor continua
+      // mudando status pelo seletor do viewer, que é o que o ADR-001 desenhou —
+      // aqui o que muda é ter o atalho de um clique na própria fila.
+      function podeAprovar(lp) {
+        return Boolean(dados && dados.usuario && dados.usuario.papel === 'admin') && lp.fila;
+      }
+
+      function podeEnviar(lp) {
+        return Boolean(dados && dados.poderes && dados.poderes.publicar) &&
+          (lp.status === 'aprovada' || lp.status === 'publicada');
+      }
+
+      // De qual id sai o HTML do preview. Só difere do próprio id numa cópia que
+      // ainda espera o deploy do arquivo dela.
+      function fonteDe(lp) {
+        return lp.fonteHtml || lp.id;
+      }
+
+      function linkDeRevisao(lp) {
+        var f = fonteDe(lp);
+        return '/ver/' + encodeURIComponent(lp.id) + (f !== lp.id ? '?fonte=' + encodeURIComponent(f) : '');
+      }
+
+      function cartao(lp) {
+        var st = Hub.STATUS[lp.status] || Hub.STATUS.revisao;
+        var abertos = lp.comentariosAbertos;
+        var fonte = fonteDe(lp);
+        var espelho = fonte !== lp.id;
+        return '' +
+          '<article class="card">' +
+            '<span class="card-stream stream" aria-hidden="true"></span>' +
+            '<div class="card-head">' +
+              '<span class="chip ' + st.chip + '"><i class="dot"></i>' + Hub.esc(st.rotulo) + '</span>' +
+              '<span class="card-data mono">' + Hub.esc(lp.data) + '</span>' +
+            '</div>' +
+            '<p class="kicker kicker-ink">' + Hub.esc(lp.evento) + '</p>' +
+            '<h3 class="display card-titulo">' + Hub.esc(lp.titulo) + '</h3>' +
+            '<p class="card-nota">' + Hub.esc(lp.nota || '') + '</p>' +
+            '<dl class="card-meta">' +
+              '<div><dt>URL no site</dt><dd class="url-site">' +
+                (lp.urlFinal ? 'prologapp.com<b>' + Hub.esc(lp.urlFinal) + '</b>' : '<i>a definir</i>') +
+              '</dd></div>' +
+              '<div><dt>Versão</dt><dd>' + Hub.esc(lp.versaoLp || '—') + '</dd></div>' +
+            '</dl>' +
+            '<div style="margin:-6px 0 16px">' +
+              '<span class="balao"' + (abertos ? '' : ' data-zero') + '>' + ICONE_BALAO +
+                (abertos ? abertos + ' ajuste' + (abertos > 1 ? 's' : '') + ' em aberto'
+                         : (lp.comentariosTotal ? lp.comentariosTotal + ' comentário' + (lp.comentariosTotal > 1 ? 's' : '') + ' resolvido' + (lp.comentariosTotal > 1 ? 's' : '') : 'sem comentários')) +
+              '</span>' +
+            '</div>' +
+            (espelho
+              ? '<p class="espelho">' + ICONE_ALERTA +
+                  '<span>Preview espelhado da <b>' + Hub.esc(fonte) + '</b>: esta cópia ainda não tem arquivo próprio. ' +
+                  'Suba <b>public/' + Hub.esc(lp.id) + '/index.html</b> num deploy.</span>' +
+                '</p>'
+              : '') +
+            '<div class="card-acoes">' +
+              '<a class="btn btn-brand" href="' + Hub.esc(linkDeRevisao(lp)) + '">Revisar e comentar ' + ICONE_SETA + '</a>' +
+              // Aprovar com ajuste em aberto é contradição: o comentário aberto é o
+              // que tirou a LP da fila limpa. Some com o clique em vez de deixar
+              // aprovar e desfazer depois.
+              (podeAprovar(lp)
+                ? '<button class="btn btn-ok" type="button" data-aprovar="' + Hub.esc(lp.id) + '"' +
+                    (abertos
+                      ? ' disabled title="Resolva os ' + abertos + ' ajuste' + (abertos > 1 ? 's' : '') + ' em aberto antes de aprovar"'
+                      : '') +
+                    '>' + ICONE_CHECK + 'Aprovar</button>'
+                : '') +
+              '<a class="btn btn-ghost" href="/' + encodeURIComponent(fonte) + '" target="_blank" rel="noopener">Abrir direto</a>' +
+              // Enviar pro site é a última etapa: aparece só quando a LP passou da
+              // fila, e só pra quem tem permissão de abrir PR no repo do site.
+              (podeEnviar(lp)
+                ? '<a class="btn btn-ghost" href="/ver/' + encodeURIComponent(lp.id) + '?publicar=1">Enviar pro site</a>'
+                : '') +
+              // O resto (duplicar, editar, arquivar, excluir) sai do cartão e vai
+              // pro menu: são ações de manutenção, e cada botão a mais aqui rouba
+              // atenção do "revisar", que é o que a fila existe pra fazer.
+              '<button class="btn btn-ghost mais" type="button" data-menu="' + Hub.esc(lp.id) + '"' +
+                ' aria-haspopup="true" aria-expanded="false" title="Mais ações" aria-label="Mais ações desta LP">' +
+                ICONE_MAIS +
+              '</button>' +
+            '</div>' +
+          '</article>';
+      }
+
+      function pintar() {
+        var t = TEXTOS[aba];
+        // Clicar numa aba antes dos dados chegarem não pode derrubar a página.
+        if (!dados) return;
+        // O menu vive fora do cartão: repintar a grade deixaria ele apontando
+        // pra um botão que não existe mais.
+        fecharMenu();
+        document.getElementById('sec-kicker').textContent = t.kicker;
+        document.getElementById('sec-titulo').textContent = t.titulo;
+        document.getElementById('sec-texto').textContent = t.texto;
+
+        var lista = dados.lps.filter(function (lp) { return aba === 'fila' ? lp.fila : !lp.fila; });
+        if (!lista.length) {
+          grid.hidden = true;
+          vazio.hidden = false;
+          vazio.innerHTML = t.vazio;
+          return;
+        }
+        vazio.hidden = true;
+        grid.hidden = false;
+        grid.innerHTML = lista.map(cartao).join('');
+      }
+
+      function kpis() {
+        var fila = dados.lps.filter(function (l) { return l.fila; }).length;
+        var conc = dados.lps.length - fila;
+        var abertos = dados.comentarios.filter(function (c) { return c.status !== 'resolvido'; }).length;
+        document.getElementById('kpi-fila').textContent = fila;
+        document.getElementById('kpi-concluidas').textContent = conc;
+        document.getElementById('kpi-abertos').textContent = abertos;
+        document.getElementById('n-fila').textContent = fila;
+        document.getElementById('n-concluidas').textContent = conc;
+      }
+
+      function eu() {
+        var u = dados.usuario;
+        document.getElementById('eu').hidden = false;
+        document.getElementById('eu-avatar').textContent = Hub.iniciais(u.nome);
+        document.getElementById('eu-nome').textContent = u.nome;
+        document.getElementById('eu-papel').textContent = u.papel;
+      }
+
+      function irPraAba(nome) {
+        aba = nome;
+        document.querySelectorAll('.abas button').forEach(function (x) {
+          x.setAttribute('aria-pressed', String(x.getAttribute('data-aba') === nome));
+        });
+        try { localStorage.setItem('lphub-aba', nome); } catch (e) {}
+      }
+
+      document.querySelectorAll('.abas button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          irPraAba(b.getAttribute('data-aba'));
+          pintar();
+        });
+      });
+
+      // Aprovar tira a LP da fila e ela troca de aba, então um clique errado dá a
+      // impressão de que o card sumiu. Em vez de diálogo do navegador, o próprio
+      // botão pede confirmação e volta ao normal sozinho se ninguém confirmar.
+      var timerConfirma;
+      document.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-aprovar]');
+        if (!b || b.disabled) return;
+        var id = b.getAttribute('data-aprovar');
+
+        if (!b.hasAttribute('data-confirmar')) {
+          document.querySelectorAll('[data-aprovar][data-confirmar]').forEach(function (x) {
+            x.removeAttribute('data-confirmar');
+            x.innerHTML = ICONE_CHECK + 'Aprovar';
+          });
+          b.setAttribute('data-confirmar', '');
+          b.innerHTML = ICONE_CHECK + 'Confirmar aprovação';
+          clearTimeout(timerConfirma);
+          timerConfirma = setTimeout(function () {
+            if (!b.isConnected) return;
+            b.removeAttribute('data-confirmar');
+            b.innerHTML = ICONE_CHECK + 'Aprovar';
+          }, 5000);
+          return;
+        }
+
+        clearTimeout(timerConfirma);
+        b.disabled = true;
+        b.innerHTML = '<span class="girando" aria-hidden="true"></span> Aprovando…';
+        Hub.api('lp', { metodo: 'PATCH', corpo: { id: id, status: 'aprovada' } })
+          .then(function () {
+            Hub.avisar('LP aprovada. Ela saiu da fila e está na aba Concluídas.');
+            return carregar();
+          })
+          .catch(function (err) {
+            Hub.avisar(err.message, 'erro');
+            b.disabled = false;
+            b.removeAttribute('data-confirmar');
+            b.innerHTML = ICONE_CHECK + 'Aprovar';
+          });
+      });
+
+      /* ================= Menu de ações do cartão ================= */
+      /* Duplicar, editar, arquivar e excluir são manutenção do cartão, não
+         revisão. Empilhar tudo como botão faria o cartão competir consigo mesmo:
+         no menu, a fila continua sendo sobre revisar. */
+      var menu = document.getElementById('menu');
+      var menuAberto = null;
+
+      function lpPorId(id) {
+        return (dados ? dados.lps : []).filter(function (x) { return x.id === id; })[0];
+      }
+
+      function itemMenu(it) {
+        if (it.sep) return '<div class="sep" role="separator"></div>';
+        return '<button type="button" role="menuitem" data-acao="' + it.acao + '"' +
+          (it.perigo ? ' data-perigo' : '') + '>' + ICONES[it.icone] + '<span>' + it.txt + '</span></button>';
+      }
+
+      function itensDoMenu(lp) {
+        var itens = [];
+        if (dados.poderes.criar) itens.push({ acao: 'duplicar', icone: 'duplicar', txt: 'Duplicar LP' });
+        if (dados.poderes.status) itens.push({ acao: 'editar', icone: 'editar', txt: 'Editar dados do cartão' });
+        if (itens.length) itens.push({ sep: true });
+        itens.push({ acao: 'copiar', icone: 'link', txt: 'Copiar link do preview' });
+        if (dados.poderes.status) {
+          if (lp.status !== 'revisao') itens.push({ acao: 'revisao', icone: 'voltar', txt: 'Devolver pra fila' });
+          if (lp.status !== 'arquivada') itens.push({ acao: 'arquivada', icone: 'arquivar', txt: 'Arquivar' });
+        }
+        if (dados.poderes.apagar) {
+          itens.push({ sep: true });
+          itens.push({ acao: 'excluir', icone: 'lixo', txt: 'Excluir LP', perigo: true });
+        }
+        return itens;
+      }
+
+      function fecharMenu() {
+        if (!menuAberto) return;
+        menu.hidden = true;
+        menu.innerHTML = '';
+        var b = document.querySelector('[data-menu][aria-expanded="true"]');
+        if (b) b.setAttribute('aria-expanded', 'false');
+        menuAberto = null;
+      }
+
+      function abrirMenu(botao, lp) {
+        menu.innerHTML = '<p class="menu-cab">' + Hub.esc(lp.titulo) + '</p>' +
+          itensDoMenu(lp).map(itemMenu).join('');
+        menu.hidden = false;
+        // Posiciona depois de medir: alinhado à direita do botão, e virado pra
+        // cima quando não cabe embaixo (cartão do fim da lista).
+        var r = botao.getBoundingClientRect();
+        var larg = menu.offsetWidth;
+        var alt = menu.offsetHeight;
+        var esq = Math.max(10, Math.min(r.right - larg, window.innerWidth - larg - 10));
+        var topo = r.bottom + 8;
+        if (topo + alt > window.innerHeight - 10) topo = Math.max(10, r.top - alt - 8);
+        menu.style.left = Math.round(esq) + 'px';
+        menu.style.top = Math.round(topo) + 'px';
+        botao.setAttribute('aria-expanded', 'true');
+        menuAberto = lp.id;
+        var primeiro = menu.querySelector('button');
+        if (primeiro) primeiro.focus();
+      }
+
+      document.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-menu]');
+        if (b) {
+          var id = b.getAttribute('data-menu');
+          var jaEstava = menuAberto === id;
+          fecharMenu();
+          if (!jaEstava) {
+            var lp = lpPorId(id);
+            if (lp) abrirMenu(b, lp);
+          }
+          return;
+        }
+        if (!e.target.closest('#menu')) fecharMenu();
+      });
+      // O menu é fixed: rolar ou redimensionar solta ele do botão.
+      window.addEventListener('resize', fecharMenu);
+      window.addEventListener('scroll', fecharMenu, true);
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        if (menuAberto) fecharMenu();
+        else if (modal.hasAttribute('data-on')) fecharModal();
+      });
+
+      function mudarStatus(lp, status) {
+        Hub.api('lp', { metodo: 'PATCH', corpo: { id: lp.id, status: status } })
+          .then(function () {
+            Hub.avisar(status === 'arquivada'
+              ? 'LP arquivada. Ela está na aba Concluídas.'
+              : 'LP de volta na fila de revisão.');
+            return carregar();
+          })
+          .catch(function (err) { Hub.avisar(err.message, 'erro'); });
+      }
+
+      menu.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-acao]');
+        if (!b) return;
+        var lp = lpPorId(menuAberto);
+        if (!lp) { fecharMenu(); return; }
+        var acao = b.getAttribute('data-acao');
+
+        if (acao === 'copiar') { Hub.copiar(location.origin + '/' + fonteDe(lp)); fecharMenu(); return; }
+        if (acao === 'duplicar') { fecharMenu(); abrirModal('duplicar', lp); return; }
+        if (acao === 'editar') { fecharMenu(); abrirModal('editar', lp); return; }
+        if (acao === 'revisao' || acao === 'arquivada') { fecharMenu(); mudarStatus(lp, acao); return; }
+
+        // Excluir leva junto os comentários da LP. Confirmação no próprio item,
+        // como o botão de aprovar faz na fila — diálogo do navegador aqui seria
+        // o único do hub.
+        if (acao !== 'excluir') return;
+        if (!b.hasAttribute('data-confirmar')) {
+          b.setAttribute('data-confirmar', '');
+          b.innerHTML = ICONES.lixo + '<span>Confirmar exclusão</span>';
+          return;
+        }
+        b.innerHTML = ICONES.lixo + '<span>Excluindo…</span>';
+        // Id vai no corpo e na query: DELETE com corpo é válido, mas nem todo
+        // runtime entrega ele parseado do outro lado.
+        Hub.api('lp?id=' + encodeURIComponent(lp.id), { metodo: 'DELETE', corpo: { id: lp.id } })
+          .then(function (d) {
+            fecharMenu();
+            Hub.avisar('LP "' + d.titulo + '" excluída' +
+              (d.comentarios ? ' com ' + d.comentarios + ' comentário' + (d.comentarios > 1 ? 's' : '') : '') + '.');
+            return carregar();
+          })
+          .catch(function (err) { fecharMenu(); Hub.avisar(err.message, 'erro'); });
+      });
+
+      /* ================= Duplicar e editar ================= */
+      var modal = document.getElementById('modal-lp');
+      var mCampos = document.getElementById('modal-campos');
+      var mPasso = document.getElementById('modal-passo');
+      var mErro = document.getElementById('modal-erro');
+      var mOk = document.getElementById('modal-ok');
+      var fId = document.getElementById('f-id');
+      var fTitulo = document.getElementById('f-titulo');
+      var fEvento = document.getElementById('f-evento');
+      var fData = document.getElementById('f-data');
+      var fVersao = document.getElementById('f-versao');
+      var fNota = document.getElementById('f-nota');
+      var fUrl = document.getElementById('f-url');
+      var fSeoTitulo = document.getElementById('f-seo-titulo');
+      var fSeoDesc = document.getElementById('f-seo-desc');
+      var fSeo = document.getElementById('f-seo');
+      var blocoSeo = document.getElementById('bloco-seo');
+      var iaNota = document.getElementById('ia-nota');
+      var modoModal = null;
+      var lpDoModal = null;
+
+      // Próximo id livre: kilsa → kilsa-2 → kilsa-3.
+      function idSugerido(base) {
+        var m = /-(\d+)$/.exec(base);
+        var raiz = m ? base.slice(0, -m[0].length) : base;
+        var n = m ? parseInt(m[1], 10) + 1 : 2;
+        while (lpPorId(raiz + '-' + n)) n++;
+        return raiz + '-' + n;
+      }
+
+      function ecoId() {
+        var v = fId.value.trim().toLowerCase();
+        document.getElementById('f-id-eco').textContent = v ? '/' + v : '/…';
+      }
+
+      fId.addEventListener('input', function () {
+        // O id é caminho: o que não vale como caminho vira hífen na hora, em vez
+        // de virar erro do servidor depois.
+        var limpo = fId.value.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-{2,}/g, '-');
+        if (limpo !== fId.value) fId.value = limpo;
+        ecoId();
+      });
+
+      function abrirModal(m, lp) {
+        modoModal = m;
+        lpDoModal = lp;
+        var dup = m === 'duplicar';
+
+        mErro.hidden = true;
+        mPasso.hidden = true;
+        mPasso.innerHTML = '';
+        mCampos.hidden = false;
+        mOk.removeAttribute('data-ir');
+        mOk.disabled = false;
+
+        document.getElementById('modal-kicker').textContent = dup ? 'duplicar' : 'editar';
+        document.getElementById('modal-titulo').textContent = dup ? 'Duplicar esta LP' : 'Editar dados do cartão';
+        document.getElementById('modal-explica').innerHTML = dup
+          ? 'Copia o cartão, não o arquivo: <code>public/id/index.html</code> entra por deploy. Até ele subir, a cópia mostra o HTML desta LP.'
+          : 'Muda só o que aparece no cartão. URL no site e SEO ficam na tela de revisão, junto do envio pro repo.';
+        document.getElementById('modal-pe-txt').textContent = dup
+          ? 'A cópia nasce na fila, sem os comentários daqui.'
+          : 'O id e o status não mudam por aqui.';
+        mOk.textContent = dup ? 'Duplicar LP' : 'Salvar';
+        document.getElementById('linha-id').hidden = !dup;
+        document.getElementById('linha-seo').hidden = !dup;
+        // Ler briefing e definir URL só fazem sentido na LP nova: numa que já
+        // existe, a URL mora na tela de revisão, junto do envio pro site.
+        document.getElementById('linha-briefing').hidden = !dup;
+        document.getElementById('linha-url').hidden = !dup;
+        // Sem a chave da IA o botão fica na tela, apagado e sem clique, dizendo
+        // o que falta — mesmo tratamento que o "Gerar com IA" da tela de
+        // revisão. Esconder faria a função parecer inexistente em vez de
+        // desligada.
+        btnArquivo.disabled = !dados.ia;
+        briefingDica.textContent = dicaDoBriefing();
+        blocoSeo.hidden = true;
+        iaNota.removeAttribute('data-on');
+        iaNota.innerHTML = '';
+        limparMarcaIa();
+        fUrl.value = '';
+        fSeoTitulo.value = '';
+        fSeoDesc.value = '';
+
+        fId.value = dup ? idSugerido(lp.id) : lp.id;
+        // Duplicar uma cópia não empilha "(cópia) (cópia)".
+        var raizTitulo = String(lp.titulo || '').replace(/\s*\(cópia\)\s*$/i, '');
+        fTitulo.value = dup ? (raizTitulo + ' (cópia)').slice(0, 90) : lp.titulo || '';
+        fEvento.value = lp.evento || '';
+        fData.value = lp.data || '';
+        fVersao.value = lp.versaoLp || '';
+        fNota.value = dup
+          ? ('Duplicada de ' + lp.titulo + '. Copy ainda por ajustar.').slice(0, 240)
+          : lp.nota || '';
+        fSeo.checked = false;
+        ecoId();
+
+        modal.setAttribute('data-on', '');
+        var foco = dup ? fId : fTitulo;
+        setTimeout(function () { foco.focus(); foco.select(); }, 30);
+      }
+
+      function fecharModal() {
+        modal.removeAttribute('data-on');
+        mOk.removeAttribute('data-ir');
+        modoModal = null;
+        lpDoModal = null;
+      }
+
+      /* ---------- Preencher a partir de um arquivo ---------- */
+      var CAMPOS_IA = {
+        id: fId, titulo: fTitulo, evento: fEvento, data: fData, versaoLp: fVersao,
+        nota: fNota, urlFinal: fUrl, seoTitulo: fSeoTitulo, seoDescricao: fSeoDesc
+      };
+
+      function limparMarcaIa() {
+        Object.keys(CAMPOS_IA).forEach(function (k) { CAMPOS_IA[k].removeAttribute('data-ia'); });
+      }
+
+      // A marca sai no primeiro toque: depois que a pessoa mexeu, o campo é dela.
+      Object.keys(CAMPOS_IA).forEach(function (k) {
+        CAMPOS_IA[k].addEventListener('input', function () { CAMPOS_IA[k].removeAttribute('data-ia'); });
+      });
+
+      var btnArquivo = document.getElementById('btn-arquivo');
+      var fArquivo = document.getElementById('f-arquivo');
+      var briefingDica = document.getElementById('briefing-dica');
+
+      function dicaDoBriefing() {
+        return dados.ia
+          ? 'Outline em PDF ou Markdown, o briefing do parceiro, um print. A IA lê e preenche o resto.'
+          : 'Indisponível: falta a ANTHROPIC_API_KEY no projeto. Enquanto isso, preencha na mão.';
+      }
+
+      btnArquivo.addEventListener('click', function () { fArquivo.click(); });
+
+      function lerBase64(arquivo) {
+        return new Promise(function (ok, falha) {
+          var leitor = new FileReader();
+          leitor.onerror = function () { falha(new Error('não deu pra ler o arquivo aqui no navegador')); };
+          leitor.onload = function () {
+            // data:<mime>;base64,<dados> — só a segunda metade vai pro servidor.
+            var bruto = String(leitor.result);
+            ok(bruto.slice(bruto.indexOf(',') + 1));
+          };
+          leitor.readAsDataURL(arquivo);
+        });
+      }
+
+      fArquivo.addEventListener('change', function () {
+        var arquivo = fArquivo.files && fArquivo.files[0];
+        if (!arquivo) return;
+        // Zera o input pra escolher o MESMO arquivo de novo disparar o evento.
+        var nome = arquivo.name;
+        fArquivo.value = '';
+
+        mErro.hidden = true;
+        iaNota.removeAttribute('data-on');
+        btnArquivo.disabled = true;
+        var rotulo = btnArquivo.innerHTML;
+        btnArquivo.innerHTML = '<span class="girando" aria-hidden="true"></span> Lendo…';
+        briefingDica.textContent = nome;
+
+        lerBase64(arquivo)
+          .then(function (base64) {
+            return Hub.api('briefing', {
+              metodo: 'POST',
+              timeout: 90000,
+              corpo: { arquivo: { nome: nome, tipo: arquivo.type, base64: base64 } }
+            });
+          })
+          .then(function (d) {
+            var preenchidos = [];
+            Object.keys(CAMPOS_IA).forEach(function (k) {
+              var valor = d.campos[k];
+              if (!valor) return;
+              // Não sobrescreve o que a pessoa já digitou de propósito — só o que
+              // veio do padrão da duplicação ou estava vazio.
+              CAMPOS_IA[k].value = valor;
+              CAMPOS_IA[k].setAttribute('data-ia', '');
+              preenchidos.push(k);
+            });
+            if (d.campos.id) ecoId();
+            if (d.campos.seoTitulo || d.campos.seoDescricao) blocoSeo.hidden = false;
+
+            iaNota.setAttribute('data-on', '');
+            iaNota.innerHTML =
+              '<b>' + preenchidos.length + ' campo' + (preenchidos.length === 1 ? '' : 's') + ' preenchido' +
+                (preenchidos.length === 1 ? '' : 's') + ' a partir de "' + Hub.esc(nome) + '".</b> Confira antes de duplicar.' +
+              (d.faltando && d.faltando.length
+                ? '<br>O documento não respondeu:<ul>' +
+                    d.faltando.map(function (x) { return '<li>' + Hub.esc(x) + '</li>'; }).join('') +
+                  '</ul>'
+                : '<br>O documento respondeu tudo que a LP precisa.');
+          })
+          .catch(function (err) {
+            mErro.hidden = false;
+            mErro.textContent = err.message;
+            briefingDica.textContent = dicaDoBriefing();
+          })
+          .finally(function () {
+            btnArquivo.disabled = false;
+            btnArquivo.innerHTML = rotulo;
+          });
+      });
+
+      document.querySelectorAll('[data-fecha-modal]').forEach(function (x) {
+        x.addEventListener('click', fecharModal);
+      });
+
+      // O que o hub não consegue fazer sozinho fica escrito, com o comando
+      // pronto: o arquivo da LP entra por deploy, não por runtime.
+      function mostrarPasso(nova, origem) {
+        var comando = 'Copy-Item -Recurse "public/' + origem + '" "public/' + nova.id + '"\nvercel --prod';
+        mCampos.hidden = true;
+        mPasso.hidden = false;
+        // O cabeçalho explicava o que ia acontecer; agora já aconteceu.
+        document.getElementById('modal-kicker').textContent = 'próximo passo';
+        document.getElementById('modal-explica').textContent = '';
+        document.getElementById('modal-pe-txt').textContent = 'Dá pra fechar: o cartão já está na fila.';
+        mPasso.innerHTML =
+          '<strong>Cartão criado.</strong>' +
+          '<p>Falta o arquivo: <b>public/' + Hub.esc(nova.id) + '/index.html</b> sobe num deploy. ' +
+            'Enquanto isso o preview da cópia mostra a LP <b>' + Hub.esc(origem) + '</b> — o hub troca sozinho ' +
+            'assim que o arquivo próprio responder.</p>' +
+          '<pre>' + Hub.esc(comando) + '</pre>' +
+          '<div class="linha-copiar">' +
+            '<button class="btn btn-ghost btn-sm" type="button" id="passo-copiar">Copiar comando</button>' +
+            '<span>Rodando na pasta do projeto.</span>' +
+          '</div>';
+        document.getElementById('passo-copiar').addEventListener('click', function () {
+          if (!navigator.clipboard) { Hub.avisar('Copie o comando na mão: o navegador não liberou a área de transferência.', 'erro'); return; }
+          navigator.clipboard.writeText(comando).then(
+            function () { Hub.avisar('Comando copiado.'); },
+            function () { Hub.avisar('Não deu pra copiar daqui.', 'erro'); }
+          );
+        });
+        mOk.disabled = false;
+        mOk.textContent = 'Abrir a cópia';
+        mOk.setAttribute('data-ir', '/ver/' + encodeURIComponent(nova.id) + '?fonte=' + encodeURIComponent(origem));
+      }
+
+      function salvar() {
+        var dup = modoModal === 'duplicar';
+        var corpo = {
+          titulo: fTitulo.value,
+          evento: fEvento.value,
+          data: fData.value,
+          versaoLp: fVersao.value,
+          nota: fNota.value
+        };
+        if (dup) {
+          corpo.de = lpDoModal.id;
+          corpo.id = fId.value.trim().toLowerCase();
+          corpo.copiarSeo = fSeo.checked;
+          corpo.urlFinal = fUrl.value;
+          // Só viajam se a IA (ou a pessoa) escreveu: campo vazio aqui não pode
+          // apagar o que o "copiar SEO da origem" traria.
+          if (fSeoTitulo.value.trim()) corpo.seoTitulo = fSeoTitulo.value;
+          if (fSeoDesc.value.trim()) corpo.seoDescricao = fSeoDesc.value;
+        } else {
+          corpo.id = lpDoModal.id;
+        }
+
+        var rotulo = mOk.textContent;
+        mErro.hidden = true;
+        mOk.disabled = true;
+        mOk.innerHTML = '<span class="girando" aria-hidden="true"></span> ' + (dup ? 'Duplicando…' : 'Salvando…');
+
+        Hub.api('lp', { metodo: dup ? 'POST' : 'PATCH', corpo: corpo })
+          .then(function (d) {
+            if (!dup) {
+              fecharModal();
+              mOk.disabled = false;
+              mOk.textContent = rotulo;
+              Hub.avisar('Cartão atualizado.');
+              return carregar();
+            }
+            var origem = d.lp.htmlDe || lpDoModal.id;
+            // A cópia nasce em revisão: quem estava em Concluídas não a veria.
+            irPraAba('fila');
+            return carregar().then(function () { mostrarPasso(d.lp, origem); });
+          })
+          .catch(function (err) {
+            mErro.hidden = false;
+            mErro.textContent = err.message;
+            mOk.disabled = false;
+            mOk.textContent = rotulo;
+          });
+      }
+
+      mOk.addEventListener('click', function () {
+        var ir = mOk.getAttribute('data-ir');
+        if (ir) { location.href = ir; return; }
+        salvar();
+      });
+
+      // Enter em campo de uma linha salva; no textarea da nota, quebra linha.
+      modal.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' || e.target.tagName === 'TEXTAREA') return;
+        e.preventDefault();
+        if (!mOk.disabled) mOk.click();
+      });
+
+      document.getElementById('sair').addEventListener('click', function () {
+        Hub.api('logout', { metodo: 'POST' }).then(function () { location.href = '/login'; });
+      });
+
+      var salva;
+      try { salva = localStorage.getItem('lphub-aba'); } catch (e) {}
+      if (salva === 'concluidas') {
+        aba = 'concluidas';
+        document.querySelectorAll('.abas button').forEach(function (x) {
+          x.setAttribute('aria-pressed', String(x.getAttribute('data-aba') === 'concluidas'));
+        });
+      }
+
+      /* ================= Notificações ================= */
+      /* Comentário é o evento que importa: é o ato que tira a LP da fila limpa
+         (ADR-001). O "já vi" fica no localStorage deste navegador, não no estado
+         do projeto — a persistência do hub é uma env var de 48KB compartilhada, e
+         gravar um timestamp de leitura a cada abertura de menu ali seria caro e
+         daria conflito com quem está comentando ao mesmo tempo. Efeito colateral
+         honesto: trocar de navegador zera o "lido". */
+      var CHAVE_VISTO = 'lphub-visto';
+      var sinoWrap = document.getElementById('sino-wrap');
+      var sino = document.getElementById('sino');
+      var sinoSelo = document.getElementById('sino-selo');
+      var avisos = document.getElementById('avisos');
+      var avisosLista = document.getElementById('avisos-lista');
+
+      function visto() {
+        try { return localStorage.getItem(CHAVE_VISTO) || ''; } catch (e) { return ''; }
+      }
+      function marcarVisto(iso) {
+        try { localStorage.setItem(CHAVE_VISTO, iso); } catch (e) {}
+      }
+
+      function tituloDaLp(id) {
+        var lp = dados.lps.filter(function (x) { return x.id === id; })[0];
+        return lp ? lp.titulo : id;
+      }
+
+      // Duas coisas merecem aviso: alguém comentou, e alguém mudou o status.
+      // A segunda é a que fecha o ciclo ("aprovada" libera a LP pro site) e era
+      // justamente a que o sino não mostrava.
+      //
+      // Ação minha não notifica: eu sei o que eu fiz. Comentário casa por e-mail;
+      // histórico só passou a gravar e-mail em 11/08, então registro antigo cai na
+      // comparação por nome.
+      function eventos() {
+        var eu = dados.usuario || {};
+        var lista = [];
+
+        dados.comentarios.forEach(function (c) {
+          if (c.autor && c.autor.email === eu.email) return;
+          lista.push({
+            tipo: 'comentario',
+            em: c.criadoEm,
+            quem: (c.autor && c.autor.nome) || '?',
+            lp: c.lp,
+            com: c.id,
+            c: c
+          });
+        });
+
+        dados.lps.forEach(function (lp) {
+          (lp.historico || []).forEach(function (h) {
+            var meu = h.porEmail ? h.porEmail === eu.email : h.por === eu.nome;
+            if (meu) return;
+            lista.push({
+              tipo: 'status',
+              em: h.em,
+              quem: h.por,
+              lp: lp.id,
+              de: h.de,
+              para: h.para,
+              motivo: h.motivo
+            });
+          });
+        });
+
+        return lista.sort(function (a, b) { return String(b.em).localeCompare(String(a.em)); });
+      }
+
+      var VERBO = {
+        revisao: 'devolveu pra revisão',
+        ajuste: 'mandou pra ajuste',
+        aprovada: 'aprovou',
+        publicada: 'marcou como publicada',
+        arquivada: 'arquivou'
+      };
+
+      function itemAviso(ev, novo) {
+        var comum =
+          '<span class="avatar">' + Hub.esc(Hub.iniciais(ev.quem)) + '</span>' +
+          '<span class="aviso-corpo">' +
+            '<span class="aviso-linha1">' +
+              '<span class="aviso-quem">' + Hub.esc(ev.quem) + '</span>' +
+              '<span class="aviso-hora">' + Hub.esc(Hub.quando(ev.em)) + '</span>' +
+            '</span>' +
+            '<span class="aviso-lp">' + Hub.esc(tituloDaLp(ev.lp)) + '</span>';
+
+        if (ev.tipo === 'status') {
+          var rot = (Hub.STATUS[ev.para] || {}).rotulo || ev.para;
+          // Registro sem "de" é o nascimento da LP (duplicada), não uma volta
+          // pra revisão: dizer "devolveu pra revisão" aqui seria mentira.
+          var verbo = ev.de ? VERBO[ev.para] || ('mudou para ' + rot) : 'criou';
+          return '' +
+            '<button class="aviso-item" type="button" role="menuitem" data-ir-lp="' + Hub.esc(ev.lp) + '"' +
+              ' data-em="' + Hub.esc(ev.em) + '"' + (novo ? ' data-novo' : '') + '>' +
+              comum +
+                '<span class="aviso-txt">' + Hub.esc(verbo) + ' a LP' +
+                  (ev.motivo ? ' (' + Hub.esc(ev.motivo) + ')' : '') + '.</span>' +
+                '<span class="aviso-tag" data-st="' + Hub.esc(ev.para) + '">' + Hub.esc(rot) + '</span>' +
+              '</span>' +
+            '</button>';
+        }
+
+        var c = ev.c;
+        var resolvido = c.status === 'resolvido';
+        return '' +
+          '<button class="aviso-item" type="button" role="menuitem" data-ir-com="' + Hub.esc(c.id) + '" data-ir-lp="' + Hub.esc(ev.lp) + '"' +
+            ' data-em="' + Hub.esc(ev.em) + '"' + (novo ? ' data-novo' : '') + '>' +
+            comum +
+              (c.trecho ? '<span class="aviso-txt">em “' + Hub.esc(c.trecho) + '”</span>' : '') +
+              (c.texto ? '<span class="aviso-txt">' + Hub.esc(c.texto) + '</span>' : '') +
+              (c.sugestao ? '<span class="aviso-tag"' + (resolvido ? ' data-resolvido' : '') + '>sugestão de texto</span>' : '') +
+              (!c.sugestao && resolvido ? '<span class="aviso-tag" data-resolvido>resolvido</span>' : '') +
+            '</span>' +
+          '</button>';
+      }
+
+      function pintarAvisos() {
+        var todos = eventos();
+        var v = visto();
+        var novos = todos.filter(function (x) { return String(x.em) > v; }).length;
+
+        sinoWrap.hidden = false;
+        sinoSelo.hidden = novos === 0;
+        sinoSelo.textContent = novos > 9 ? '9+' : novos;
+        sino.title = novos ? novos + ' comentário' + (novos > 1 ? 's' : '') + ' desde a última vez' : 'Notificações';
+        document.getElementById('avisos-lidas').disabled = novos === 0;
+
+        avisosLista.innerHTML = todos.length
+          ? todos.slice(0, 20).map(function (x) { return itemAviso(x, String(x.em) > v); }).join('')
+          : '<div class="avisos-vazio">Nada ainda. Comentário, pedido de ajuste e aprovação de outra pessoa aparecem aqui.</div>';
+
+        document.getElementById('avisos-pe').textContent = (dados.avisoExterno
+          ? 'Comentário novo também cai no Discord.'
+          : 'Só aqui dentro: pra receber no Discord, falta configurar o webhook.') +
+          ' O "lido" é por navegador.';
+      }
+
+      function abrirAvisos(abrir) {
+        avisos.toggleAttribute('data-on', abrir);
+        sino.setAttribute('aria-expanded', String(abrir));
+      }
+
+      sino.addEventListener('click', function (e) {
+        e.stopPropagation();
+        abrirAvisos(!avisos.hasAttribute('data-on'));
+      });
+      document.addEventListener('click', function (e) {
+        if (!avisos.hasAttribute('data-on')) return;
+        if (!e.target.closest('#sino-wrap')) abrirAvisos(false);
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') abrirAvisos(false);
+      });
+
+      document.getElementById('avisos-lidas').addEventListener('click', function () {
+        var topo = eventos()[0];
+        if (topo) marcarVisto(String(topo.em));
+        pintarAvisos();
+      });
+
+      // Clicar na notificação leva ao comentário, não só à LP: o viewer aceita
+      // ?com=<id> e rola até o trecho marcado.
+      avisosLista.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-ir-lp]');
+        if (!b) return;
+        // Marca lido até o instante do item clicado, não até o topo: o que está
+        // acima dele continua não lido, que é o comportamento esperado.
+        if (b.getAttribute('data-em')) marcarVisto(b.getAttribute('data-em'));
+        var com = b.getAttribute('data-ir-com');
+        location.href = '/ver/' + encodeURIComponent(b.getAttribute('data-ir-lp')) +
+          (com ? '?com=' + encodeURIComponent(com) : '');
+      });
+
+      // Devolve a promessa: quem chama depois de uma ação (duplicar, excluir)
+      // precisa saber quando a lista já refletiu o que acabou de mudar.
+      function carregar() {
+        carregandoEl.hidden = false;
+        carregandoEl.innerHTML = '<span class="girando" aria-hidden="true"></span> Carregando o hub…';
+        vazio.hidden = true;
+        return Hub.api('dados', { timeout: 15000 }).then(function (d) {
+          dados = d;
+          window.__hubPronto = true;
+          carregandoEl.hidden = true;
+          eu();
+          kpis();
+          pintar();
+          pintarAvisos();
+          var ultima = d.lps.map(function (l) { return l.sync; }).filter(Boolean)[0];
+          document.getElementById('ft-sync').textContent = ultima ? 'Último sync do vault: ' + ultima : '';
+          if (!d.persistencia) Hub.avisar('Persistência não configurada: comentários não vão salvar.', 'erro');
+        }).catch(function (e) {
+          window.__hubPronto = true;
+          carregandoEl.hidden = true;
+          vazio.hidden = false;
+          vazio.innerHTML = '<strong>Não deu pra carregar</strong>' + Hub.esc(e.message) +
+            '<div style="margin-top:16px"><button class="btn btn-ghost btn-sm" id="retry">Tentar de novo</button></div>';
+          document.getElementById('retry').addEventListener('click', carregar);
+        });
+      }
+      carregar();
+    })();
+  </script>
+</body>
+</html>

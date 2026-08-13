@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrar · LP Hub Prolog Talks</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  <meta name="theme-color" content="#043ad1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,500;1,500&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/ds.css?v=9">
+  <style>
+    body { background: var(--brand-900); min-height: 100dvh; display: grid; place-items: center; padding: 24px; }
+    .fundo { position: fixed; inset: 0; pointer-events: none; }
+    .fundo::before {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        radial-gradient(circle at 12% 0%, rgba(0,238,255,.18), transparent 52%),
+        radial-gradient(circle at 100% 100%, rgba(4,58,209,.6), transparent 58%);
+    }
+    .fundo::after {
+      content: ''; position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: 48px 48px;
+      -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 15%, transparent 70%);
+      mask-image: radial-gradient(ellipse at 50% 30%, #000 15%, transparent 70%);
+    }
+
+    .caixa {
+      position: relative; width: min(420px, 100%);
+      background: #fff; border-radius: var(--r-xxl); box-shadow: var(--sh-xl);
+      padding: 36px 32px 30px; overflow: hidden;
+    }
+    .caixa > .stream { position: absolute; top: 0; left: 0; right: 0; }
+    .marca { display: block; height: 26px; width: auto; margin-bottom: 26px; }
+    h1 { font-size: 27px; line-height: 1.15; margin: 12px 0 0; }
+    .sub { color: var(--ink-500); font-size: 14px; line-height: 1.6; margin: 12px 0 0; }
+
+    .area-google { margin-top: 26px; min-height: 44px; display: flex; justify-content: center; }
+    #gbtn { display: flex; justify-content: center; }
+
+    .ou {
+      display: flex; align-items: center; gap: 12px; margin: 24px 0 20px;
+      font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-400);
+    }
+    .ou::before, .ou::after { content: ''; flex: 1; height: 1px; background: var(--ink-200); }
+
+    form { display: grid; gap: 10px; }
+    label { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-500); }
+    .campo-codigo { text-transform: uppercase; letter-spacing: .1em; font-weight: 600; }
+
+    .erro {
+      margin-top: 16px; font-size: 13px; line-height: 1.55; color: var(--err-700);
+      background: var(--err-100); border-left: 2px solid var(--err-500);
+      border-radius: 0 var(--r-md) var(--r-md) 0; padding: 11px 14px; display: none;
+    }
+    .erro[data-on] { display: block; }
+
+    .rodape {
+      margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--ink-200);
+      font-size: 12px; line-height: 1.6; color: var(--ink-500);
+    }
+    .pendente {
+      margin-top: 22px; font-size: 13px; line-height: 1.6; color: var(--warn-700);
+      background: var(--warn-100); border-radius: var(--r-md); padding: 13px 15px; display: none;
+    }
+    .pendente[data-on] { display: block; }
+  </style>
+</head>
+<body>
+  <div class="fundo" aria-hidden="true"></div>
+
+  <main class="caixa">
+    <span class="stream" aria-hidden="true"></span>
+    <img class="marca" src="/logo-lightmode.svg" alt="Prolog" width="105" height="26">
+    <span class="kicker">acesso interno</span>
+    <h1 class="display">LP Hub <em>Prolog Talks</em></h1>
+    <p class="sub">Entre com a sua conta do Google da Prolog. É ela que define o que você pode fazer aqui: revisar, comentar e mudar o status das LPs.</p>
+
+    <div class="area-google"><div id="gbtn"></div></div>
+
+    <div class="pendente" id="pendente">
+      O login com Google ainda não está ligado neste ambiente. Use o código de acesso abaixo enquanto isso.
+    </div>
+
+    <div class="ou" id="ou" hidden>ou</div>
+
+    <form id="form-codigo" hidden>
+      <label for="codigo">Código de acesso</label>
+      <input class="campo campo-codigo" id="codigo" name="codigo" autocomplete="one-time-code" placeholder="ex.: PROLOG-XXXX" required>
+      <button class="btn btn-brand" type="submit" id="enviar">Entrar</button>
+    </form>
+
+    <p class="erro" id="erro" role="alert"></p>
+
+    <p class="rodape">Uso interno da Prolog App. Página não indexada. Qualquer dúvida de acesso, fala com o Gui.</p>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+
+  <script src="/app.js?v=8"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    (function () {
+      var erro = document.getElementById('erro');
+      var form = document.getElementById('form-codigo');
+      var ou = document.getElementById('ou');
+      var pendente = document.getElementById('pendente');
+      var enviar = document.getElementById('enviar');
+
+      function proximo() {
+        var p = new URLSearchParams(location.search).get('next');
+        // Só caminho relativo: evita virar redirect aberto pra fora do domínio.
+        return p && p.charAt(0) === '/' && p.charAt(1) !== '/' ? p : '/';
+      }
+
+      function mostrarErro(msg) {
+        erro.textContent = msg;
+        erro.setAttribute('data-on', '');
+      }
+
+      function entrou() { location.href = proximo(); }
+
+      function logar(corpo) {
+        return Hub.api('login', { metodo: 'POST', corpo: corpo }).then(entrou);
+      }
+
+      // Já logado não precisa ver tela de login.
+      Hub.api('sessao').then(function (s) { if (s.logado) location.replace(proximo()); }).catch(function () {});
+
+      Hub.api('config').then(function (cfg) {
+        if (cfg.codigos) { ou.hidden = false; form.hidden = false; }
+        if (!cfg.google) {
+          pendente.setAttribute('data-on', '');
+          ou.hidden = true;
+          return;
+        }
+        var pronto = setInterval(function () {
+          if (!(window.google && google.accounts && google.accounts.id)) return;
+          clearInterval(pronto);
+          google.accounts.id.initialize({
+            client_id: cfg.googleClientId,
+            hd: cfg.dominio,
+            callback: function (resp) {
+              logar({ credential: resp.credential }).catch(function (e) { mostrarErro(e.message); });
+            }
+          });
+          google.accounts.id.renderButton(document.getElementById('gbtn'), {
+            theme: 'outline', size: 'large', shape: 'rectangular',
+            text: 'continue_with', locale: 'pt-BR', width: 340
+          });
+        }, 120);
+        setTimeout(function () { clearInterval(pronto); }, 8000);
+      }).catch(function (e) { mostrarErro(e.message); });
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        erro.removeAttribute('data-on');
+        enviar.disabled = true;
+        logar({ codigo: document.getElementById('codigo').value })
+          .catch(function (err) { mostrarErro(err.message); })
+          .finally(function () { enviar.disabled = false; });
+      });
+    })();
+  </script>
+</body>
+</html>

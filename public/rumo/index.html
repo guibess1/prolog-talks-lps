@@ -1,0 +1,274 @@
+<meta name="robots" content="noindex, nofollow">
+<!--
+  ============================================================
+  LP — Prolog Talks com Rumo Brasil  |  CIOT na carga fracionada
+  Evento: 10/06/2026 · 19h · Online (YouTube) · Gratuito
+  ------------------------------------------------------------
+  COMO USAR NO ELEMENTOR:
+  1. Adicione um widget "HTML" (Elementos > HTML) numa seção full-width.
+  2. Cole TODO este bloco (do <style> ao último </div>).
+  3. Substitua os PLACEHOLDERS marcados com  <<< ... >>> :
+     - <<< EMBED HUBSPOT >>>  → cole o código de incorporação do formulário HubSpot
+     - <<< LINK YOUTUBE >>>   → link da transmissão (quando disponível)
+     - <<< LOGO RUMO >>>      → URL do logo da Rumo Brasil
+     - <<< FOTO EDIVALDO >>>  → URL da foto do Edivaldo
+     - <<< FOTO FELIPE >>>    → URL da foto do Felipe
+  Tudo está escopado em #ptlp para não vazar estilo pro resto do site.
+  Tokens: Prolog Design System (tonal-700 #3D5FD9 · fonte Prompt).
+  ============================================================
+-->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+
+#ptlp *{margin:0;padding:0;box-sizing:border-box}
+#ptlp{
+  --tonal-700:#3D5FD9; --tonal-800:#2C3CA1; --tonal-100:#F1F5FD; --tonal-200:#DEE7FB;
+  --highlight:#FA541C; --highlight-h:#D64717; --secondary:#65D5D2;
+  --neutral-100:#FFFFFF; --neutral-300:#D8DADF; --neutral-500:#6F7588; --neutral-600:#3F424D; --neutral-700:#25262C;
+  font-family:'Prompt',-apple-system,sans-serif;
+  color:var(--neutral-600); line-height:1.5; font-weight:300;
+  -webkit-font-smoothing:antialiased;
+}
+#ptlp h1,#ptlp h2,#ptlp h3,#ptlp h4{font-weight:600;line-height:1.2;color:var(--neutral-700)}
+#ptlp .ptlp-wrap{max-width:1140px;margin:0 auto;padding:0 24px}
+#ptlp .ptlp-section{padding:72px 0}
+
+/* ---------- HERO ---------- */
+#ptlp .ptlp-hero{
+  background:linear-gradient(135deg,var(--tonal-800) 0%,var(--tonal-700) 100%);
+  color:#fff;padding:56px 0 72px;position:relative;overflow:hidden;
+}
+#ptlp .ptlp-hero::after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;
+  background:radial-gradient(circle,rgba(101,213,210,.25),transparent 70%);border-radius:50%}
+#ptlp .ptlp-hero h1,#ptlp .ptlp-hero h2{color:#fff}
+#ptlp .ptlp-hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;position:relative;z-index:2}
+#ptlp .ptlp-brandrow{display:flex;align-items:center;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+#ptlp .ptlp-logo{font-size:24px;font-weight:600;letter-spacing:.5px;display:flex;align-items:center;gap:8px}
+#ptlp .ptlp-logo span{opacity:.6;font-weight:300}
+#ptlp .ptlp-rumo{height:34px;background:rgba(255,255,255,.12);border:1px dashed rgba(255,255,255,.4);
+  border-radius:6px;padding:0 14px;display:flex;align-items:center;font-size:12px;font-weight:400}
+#ptlp .ptlp-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.25);padding:6px 14px;border-radius:100px;font-size:13px;font-weight:500;
+  letter-spacing:.4px;margin-bottom:20px}
+#ptlp .ptlp-dot{width:8px;height:8px;border-radius:50%;background:var(--secondary);box-shadow:0 0 0 4px rgba(101,213,210,.3)}
+#ptlp .ptlp-hero h1{font-size:42px;margin-bottom:18px}
+#ptlp .ptlp-hero .ptlp-sub{font-size:18px;font-weight:300;color:rgba(255,255,255,.9);margin-bottom:28px;max-width:520px}
+#ptlp .ptlp-meta{display:flex;gap:14px;flex-wrap:wrap}
+#ptlp .ptlp-meta-item{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:400;
+  background:rgba(255,255,255,.1);padding:10px 16px;border-radius:8px}
+#ptlp .ptlp-meta-item b{font-weight:600}
+
+/* ---------- FORM CARD ---------- */
+#ptlp .ptlp-formcard{background:#fff;border-radius:16px;padding:32px;box-shadow:0 24px 60px rgba(20,30,80,.28)}
+#ptlp .ptlp-formcard h3{font-size:22px;color:var(--neutral-700);margin-bottom:6px}
+#ptlp .ptlp-formcard p{font-size:14px;color:var(--neutral-500);margin-bottom:22px}
+#ptlp .ptlp-hubspot{min-height:230px}
+/* fallback visual do form (some quando o HubSpot é colado por cima) */
+#ptlp .ptlp-formfake label{display:block;font-size:13px;font-weight:500;color:var(--neutral-600);margin:0 0 6px}
+#ptlp .ptlp-formfake input{width:100%;height:44px;border:1px solid var(--neutral-300);border-radius:4px;
+  padding:0 14px;font-family:inherit;font-size:14px;color:var(--neutral-600);margin-bottom:16px;outline:none}
+#ptlp .ptlp-formfake input:focus{border-color:var(--tonal-700);box-shadow:0 0 0 4px var(--tonal-200)}
+#ptlp .ptlp-cta{display:block;width:100%;border:0;cursor:pointer;text-align:center;text-decoration:none;
+  background:var(--highlight);color:#fff;font-family:inherit;font-weight:600;font-size:16px;
+  padding:15px 20px;border-radius:8px;transition:.2s;box-shadow:0 8px 20px rgba(250,84,28,.35)}
+#ptlp .ptlp-cta:hover{background:var(--highlight-h);transform:translateY(-1px)}
+#ptlp .ptlp-formnote{font-size:12px;color:var(--neutral-500);text-align:center;margin-top:14px}
+
+/* ---------- SOBRE / POR QUE ---------- */
+#ptlp .ptlp-tag{display:inline-block;background:var(--tonal-100);color:var(--tonal-700);font-size:13px;
+  font-weight:600;padding:6px 14px;border-radius:100px;letter-spacing:.4px;margin-bottom:16px}
+#ptlp .ptlp-section h2{font-size:32px;margin-bottom:16px;max-width:760px}
+#ptlp .ptlp-lead{font-size:18px;color:var(--neutral-500);max-width:720px;font-weight:300}
+
+/* ---------- BULLETS ---------- */
+#ptlp .ptlp-learn{background:var(--tonal-100)}
+#ptlp .ptlp-bullets{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:36px}
+#ptlp .ptlp-bullet{background:#fff;border:1px solid var(--neutral-300);border-radius:12px;padding:24px;display:flex;gap:16px}
+#ptlp .ptlp-check{flex:none;width:36px;height:36px;border-radius:8px;background:var(--tonal-700);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:600;font-size:18px}
+#ptlp .ptlp-bullet h4{font-size:17px;margin-bottom:4px}
+#ptlp .ptlp-bullet p{font-size:14px;color:var(--neutral-500)}
+
+/* ---------- BÔNUS ---------- */
+#ptlp .ptlp-bonus{background:linear-gradient(120deg,var(--tonal-700),var(--tonal-800));color:#fff;border-radius:20px;
+  padding:48px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center}
+#ptlp .ptlp-bonus h3{color:#fff;font-size:26px;margin-bottom:10px}
+#ptlp .ptlp-bonus p{color:rgba(255,255,255,.9);font-size:16px;font-weight:300;max-width:560px}
+#ptlp .ptlp-bonus .ptlp-pill{display:inline-block;background:var(--secondary);color:var(--neutral-700);
+  font-size:12px;font-weight:600;padding:6px 14px;border-radius:100px;margin-bottom:16px;letter-spacing:.5px}
+#ptlp .ptlp-bonus-ico{font-size:64px;line-height:1}
+
+/* ---------- SPEAKERS ---------- */
+#ptlp .ptlp-speakers{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px}
+#ptlp .ptlp-speaker{border:1px solid var(--neutral-300);border-radius:16px;padding:28px;display:flex;gap:20px;align-items:center}
+#ptlp .ptlp-avatar{flex:none;width:84px;height:84px;border-radius:50%;background:var(--tonal-100);
+  border:2px dashed var(--neutral-300);display:flex;align-items:center;justify-content:center;
+  color:var(--tonal-700);font-size:11px;text-align:center;overflow:hidden}
+#ptlp .ptlp-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+#ptlp .ptlp-speaker h4{font-size:19px;margin-bottom:2px}
+#ptlp .ptlp-speaker .ptlp-role{font-size:14px;color:var(--tonal-700);font-weight:500;margin-bottom:6px}
+#ptlp .ptlp-speaker p{font-size:13px;color:var(--neutral-500)}
+
+/* ---------- CTA FINAL ---------- */
+#ptlp .ptlp-final{background:var(--neutral-700);color:#fff;text-align:center}
+#ptlp .ptlp-final h2{color:#fff;font-size:34px;margin-bottom:14px}
+#ptlp .ptlp-final p{font-size:18px;color:rgba(255,255,255,.8);margin-bottom:32px;font-weight:300}
+#ptlp .ptlp-final .ptlp-cta{display:inline-block;width:auto;padding:16px 44px}
+
+/* ---------- FOOTER ---------- */
+#ptlp .ptlp-footer{background:var(--neutral-700);border-top:1px solid rgba(255,255,255,.1);
+  color:rgba(255,255,255,.6);text-align:center;padding:28px 0;font-size:13px}
+
+/* ---------- RESPONSIVO ---------- */
+@media(max-width:880px){
+  #ptlp .ptlp-hero-grid,#ptlp .ptlp-bullets,#ptlp .ptlp-speakers,#ptlp .ptlp-bonus{grid-template-columns:1fr}
+  #ptlp .ptlp-hero h1{font-size:32px}
+  #ptlp .ptlp-section h2,#ptlp .ptlp-final h2{font-size:26px}
+  #ptlp .ptlp-section{padding:52px 0}
+  #ptlp .ptlp-bonus{text-align:center;padding:36px 24px}
+  #ptlp .ptlp-bonus-ico{display:none}
+}
+</style>
+
+<div id="ptlp">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="ptlp-hero">
+    <div class="ptlp-wrap">
+      <div class="ptlp-brandrow">
+        <div class="ptlp-logo">⌃ Prolog <span>Talks</span></div>
+        <span style="opacity:.4">×</span>
+        <!-- <<< LOGO RUMO >>> troque a div abaixo por: <img src="URL_DO_LOGO" alt="Rumo Brasil" style="height:34px"> -->
+        <div class="ptlp-rumo">Rumo Brasil</div>
+      </div>
+      <div class="ptlp-hero-grid">
+        <div>
+          <div class="ptlp-eyebrow"><span class="ptlp-dot"></span> LIVE GRATUITA · ONLINE</div>
+          <h1>CIOT na carga fracionada: como emitir certo quando uma viagem tem várias entregas</h1>
+          <p class="ptlp-sub">Uma conversa direta com quem cuida da conformidade fiscal numa transportadora de grande porte. Saia da dúvida e blinde sua operação contra multa e passivo com o autônomo.</p>
+          <div class="ptlp-meta">
+            <div class="ptlp-meta-item">📅 <b>10 de junho</b> · Quarta</div>
+            <div class="ptlp-meta-item">🕖 <b>19h</b> (Brasília)</div>
+            <div class="ptlp-meta-item">▶️ Ao vivo no <b>YouTube</b></div>
+          </div>
+        </div>
+
+        <!-- ===== FORM CARD ===== -->
+        <div class="ptlp-formcard">
+          <h3>Garanta sua vaga</h3>
+          <p>Inscreva-se grátis e receba o link da transmissão + material de apoio.</p>
+          <div class="ptlp-hubspot">
+            <!--  <<< EMBED HUBSPOT >>>  cole aqui o código do formulário HubSpot e remova o bloco .ptlp-formfake abaixo -->
+            <form class="ptlp-formfake" onsubmit="return false">
+              <label>Nome completo*</label>
+              <input type="text" placeholder="Digite seu nome">
+              <label>E-mail corporativo*</label>
+              <input type="email" placeholder="Digite seu e-mail">
+              <label>Tamanho da frota*</label>
+              <input type="text" placeholder="Quantos veículos você gerencia?">
+              <button class="ptlp-cta">Quero me inscrever</button>
+            </form>
+          </div>
+          <p class="ptlp-formnote">Vaga gratuita. Sem spam — só o conteúdo do episódio.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== POR QUE ASSISTIR ===================== -->
+  <section class="ptlp-section">
+    <div class="ptlp-wrap">
+      <span class="ptlp-tag">POR QUE ASSISTIR</span>
+      <h2>O CIOT é obrigação da ANTT — e na carga fracionada ele trava na prática</h2>
+      <p class="ptlp-lead">Uma viagem com várias entregas e vários embarcadores vira um nó: piso mínimo por fração, vale-pedágio, o que a pagadora aceita. Quase ninguém explica direito — e o erro vira multa ou passivo com o autônomo. Esse episódio nasceu de uma dúvida real do setor, com a leitura de quem vive a conformidade fiscal todo dia.</p>
+    </div>
+  </section>
+
+  <!-- ===================== O QUE VOCÊ VAI APRENDER ===================== -->
+  <section class="ptlp-section ptlp-learn">
+    <div class="ptlp-wrap">
+      <span class="ptlp-tag">NO EPISÓDIO</span>
+      <h2>O que você vai levar pra sua operação</h2>
+      <div class="ptlp-bullets">
+        <div class="ptlp-bullet">
+          <div class="ptlp-check">✓</div>
+          <div><h4>Como emitir o CIOT certo na fracionada</h4><p>Por viagem ou por agregado — quando usar cada um sem errar.</p></div>
+        </div>
+        <div class="ptlp-bullet">
+          <div class="ptlp-check">✓</div>
+          <div><h4>O que a pagadora / IPEF aceita</h4><p>E o que gera passivo na hora de contratar o autônomo.</p></div>
+        </div>
+        <div class="ptlp-bullet">
+          <div class="ptlp-check">✓</div>
+          <div><h4>As travas práticas da ANTT</h4><p>Piso mínimo por fração e vale-pedágio descomplicados.</p></div>
+        </div>
+        <div class="ptlp-bullet">
+          <div class="ptlp-check">✓</div>
+          <div><h4>Como blindar a operação</h4><p>Pra não tomar multa nem gerar passivo com o motorista.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== BÔNUS / MATERIAL RICO ===================== -->
+  <section class="ptlp-section">
+    <div class="ptlp-wrap">
+      <div class="ptlp-bonus">
+        <div>
+          <span class="ptlp-pill">BÔNUS PRA QUEM SE INSCREVER</span>
+          <h3>Checklist de conformidade do CIOT</h3>
+          <p>Um material de apoio prático pra adequar sua operação ao CIOT e integrar ao seu dia a dia de gestão de frota. Enviado por e-mail para todos os inscritos.</p>
+        </div>
+        <div class="ptlp-bonus-ico">📋</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SPEAKERS ===================== -->
+  <section class="ptlp-section ptlp-learn">
+    <div class="ptlp-wrap">
+      <span class="ptlp-tag">QUEM CONDUZ</span>
+      <h2>Convidado e mediação</h2>
+      <div class="ptlp-speakers">
+        <div class="ptlp-speaker">
+          <div class="ptlp-avatar">
+            <!-- <<< FOTO EDIVALDO >>>  <img src="URL" alt="Edivaldo"> -->
+            FOTO
+          </div>
+          <div>
+            <h4>Edivaldo</h4>
+            <div class="ptlp-role">Diretor Tributário · Rumo Brasil</div>
+            <p>Responsável pela conformidade fiscal de uma operação de grande porte.</p>
+          </div>
+        </div>
+        <div class="ptlp-speaker">
+          <div class="ptlp-avatar">
+            <!-- <<< FOTO FELIPE >>>  <img src="URL" alt="Felipe"> -->
+            FOTO
+          </div>
+          <div>
+            <h4>Felipe</h4>
+            <div class="ptlp-role">Coordenador Comercial · Mediação</div>
+            <p>Conduz a conversa trazendo as dúvidas reais do gestor de frota.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA FINAL ===================== -->
+  <section class="ptlp-section ptlp-final">
+    <div class="ptlp-wrap">
+      <h2>Dia 10/06, às 19h. Sua vaga é gratuita.</h2>
+      <p>Inscreva-se agora e receba o link da transmissão e o material de apoio.</p>
+      <!-- aponte o href para a âncora do form ou para o <<< LINK YOUTUBE >>> -->
+      <a href="#ptlp" class="ptlp-cta">Quero me inscrever grátis</a>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <div class="ptlp-footer">
+    Prolog Talks · uma realização Prolog App em parceria com a Rumo Brasil · © 2026
+  </div>
+
+</div>
