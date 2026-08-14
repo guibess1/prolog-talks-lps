@@ -30,10 +30,11 @@
   (Prospeccao). O Yan esta em Sao Paulo no dia 08/09, montando o estande do TNS
   Summit - voo comprado, nao da pra conduzir. Decisao do Gui em 14/08. Os dois
   blocos de speaker (hero e secao do video) foram atualizados.
-  ATENCAO - o que NAO foi trocado aqui e depende de acao fora da LP:
-   - o form do HubSpot ainda se chama "18/08/2026 [Prolog Talks]" (id 116f4f06);
-     renomear no HubSpot pra nao sujar o relatorio de origem
-   - a foto do Jonatan continua pendente: o avatar e a inicial "J"
+  HubSpot: resolvido pelo Gui em 14/08 - form renomeado, "Fonte detalhada" e
+  "Ultima fonte de conversao" apontando pra data nova. Detalhe do label x valor
+  no comentario do bloco do formulario, mais abaixo.
+
+  Pendente: a foto do Jonatan - o avatar ainda e a inicial "J".
   ============================================================================
   v2 (06/08/2026) - visual alinhado ao site comercial novo (Astro/Operations).
   Tokens, tipografia e formas vem de site-comercial-prolog/src/styles/global.css
@@ -782,12 +783,25 @@ body { overflow-x: hidden; }
 
           <!-- ============================================================
                FORMULÁRIO OFICIAL DO HUBSPOT — conta Prolog (portal 44667852)
-               Form "18/08/2026 [Prolog Talks]" — id 116f4f06-...
+               Form da edição — id 116f4f06-...
                Campos (na ordem em que aparecem): nome completo · cargo ·
                e-mail · telefone · empresa · tamanho da frota.
                Dois campos ocultos já vêm preenchidos pelo próprio form:
-               última fonte de conversão = "18/08/2026 [Prolog Talks]" e
-               gatilho LM/DM = "Eventos".
+               última fonte de conversão e gatilho LM/DM = "Eventos".
+
+               14/08 — o Gui renomeou o form e a fonte pra data nova. Na opção
+               de `ultima_fonte_conversao`, o LABEL virou "08/09/2026
+               [Prolog Talks]" e o VALOR interno seguiu "18/08/2026
+               [Prolog Talks]". Isso está certo e não deve ser "consertado":
+               o valor é o que fica gravado no contato, então trocá-lo
+               deixaria órfão todo mundo que já se inscreveu. Efeito
+               colateral a lembrar: export e API devolvem o valor (18/08), a
+               UI mostra o label (08/09).
+
+               Resolvido no mesmo dia: o gatilho LM/DM manda "Eventos" e a
+               opção existe mesmo — value "Eventos", label "Evento". A dúvida
+               antiga de que o campo não gravaria era falso alarme, era
+               comparação de label com value.
           ============================================================ -->
           <div id="hubspot-form-target" class="pt-hs-form"></div>
           <script charset="utf-8" type="text/javascript" src="https://js.hsforms.net/forms/embed/v2.js"></script>
