@@ -122,14 +122,17 @@
       font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-400);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .menu button {
-      width: 100%; display: flex; align-items: center; gap: 10px; text-align: left;
+    /* Item de link (abrir preview, enviar pro site) é <a> de verdade pra aceitar
+       ctrl+clique e clique do meio — só precisa parecer com os outros itens. */
+    .menu button, .menu a[role="menuitem"] {
+      width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 10px; text-align: left;
       font-family: var(--font-sans); font-size: 13.5px; font-weight: 500; color: var(--ink-700);
       background: transparent; border: 0; padding: 9px 10px; border-radius: var(--r-md); cursor: pointer;
+      text-decoration: none;
       transition: background .14s ease, color .14s ease;
     }
-    .menu button:hover { background: var(--brand-100); color: var(--brand-600); }
-    .menu button svg { width: 15px; height: 15px; flex: 0 0 auto; opacity: .7; }
+    .menu button:hover, .menu a[role="menuitem"]:hover { background: var(--brand-100); color: var(--brand-600); }
+    .menu button svg, .menu a[role="menuitem"] svg { width: 15px; height: 15px; flex: 0 0 auto; opacity: .7; }
     .menu .sep { height: 1px; margin: 5px 6px; background: var(--ink-200); }
     .menu button[data-perigo] { color: var(--err-700); }
     .menu button[data-perigo]:hover { background: var(--err-100); color: var(--err-700); }
@@ -608,6 +611,9 @@
         duplicar: svg('<rect x="9" y="9" width="12" height="12" rx="2.2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>'),
         editar:   svg('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
         link:     svg('<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>'),
+        abrir:    svg('<path d="M15 3h6v6"/><path d="M10.5 13.5 21 3"/><path d="M18 13.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5.5"/>'),
+        globo:    svg('<circle cx="12" cy="12" r="9"/><path d="M3.2 9.5h17.6"/><path d="M3.2 14.5h17.6"/><path d="M12 3a15 15 0 0 1 0 18"/><path d="M12 3a15 15 0 0 0 0 18"/>'),
+        enviar:   svg('<path d="M21 14.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4.5"/><path d="M7.5 8.5 12 4l4.5 4.5"/><path d="M12 4v12"/>'),
         voltar:   svg('<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>'),
         arquivar: svg('<rect x="2.5" y="4" width="19" height="4.5" rx="1.4"/><path d="M4.5 8.5V19a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5V8.5"/><path d="M10 13h4"/>'),
         lixo:     svg('<path d="M3.5 6.5h17"/><path d="M9 6.5V4.8A1.3 1.3 0 0 1 10.3 3.5h3.4A1.3 1.3 0 0 1 15 4.8v1.7"/><path d="M6 6.5 7 19.4a1.6 1.6 0 0 0 1.6 1.5h6.8a1.6 1.6 0 0 0 1.6-1.5L18 6.5"/>')
@@ -681,15 +687,10 @@
                       : '') +
                     '>' + ICONE_CHECK + 'Aprovar</button>'
                 : '') +
-              '<a class="btn btn-ghost" href="/' + encodeURIComponent(fonte) + '" target="_blank" rel="noopener">Abrir direto</a>' +
-              // Enviar pro site é a última etapa: aparece só quando a LP passou da
-              // fila, e só pra quem tem permissão de abrir PR no repo do site.
-              (podeEnviar(lp)
-                ? '<a class="btn btn-ghost" href="/ver/' + encodeURIComponent(lp.id) + '?publicar=1">Enviar pro site</a>'
-                : '') +
-              // O resto (duplicar, editar, arquivar, excluir) sai do cartão e vai
-              // pro menu: são ações de manutenção, e cada botão a mais aqui rouba
-              // atenção do "revisar", que é o que a fila existe pra fazer.
+              // Todo o resto (abrir direto, links, enviar pro site, duplicar,
+              // editar, arquivar, excluir) sai do cartão e vai pro menu: cada
+              // botão a mais aqui rouba atenção do "revisar", que é o que a fila
+              // existe pra fazer.
               '<button class="btn btn-ghost mais" type="button" data-menu="' + Hub.esc(lp.id) + '"' +
                 ' aria-haspopup="true" aria-expanded="false" title="Mais ações" aria-label="Mais ações desta LP">' +
                 ICONE_MAIS +
@@ -809,24 +810,46 @@
 
       function itemMenu(it) {
         if (it.sep) return '<div class="sep" role="separator"></div>';
+        var miolo = ICONES[it.icone] + '<span>' + it.txt + '</span>';
+        // Quem navega continua sendo link: preserva ctrl+clique e clique do meio,
+        // que sumiriam se virasse botão com window.open.
+        if (it.href) {
+          return '<a role="menuitem" href="' + Hub.esc(it.href) + '"' +
+            (it.fora ? ' target="_blank" rel="noopener"' : '') + '>' + miolo + '</a>';
+        }
         return '<button type="button" role="menuitem" data-acao="' + it.acao + '"' +
-          (it.perigo ? ' data-perigo' : '') + '>' + ICONES[it.icone] + '<span>' + it.txt + '</span></button>';
+          (it.perigo ? ' data-perigo' : '') + '>' + miolo + '</button>';
       }
 
       function itensDoMenu(lp) {
         var itens = [];
+        // Separador só entra entre grupos que existem: com permissão magra, um
+        // grupo inteiro some e a linha ficaria órfã.
+        function sep() { if (itens.length && !itens[itens.length - 1].sep) itens.push({ sep: true }); }
+
         if (dados.poderes.criar) itens.push({ acao: 'duplicar', icone: 'duplicar', txt: 'Duplicar LP' });
         if (dados.poderes.status) itens.push({ acao: 'editar', icone: 'editar', txt: 'Editar dados do cartão' });
-        if (itens.length) itens.push({ sep: true });
+
+        sep();
+        itens.push({ icone: 'abrir', txt: 'Abrir preview direto', href: '/' + encodeURIComponent(fonteDe(lp)), fora: true });
         itens.push({ acao: 'copiar', icone: 'link', txt: 'Copiar link do preview' });
+        // Link oficial só existe depois que a URL no site foi definida — antes
+        // disso não há o que copiar, e um item morto só engana.
+        if (lp.urlFinal) itens.push({ acao: 'copiar-site', icone: 'globo', txt: 'Copiar link do site oficial' });
+
+        sep();
+        // Enviar pro site é a última etapa: aparece só quando a LP passou da
+        // fila, e só pra quem tem permissão de abrir PR no repo do site.
+        if (podeEnviar(lp)) itens.push({ icone: 'enviar', txt: 'Enviar pro site', href: '/ver/' + encodeURIComponent(lp.id) + '?publicar=1' });
         if (dados.poderes.status) {
           if (lp.status !== 'revisao') itens.push({ acao: 'revisao', icone: 'voltar', txt: 'Devolver pra fila' });
           if (lp.status !== 'arquivada') itens.push({ acao: 'arquivada', icone: 'arquivar', txt: 'Arquivar' });
         }
         if (dados.poderes.apagar) {
-          itens.push({ sep: true });
+          sep();
           itens.push({ acao: 'excluir', icone: 'lixo', txt: 'Excluir LP', perigo: true });
         }
+        while (itens.length && itens[itens.length - 1].sep) itens.pop();
         return itens;
       }
 
@@ -855,7 +878,7 @@
         menu.style.top = Math.round(topo) + 'px';
         botao.setAttribute('aria-expanded', 'true');
         menuAberto = lp.id;
-        var primeiro = menu.querySelector('button');
+        var primeiro = menu.querySelector('[role="menuitem"]');
         if (primeiro) primeiro.focus();
       }
 
@@ -894,6 +917,11 @@
       }
 
       menu.addEventListener('click', function (e) {
+        // Item de link navega sozinho; o menu só sai da frente. Fechar depois do
+        // clique porque limpar o innerHTML agora arrancaria o <a> antes de ele
+        // ser seguido.
+        if (e.target.closest('a[role="menuitem"]')) { setTimeout(fecharMenu, 0); return; }
+
         var b = e.target.closest('[data-acao]');
         if (!b) return;
         var lp = lpPorId(menuAberto);
@@ -901,6 +929,7 @@
         var acao = b.getAttribute('data-acao');
 
         if (acao === 'copiar') { Hub.copiar(location.origin + '/' + fonteDe(lp)); fecharMenu(); return; }
+        if (acao === 'copiar-site') { Hub.copiar('https://prologapp.com' + lp.urlFinal); fecharMenu(); return; }
         if (acao === 'duplicar') { fecharMenu(); abrirModal('duplicar', lp); return; }
         if (acao === 'editar') { fecharMenu(); abrirModal('editar', lp); return; }
         if (acao === 'revisao' || acao === 'arquivada') { fecharMenu(); mudarStatus(lp, acao); return; }
