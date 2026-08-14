@@ -49,9 +49,9 @@ function inicial() {
         id: 'kilsa',
         titulo: 'Kilsa — Adesão de Motoristas',
         evento: 'Prolog Talks',
-        data: '18/08/2026',
-        versaoLp: 'v2.1',
-        nota: 'Versão mais recente, já com o visual do site comercial novo.',
+        data: '08/09/2026',
+        versaoLp: 'v2.2',
+        nota: 'Live adiada de 18/08 pra 08/09 — a v2.2 só troca as datas.',
         status: 'revisao',
         sync: '06/08, 21:27',
         urlFinal: '/talks/adesao-de-motoristas',
@@ -60,7 +60,7 @@ function inicial() {
         // LP — nunca inventa texto.
         seoTitulo: 'Prolog Talks · Adesão de motoristas aos procedimentos',
         seoDescricao:
-          'Live gratuita em 18/08, 19h: como fazer o time de motoristas cumprir a rotina sem você ter que cobrar todo dia. Pra quem gerencia 30 placas ou mais.',
+          'Live gratuita em 08/09, 19h: como fazer o time de motoristas cumprir a rotina sem você ter que cobrar todo dia. Pra quem gerencia 30 placas ou mais.',
         historico: [],
         envios: [],
       },
