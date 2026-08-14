@@ -79,6 +79,12 @@
     .card:hover .card-stream { opacity: 1; }
     .card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
     .card-data { font-size: 11px; color: var(--ink-500); }
+    /* Pro admin o chip deixa de ser rótulo e vira o botão que troca o status à
+       mão: o lugar onde o estado é lido é o lugar onde se muda ele. Pra quem
+       não é admin continua sendo <span>, e nada no cartão muda. */
+    .chip-troca { border: 0; cursor: pointer; font-family: var(--font-sans); font-size: 11px; }
+    .chip-troca:hover, .chip-troca[aria-expanded="true"] { box-shadow: inset 0 0 0 1.5px currentColor; }
+    .chip-troca .caret { width: 11px; height: 11px; margin: 0 -3px; opacity: .8; }
     .card-titulo { font-size: 21px; line-height: 1.25; margin: 7px 0 0; }
     .card-nota { color: var(--ink-500); font-size: 14px; line-height: 1.6; margin: 10px 0 0; }
     .card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 18px 0 20px; padding-top: 16px; border-top: 1px solid var(--ink-200); }
@@ -139,6 +145,15 @@
     /* Precisa vencer o :hover do item de perigo, que é mais específico. */
     .menu button[data-confirmar], .menu button[data-confirmar]:hover { background: var(--err-500); color: #fff; }
     .menu button[data-confirmar] svg { opacity: 1; }
+    /* Troca de status: bolinha na cor do estado no lugar do ícone. O estado
+       atual fica marcado e sem clique — trocar por ele mesmo não é ação. */
+    .menu .ponto { width: 9px; height: 9px; border-radius: 999px; flex: 0 0 auto; margin: 0 3px; }
+    .menu button[data-status] .marca { margin-left: auto; width: 14px; height: 14px; opacity: 1; color: var(--ok-500); }
+    .menu button[data-status][aria-current="true"],
+    .menu button[data-status][aria-current="true"]:hover { background: var(--ink-100); color: var(--ink-500); cursor: default; }
+    .menu button[data-status][disabled] { opacity: .5; cursor: not-allowed; }
+    .menu button[data-status][disabled]:hover { background: transparent; color: var(--ink-700); }
+    .menu-nota { margin: 6px 0 2px; padding: 8px 10px 2px; border-top: 1px solid var(--ink-200); font-size: 11.5px; line-height: 1.5; color: var(--ink-400); }
 
     /* ---------- Modal de duplicar / editar ---------- */
     .modal { position: fixed; inset: 0; z-index: 100; display: none; }
@@ -602,6 +617,8 @@
       var ICONE_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>';
       var ICONE_BALAO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.9 8.9 0 0 1-3.8-.9L3 21l1.9-5a8.4 8.4 0 0 1-.9-3.8 8.4 8.4 0 0 1 8.4-9 8.4 8.4 0 0 1 8.6 8.3z"/></svg>';
       var ICONE_MAIS = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg>';
+      var ICONE_CARET = '<svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+      var ICONE_MARCA = '<svg class="marca" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>';
       var ICONE_ALERTA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 2.4 17.3A2 2 0 0 0 4.1 20.3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>';
 
       var svg = function (d) {
@@ -631,6 +648,33 @@
           (lp.status === 'aprovada' || lp.status === 'publicada');
       }
 
+      // Mudar o status à mão passa por cima do caminho normal (revisão →
+      // aprovada → enviada → publicada). Serve pra quando o hub e a realidade
+      // divergem: a página foi pro ar por fora, ou uma LP precisa voltar pra
+      // ajuste sem que ninguém tenha comentado. Fica no admin pelo mesmo motivo
+      // de aprovar e enviar pro site — é quem toca o processo.
+      function podeTrocarStatus() {
+        return Boolean(dados && dados.usuario && dados.usuario.papel === 'admin' &&
+          dados.poderes && dados.poderes.status);
+      }
+
+      // Ordem do fluxo, não alfabética: o menu é lido como uma linha do tempo.
+      var ORDEM_STATUS = ['revisao', 'ajuste', 'aprovada', 'publicada', 'arquivada'];
+      var COR_STATUS = {
+        revisao:   'var(--warn-500)',
+        ajuste:    'var(--mkt-500)',
+        aprovada:  'var(--ok-500)',
+        publicada: 'var(--brand-500)',
+        arquivada: 'var(--ink-400)'
+      };
+      var AVISO_STATUS = {
+        revisao:   'LP de volta na fila de revisão.',
+        ajuste:    'LP marcada como em ajuste. Ela voltou pra fila.',
+        aprovada:  'LP aprovada. Ela saiu da fila e está na aba Concluídas.',
+        publicada: 'LP marcada como publicada. Isso muda só o hub: quem põe a página no ar é o merge em main.',
+        arquivada: 'LP arquivada. Ela está na aba Concluídas.'
+      };
+
       // De qual id sai o HTML do preview. Só difere do próprio id numa cópia que
       // ainda espera o deploy do arquivo dela.
       function fonteDe(lp) {
@@ -647,11 +691,17 @@
         var abertos = lp.comentariosAbertos;
         var fonte = fonteDe(lp);
         var espelho = fonte !== lp.id;
+        var mioloChip = '<i class="dot"></i>' + Hub.esc(st.rotulo);
         return '' +
           '<article class="card">' +
             '<span class="card-stream stream" aria-hidden="true"></span>' +
             '<div class="card-head">' +
-              '<span class="chip ' + st.chip + '"><i class="dot"></i>' + Hub.esc(st.rotulo) + '</span>' +
+              (podeTrocarStatus()
+                ? '<button class="chip ' + st.chip + ' chip-troca" type="button" data-status-menu="' + Hub.esc(lp.id) + '"' +
+                    ' aria-haspopup="true" aria-expanded="false" title="Mudar o status desta LP à mão">' +
+                    mioloChip + ICONE_CARET +
+                  '</button>'
+                : '<span class="chip ' + st.chip + '">' + mioloChip + '</span>') +
               '<span class="card-data mono">' + Hub.esc(lp.data) + '</span>' +
             '</div>' +
             '<p class="kicker kicker-ink">' + Hub.esc(lp.evento) + '</p>' +
@@ -803,6 +853,10 @@
          no menu, a fila continua sendo sobre revisar. */
       var menu = document.getElementById('menu');
       var menuAberto = null;
+      // Dois gatilhos usam a mesma caixa flutuante (o ⋯ e o chip de status), e
+      // clicar no gatilho de novo fecha. Sem o modo, abrir o status com o menu
+      // de ações aberto no mesmo cartão só fecharia o que já estava lá.
+      var menuModo = null;
 
       function lpPorId(id) {
         return (dados ? dados.lps : []).filter(function (x) { return x.id === id; })[0];
@@ -841,7 +895,10 @@
         // Enviar pro site é a última etapa: aparece só quando a LP passou da
         // fila, e só pra quem tem permissão de abrir PR no repo do site.
         if (podeEnviar(lp)) itens.push({ icone: 'enviar', txt: 'Enviar pro site', href: '/ver/' + encodeURIComponent(lp.id) + '?publicar=1' });
-        if (dados.poderes.status) {
+        // Quem tem o seletor no chip já muda pra qualquer status por lá: repetir
+        // dois deles aqui seriam dois caminhos pra mesma coisa. Revisor não tem
+        // o seletor, então pra ele estes dois atalhos continuam sendo a via.
+        if (dados.poderes.status && !podeTrocarStatus()) {
           if (lp.status !== 'revisao') itens.push({ acao: 'revisao', icone: 'voltar', txt: 'Devolver pra fila' });
           if (lp.status !== 'arquivada') itens.push({ acao: 'arquivada', icone: 'arquivar', txt: 'Arquivar' });
         }
@@ -853,44 +910,78 @@
         return itens;
       }
 
+      // Os cinco estados na ordem do fluxo. O atual aparece marcado e não
+      // clica; "aprovada" e "publicada" ficam travadas com ajuste em aberto,
+      // pela mesma razão do botão Aprovar — o comentário aberto é justamente o
+      // que tirou a LP da fila limpa.
+      function menuDeStatus(lp) {
+        var abertos = lp.comentariosAbertos;
+        return '<p class="menu-cab">Status · ' + Hub.esc(lp.titulo) + '</p>' +
+          ORDEM_STATUS.map(function (chave) {
+            var s = Hub.STATUS[chave] || {};
+            var atual = lp.status === chave;
+            var travado = !atual && abertos && (chave === 'aprovada' || chave === 'publicada');
+            return '<button type="button" role="menuitem" data-status="' + chave + '"' +
+              (atual ? ' aria-current="true"' : '') +
+              (travado
+                ? ' disabled title="Resolva os ' + abertos + ' ajuste' + (abertos > 1 ? 's' : '') + ' em aberto antes"'
+                : '') +
+              '>' +
+                '<i class="ponto" style="background:' + COR_STATUS[chave] + '"></i>' +
+                '<span>' + Hub.esc(s.rotulo || chave) + '</span>' +
+                (atual ? ICONE_MARCA : '') +
+              '</button>';
+          }).join('') +
+          '<p class="menu-nota">Muda só o estado aqui no hub: não abre PR, não publica e não tira nada do ar.</p>';
+      }
+
       function fecharMenu() {
         if (!menuAberto) return;
         menu.hidden = true;
         menu.innerHTML = '';
-        var b = document.querySelector('[data-menu][aria-expanded="true"]');
+        var b = document.querySelector('[data-menu][aria-expanded="true"], [data-status-menu][aria-expanded="true"]');
         if (b) b.setAttribute('aria-expanded', 'false');
         menuAberto = null;
+        menuModo = null;
       }
 
-      function abrirMenu(botao, lp) {
-        menu.innerHTML = '<p class="menu-cab">' + Hub.esc(lp.titulo) + '</p>' +
-          itensDoMenu(lp).map(itemMenu).join('');
+      function abrirMenu(botao, lp, modo) {
+        menu.innerHTML = modo === 'status'
+          ? menuDeStatus(lp)
+          : '<p class="menu-cab">' + Hub.esc(lp.titulo) + '</p>' + itensDoMenu(lp).map(itemMenu).join('');
         menu.hidden = false;
-        // Posiciona depois de medir: alinhado à direita do botão, e virado pra
-        // cima quando não cabe embaixo (cartão do fim da lista).
+        // Posiciona depois de medir, e virado pra cima quando não cabe embaixo
+        // (cartão do fim da lista). O ⋯ mora na direita do cartão e o chip na
+        // esquerda: cada um alinha pelo lado em que está, senão o menu do chip
+        // nasceria pendurado pra fora do cartão.
         var r = botao.getBoundingClientRect();
         var larg = menu.offsetWidth;
         var alt = menu.offsetHeight;
-        var esq = Math.max(10, Math.min(r.right - larg, window.innerWidth - larg - 10));
+        var bruto = modo === 'status' ? r.left : r.right - larg;
+        var esq = Math.max(10, Math.min(bruto, window.innerWidth - larg - 10));
         var topo = r.bottom + 8;
         if (topo + alt > window.innerHeight - 10) topo = Math.max(10, r.top - alt - 8);
         menu.style.left = Math.round(esq) + 'px';
         menu.style.top = Math.round(topo) + 'px';
         botao.setAttribute('aria-expanded', 'true');
         menuAberto = lp.id;
-        var primeiro = menu.querySelector('[role="menuitem"]');
+        menuModo = modo;
+        var primeiro = menu.querySelector('[role="menuitem"]:not([disabled]):not([aria-current="true"])') ||
+          menu.querySelector('[role="menuitem"]');
         if (primeiro) primeiro.focus();
       }
 
       document.addEventListener('click', function (e) {
-        var b = e.target.closest('[data-menu]');
+        var b = e.target.closest('[data-menu], [data-status-menu]');
         if (b) {
-          var id = b.getAttribute('data-menu');
-          var jaEstava = menuAberto === id;
+          var ehStatus = b.hasAttribute('data-status-menu');
+          var id = b.getAttribute(ehStatus ? 'data-status-menu' : 'data-menu');
+          var modo = ehStatus ? 'status' : 'acoes';
+          var jaEstava = menuAberto === id && menuModo === modo;
           fecharMenu();
           if (!jaEstava) {
             var lp = lpPorId(id);
-            if (lp) abrirMenu(b, lp);
+            if (lp) abrirMenu(b, lp, modo);
           }
           return;
         }
@@ -908,15 +999,26 @@
       function mudarStatus(lp, status) {
         Hub.api('lp', { metodo: 'PATCH', corpo: { id: lp.id, status: status } })
           .then(function () {
-            Hub.avisar(status === 'arquivada'
-              ? 'LP arquivada. Ela está na aba Concluídas.'
-              : 'LP de volta na fila de revisão.');
+            Hub.avisar(AVISO_STATUS[status] || 'Status atualizado.');
             return carregar();
           })
           .catch(function (err) { Hub.avisar(err.message, 'erro'); });
       }
 
       menu.addEventListener('click', function (e) {
+        // Troca de status: um clique aplica. A confirmação em dois toques que o
+        // botão Aprovar tem não cabe aqui — abrir o menu e escolher um estado
+        // já são dois passos deliberados, e todo estado desfaz no mesmo menu.
+        var s = e.target.closest('[data-status]');
+        if (s) {
+          var alvoStatus = lpPorId(menuAberto);
+          if (!alvoStatus || s.disabled || s.getAttribute('aria-current') === 'true') return;
+          var novo = s.getAttribute('data-status');
+          fecharMenu();
+          mudarStatus(alvoStatus, novo);
+          return;
+        }
+
         // Item de link navega sozinho; o menu só sai da frente. Fechar depois do
         // clique porque limpar o innerHTML agora arrancaria o <a> antes de ele
         // ser seguido.

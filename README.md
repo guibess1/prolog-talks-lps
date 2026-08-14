@@ -113,9 +113,16 @@ vercel --prod     # ainda funciona, pra subir sem passar por commit
 
 | Papel | Pode |
 |---|---|
-| `admin` | tudo: aprovar pela fila, duplicar, excluir, apagar comentário, abrir PR no site |
-| `revisor` | ver, comentar, resolver, mudar status, editar dados do cartão |
+| `admin` | tudo: aprovar pela fila, trocar o status à mão, duplicar, excluir, apagar comentário, abrir PR no site |
+| `revisor` | ver, comentar, resolver, devolver pra fila, arquivar, editar dados do cartão |
 | `leitor` | só ver |
+
+Pro admin, o chip de status do cartão é um botão: abre os cinco estados e grava o
+que for escolhido, sem passar pela tela de revisão. É a saída pra quando o hub e a
+realidade divergem — a página foi pro ar por fora, ou uma LP precisa voltar pra
+ajuste sem ninguém ter comentado. `aprovada` e `publicada` continuam travadas
+enquanto houver ajuste em aberto, e trocar o status aqui não abre PR, não publica e
+não tira nada do ar: mexe só no estado dentro do hub.
 
 O papel é re-resolvido da env var a cada requisição, não do cookie: promover ou rebaixar
 alguém passa a valer no clique seguinte, sem precisar deslogar.
